@@ -2,6 +2,7 @@
   "name": "mallorca-planner",
   "private": true,
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "setup-hooks": "git config core.hooksPath .githooks"
   }
 }
