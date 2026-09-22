@@ -34,9 +34,9 @@ test("route stops have valid coordinate pairs and use road routing", () => {
       assert.ok(Number(lon) >= 2 && Number(lon) <= 4);
     }
   }
-  assert.match(app, /router\.project-osrm\.org\/route\/v1\/driving/);
+  assert.match(app, /router\.project-osrm\.org\/route\/v1\/driving/);\n  assert.match(app, /#146BFF/);
   assert.match(app, /routing\.openstreetmap\.de\/routed-car\/route\/v1\/driving/);
-  assert.doesNotMatch(app, /L\.polyline\(r\.stops/);
+  assert.doesNotMatch(app, /L\.polyline\(r\.stops/);\n  assert.match(app, /Open in Google Maps/);\n  assert.match(app, /by:"Pantelis"/);
 });
 
 test("spot cards build image URLs without an accidental template-literal placeholder", () => {
@@ -101,5 +101,5 @@ test("render smoke test creates the main planner sections", () => {
 
   assert.match(elements.get("#plan").innerHTML, /Fri 16 · Plan/);
   assert.ok(elements.get("#days").innerHTML.includes("Sat 17"));
-  assert.ok(elements.get("#filters").innerHTML.includes("Φαγητό"));
+  assert.ok(elements.get("#filters").innerHTML.includes("Food"));
 });
