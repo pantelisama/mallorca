@@ -180,6 +180,8 @@ render();
 document.addEventListener("click",e=>{
   const dayBtn=e.target.closest("#days [data-day]");
   if(dayBtn){currentDay=dayBtn.dataset.day;render();return;}
+  const villageCard=e.target.closest("[data-village]");
+  if(villageCard){openVillage(villageCard.dataset.village);return;}
   const catBtn=e.target.closest("#filters [data-cat]");
   if(catBtn){toggleCat(catBtn.dataset.cat,catBtn);return;}
 });
