@@ -136,12 +136,25 @@ async function drawRoute(id){
   // Follow the actual road network instead of drawing straight lines between stops.
   const coords=r.stops.map(x=>x.c[1]+","+x.c[0]).join(";");
   let geometry=null;
-  try{
-    const res=await fetch("https://router.project-osrm.org/route/v1/driving/"+coords+"?overview=full&geometries=geojson&steps=false");
-    if(res.ok){const data=await res.json();if(data.routes&&data.routes[0])geometry=data.routes[0].geometry.coordinates.map(p=>[p[1],p[0]]);}
-  }catch(e){}
-  const line=geometry||r.stops.map(x=>x.c);
-  L.polyline(line,{color:"#18211d",weight:5,opacity:.85}).addTo(routeLayer);
+  const endpoints=[
+    "https://router.project-osrm.org/route/v1/driving/",
+    "https://routing.openstreetmap.de/routed-car/route/v1/driving/"
+  ];
+  for(const endpoint of endpoints){
+    if(geometry)break;
+    try{
+      const res=await fetch(endpoint+coords+"?overview=full&geometries=geojson&steps=false");
+      if(res.ok){
+        const data=await res.json();
+        if(data.routes&&data.routes[0]&&data.routes[0].geometry){
+          geometry=data.routes[0].geometry.coordinates.map(p=>[p[1],p[0]]);
+        }
+      }
+    }catch(e){}
+  }
+  if(geometry){
+    L.polyline(geometry,{color:"#18211d",weight:5,opacity:.85}).addTo(routeLayer);
+  }
   r.stops.forEach((x,i)=>{
     const size=x.size==="long"?"large":"small";
     const cls="route-pin route-"+x.type+" route-"+size;
@@ -168,7 +181,7 @@ document.querySelector("#filters").innerHTML=Object.entries(categories).filter((
 document.querySelector("h1").textContent=day.title;document.querySelector(".sub").textContent=day.sub;
 routeVisible=false;map.removeLayer(routeLayer);
 const plan=day.plan.map((x,i)=>"<article class='day-card'><div class='day-number'>"+String(i+1).padStart(2,"0")+"</div><div class='day-content'><div class='time'>"+x[0]+"</div><h3>"+x[1]+"</h3><p>"+x[2]+"</p><span class='tag'>"+categories[x[3]].icon+" "+categories[x[3]].label+"</span><div class='route'>"+x[4]+"</div></div></article>").join("");
-const cards=daySpots.map(s=>{const i=spots.indexOf(s);return "<article class='spot-card' onclick='openSpot("+i+")'><img loading='lazy' src='"+(s.photo||"https://loremflickr.com/640/480/"+encodeURIComponent(s.n)+"?lock="+(i+20))+"' alt='"+s.n+"'><div class='spot-info'><div class='spot-cat'>"+categories[s.cat].icon+" "+categories[s.cat].label+"</div><h3>"+s.n+"</h3>"+(s.rating?"<div class='spot-rating'>★★★★★ <strong>"+s.rating+"</strong> · "+(s.reviews||0).toLocaleString()+" reviews</div>":"")+(s.type?"<p class='spot-type'>"+s.type+"</p>":"")+"<p>"+s.d+"</p></div></article>";}).join("");
+const cards=daySpots.map(s=>{const i=spots.indexOf(s);return "<article class='spot-card' onclick='openSpot("+i+")'><img loading='lazy' src='${s.photo||"https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=640&q=80"}' onerror='this.onerror=null;this.src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=640&q=80"' alt='"+s.n+"'><div class='spot-info'><div class='spot-cat'>"+categories[s.cat].icon+" "+categories[s.cat].label+"</div><h3>"+s.n+"</h3>"+(s.rating?"<div class='spot-rating'>★★★★★ <strong>"+s.rating+"</strong> · "+(s.reviews||0).toLocaleString()+" reviews</div>":"")+(s.type?"<p class='spot-type'>"+s.type+"</p>":"")+"<p>"+s.d+"</p></div></article>";}).join("");
 const villagesHtml=dayVillages.map(v=>"<article class='spot-card village-card' data-village='"+v.id+"'><div class='spot-info'><div class='spot-cat'>🏘️ Villages</div><h3>"+v.name+"</h3>"+(v.data.rating?"<div class='spot-rating'>★★★★★ <strong>"+v.data.rating+"</strong> · "+(v.data.reviews||0).toLocaleString()+" reviews</div>":"")+"<p>"+(v.data.description||"Open this village to see its own saved data.")+"</p></div></article>").join("");
 document.querySelector("#plan").innerHTML="<section class='day-panel'><div class='findings-head'><div><h2>"+day.label+" · Plan</h2><p class='day-description'>"+day.sub+"</p></div><div class='day-tools'>"+(routes[currentDay]?"<button type='button' id='route-toggle' class='route-toggle' onclick='toggleRoute()'>Show route</button>":"")+"<span>"+day.plan.length+" stops</span></div></div><div class='day-grid'>"+plan+"</div></section><section class='findings'><div class='findings-head'><h2>"+(currentDay==="sat"||currentDay==="sun"?"Day addons":"Palma addons")+"</h2><span>"+(daySpots.length+dayVillages.length)+" places</span></div><div class='photo-grid'>"+cards+villagesHtml+"</div></section>";
 if(routes[currentDay]){drawRoute(currentDay);routeLayer.addTo(map);routeVisible=true;const b=document.querySelector("#route-toggle");if(b){b.textContent="Hide route";b.classList.add("active");}}
