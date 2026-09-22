@@ -131,7 +131,7 @@ function render(){
     "<div class='plan-intro'><h2>"+d.title+"</h2><p>"+d.sub+"</p></div>"+
     d.plan.map(i=>"<article class='card'><div class='time'>"+i[0]+"</div><div class='title'>"+i[1]+"</div><div class='desc'>"+i[2]+"</div><span class='tag'>"+categories[i[3]].icon+" "+categories[i[3]].label+"</span><div class='route'>"+i[4]+"</div></article>").join("")+
     "<section class='findings'><div class='findings-head'><h2>Palma findings</h2><span>"+spots.length+" places</span></div><div class='photo-grid'>"+
-    spots.map((s,idx)=>"<article class='spot-card' onclick='openSpot("+idx+")'><img loading='lazy' src='https://loremflickr.com/640/480/"+encodeURIComponent(s.n)+",Palma,Mallorca?lock="+(idx+20)+"' alt='"+s.n+"' onerror='this.src=&quot;https://loremflickr.com/640/480/Mallorca,Palma?lock=999&quot;'><div class='spot-info'><div class='spot-cat'>"+categories[s.cat].icon+" "+categories[s.cat].label+"</div><h3>"+s.n+"</h3><p>"+s.d+"</p></div></article>").join("")+
+    spots.map((s,idx)=>"<article class='spot-card' onclick='openSpot("+idx+")'><img loading='lazy' src='"+(s.photo||"https://loremflickr.com/640/480/Mallorca,Palma?lock="+(idx+20))+"' alt='"+s.n+"'><div class='spot-info'><div class='spot-cat'>"+categories[s.cat].icon+" "+categories[s.cat].label+"</div><h3>"+s.n+"</h3>"+(s.rating?("<div class='spot-rating'>★★★★★ <strong>"+s.rating+"</strong> · "+(s.reviews||0).toLocaleString()+" reviews</div>"):"")+(s.type?("<p class='spot-type'>"+s.type+"</p>"):"")+"<p>"+s.d+"</p></div></article>").join("")+
     "</div></section>";
   map.fitBounds(L.latLngBounds(spots.map(s=>s.c)),{padding:[40,40]});
 }
