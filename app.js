@@ -45,13 +45,13 @@ const spots=[
   {n:"Old Town courtyard walk",c:[39.5718,2.6490],cat:"experiences",d:"Wander the hidden patios and stone lanes between La Seu and Plaça Major."},
   {n:"La Lonja evening walk",c:[39.5682,2.6458],cat:"experiences",d:"Historic maritime quarter that comes alive around sunset."},
   {n:"Santa Catalina evening",c:[39.5695,2.6390],cat:"experiences",d:"Market → vermouth → tapas → bars; one of Palma's liveliest local areas."},
-  {n:"Portixol waterfront",c:[39.5620,2.6760],cat:"experiences",d:"Seafront walk east of the centre, useful if you want sea rather than old town."},
-  {n:"Baluard des Príncep",c:[39.5667,2.6522],cat:"experiences",d:"Medieval defensive wall area and quieter waterfront views."},
-  {n:"Palma sunset waterfront",c:[39.5657,2.6485],cat:"experiences",d:"Golden-hour walk between Parc de la Mar and the harbour."},
+  {n:"Portixol waterfront",c:[39.5633,2.6768],cat:"experiences",d:"Seafront walk east of the centre, useful if you want sea rather than old town."},
+  {n:"Baluard des Príncep",c:[39.5670,2.6517],cat:"experiences",d:"Medieval defensive wall area and quieter waterfront views."},
+  {n:"Palma sunset waterfront",c:[39.5664,2.6489],cat:"experiences",d:"Golden-hour walk between Parc de la Mar and the harbour."},
 
   // INSTAGRAMMABLE
-  {n:"Cathedral × Parc de la Mar reflection",c:[39.5659,2.6500],cat:"instagram",d:"The classic Palma reflection shot."},
-  {n:"La Seu stone steps / sea",c:[39.5674,2.6482],cat:"instagram",d:"Cathedral façade with sea and palms."},
+  {n:"Cathedral × Parc de la Mar reflection",c:[39.5663,2.6505],cat:"instagram",d:"The classic Palma reflection shot."},
+  {n:"La Seu stone steps / sea",c:[39.5677,2.6481],cat:"instagram",d:"Cathedral façade with sea and palms."},
   {n:"Passeig del Born",c:[39.5700,2.6480],cat:"instagram",d:"Long symmetrical tree-lined composition."},
   {n:"Can Casasayas",c:[39.5720,2.6470],cat:"instagram",d:"Curved Modernista balconies and twin façades."},
   {n:"Can Corbella",c:[39.5722,2.6510],cat:"instagram",d:"Decorative neo-Mudéjar façade near the old town centre."},
