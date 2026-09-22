@@ -23,3 +23,7 @@
 .route-pin.route-photo span{background:#7b5aa6;color:#fff;font-size:14px}
 
 .finder-tag{background:#eef4ff;color:#146BFF}.finder-tag::before{content:"Added by ";color:#6d7480}
+
+
+.map-place-label{background:transparent;border:0;pointer-events:none}
+.map-place-label span{display:inline-block;padding:3px 6px;border-radius:5px;background:rgba(255,255,255,.9);box-shadow:0 1px 5px #0002;color:#18211d;font-size:12px;font-weight:700;white-space:nowrap;text-shadow:0 1px 0 #fff}
