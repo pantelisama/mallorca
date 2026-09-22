@@ -114,19 +114,19 @@ const areaLayer=L.layerGroup().addTo(map);
 areas.forEach(a=>{const poly=L.polygon(a.p,{color:"#18211d",weight:1,fillOpacity:.12});poly.bindPopup("<strong>"+a.icon+" "+a.n+"</strong><br><small>"+a.type+"</small><br>"+a.d);poly.on("click",()=>focusArea(a.id));poly.addTo(areaLayer);});
 const routes={
   sat:{stops:[
-    {n:"Palma",c:[39.5700,2.6480],type:"start"},
-    {n:"Caimari",c:[39.7744,2.8794],type:"village"},
-    {n:"Santuari de Lluc",c:[39.8231,2.8830],type:"sight",d:"Monastery, basilica and mountain surroundings."},
-    {n:"Pollença Old Town",c:[39.8767,3.0164],type:"village"},
-    {n:"Calvari Steps",c:[39.8769,3.0160],type:"sight",d:"Historic staircase and viewpoint above Pollença."}
+    {n:"Palma",c:[39.5700,2.6480],type:"start",size:"small"},
+    {n:"Caimari",c:[39.7744,2.8794],type:"village",size:"long",d:"Village stop — coffee / short wander."},
+    {n:"Santuari de Lluc",c:[39.8231,2.8830],type:"sight",size:"long",d:"Monastery, basilica and mountain surroundings."},
+    {n:"Pollença Old Town",c:[39.8767,3.0164],type:"village",size:"long",d:"Old-town walk and Calvari."},
+    {n:"Calvari Steps",c:[39.8769,3.0160],type:"sight",size:"small",d:"Historic staircase and viewpoint above Pollença."}
   ]},
   sun:{stops:[
-    {n:"Pollença",c:[39.8767,3.0164],type:"start"},
-    {n:"Port de Pollença",c:[39.9075,3.0815],type:"village"},
-    {n:"Mirador Es Colomer",c:[39.9328,3.1832],type:"sight",d:"Clifftop viewpoint over the Formentor peninsula."},
-    {n:"Formentor Beach",c:[39.9357,3.2040],type:"sight",d:"Pine-backed beach and sea stop."},
-    {n:"Cap de Formentor",c:[39.9600,3.2095],type:"sight",d:"Dramatic northern tip and lighthouse viewpoint."},
-    {n:"Pollença",c:[39.8767,3.0164],type:"end"}
+    {n:"Pollença",c:[39.8767,3.0164],type:"start",size:"small"},
+    {n:"Port de Pollença",c:[39.9075,3.0815],type:"village",size:"long",d:"Waterfront breakfast / walk."},
+    {n:"Mirador Es Colomer",c:[39.9328,3.1832],type:"sight",size:"small",d:"Clifftop viewpoint over the Formentor peninsula."},
+    {n:"Formentor Beach",c:[39.9357,3.2040],type:"sight",size:"long",d:"Beach and sea stop."},
+    {n:"Cap de Formentor",c:[39.9600,3.2095],type:"sight",size:"long",d:"Dramatic northern tip and lighthouse viewpoint."},
+    {n:"Pollença",c:[39.8767,3.0164],type:"end",size:"small"}
   ]}
 };
 let routeLayer=L.layerGroup(),routeVisible=false;
@@ -143,11 +143,15 @@ async function drawRoute(id){
   const line=geometry||r.stops.map(x=>x.c);
   L.polyline(line,{color:"#18211d",weight:5,opacity:.85}).addTo(routeLayer);
   r.stops.forEach((x,i)=>{
-    const cls=x.type==="sight"?"route-pin route-sight":"route-pin";
-    const icon=L.divIcon({className:cls,html:"<span>"+(i+1)+"</span>",iconSize:[30,30],iconAnchor:[15,15]});
+    const size=x.size==="long"?"large":"small";
+    const cls="route-pin route-"+x.type+" route-"+size;
+    const iconSize=x.size==="long"?[38,38]:[26,26];
+    const anchor=x.size==="long"?[19,19]:[13,13];
+    const glyph=x.type==="sight"?"◆":x.type==="village"?"●":x.type==="start"?"▶":"■";
+    const icon=L.divIcon({className:cls,html:"<span>"+glyph+"</span>",iconSize:iconSize,iconAnchor:anchor});
     const marker=L.marker(x.c,{icon:icon}).addTo(routeLayer);
-    marker.bindPopup("<strong>"+(i+1)+". "+x.n+"</strong>"+(x.d?"<br><small>"+x.d+"</small>":""));
-    marker.bindTooltip((i+1)+". "+x.n,{direction:"top",offset:[0,-12]});
+    marker.bindPopup("<strong>"+x.n+"</strong>"+(x.d?"<br><small>"+x.d+"</small>":""));
+    marker.bindTooltip(x.n,{permanent:true,direction:"top",offset:[0,x.size==="long"?-22:-16],className:"route-label"});
   });
 }
 function toggleRoute(){if(!routes[currentDay])return;routeVisible=!routeVisible;if(routeVisible){drawRoute(currentDay);routeLayer.addTo(map);}else{map.removeLayer(routeLayer);}const b=document.querySelector("#route-toggle");if(b){b.textContent=routeVisible?"Hide route":"Show route";b.classList.toggle("active",routeVisible);}}
