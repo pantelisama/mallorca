@@ -42,7 +42,8 @@ test("route stops have valid coordinate pairs and use road routing", () => {
 test("spot cards build image URLs without an accidental template-literal placeholder", () => {
   assert.match(app, /const photo=s\.photo\|\|"https:\/\/images\.unsplash\.com/);
   assert.doesNotMatch(app, /\$\{s\.photo\|\|/);
-  assert.match(app, /onerror='this\.onerror=null;this\.src=/);
+  assert.match(app, /onerror='this\\.onerror=null;this\\.src=\\\"\"\+fallback\+\\\"\"'/);
+  assert.doesNotMatch(app, /this\\.src=\"\"\\+fallback\\+\"\"/);
 });
 
 test("render smoke test creates the main planner sections", () => {
