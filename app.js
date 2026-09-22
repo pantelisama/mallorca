@@ -123,7 +123,7 @@ Object.keys(categories).forEach(cat=>{
 
 function render(){
   const day=days.find(d=>d.id===currentDay)||days[0];
-  document.querySelector("#days").innerHTML=days.map(d=>"<button class='"+(d.id===currentDay?"active":"")+"' onclick='selectDay(\""+d.id+"\")'>"+d.label+"</button>").join("")+"<button onclick='showAreas()'>Explore areas</button>";
+  document.querySelector("#days").innerHTML=days.map(d=>"<button class=\""+(d.id===currentDay?"active":"")+"\" data-day=\""+d.id+"\">"+d.label+"</button>").join("")+"<button onclick=\"showAreas()\">Explore areas</button>";
   document.querySelector("#filters").innerHTML=Object.entries(categories).map(([k,v])=>"<button class='filter' data-cat='"+k+"' onclick='toggleCat(\\\""+k+"\\\",this)'>"+v.icon+" "+v.label+" <span>"+spots.filter(s=>s.cat===k).length+"</span></button>").join("");
 
   const cats=[...new Set(day.plan.map(x=>x[3]))];
@@ -144,6 +144,7 @@ function render(){
   map.fitBounds(L.latLngBounds(spots.map(s=>s.c)),{padding:[40,40]});
 }
 function selectDay(id){currentDay=id;render()}
+document.querySelector("#days").addEventListener("click",e=>{const b=e.target.closest("[data-day]");if(b)selectDay(b.dataset.day)});
 function showTripOverview(){
   document.querySelector("#plan").innerHTML="<section class='trip-overview'><div class='findings-head'><div><h2>Full trip · 16—19 Oct</h2><p class='day-description'>Complete organised itinerary, day by day.</p></div><span>"+days.reduce((n,d)=>n+d.plan.length,0)+" stops</span></div><div class='trip-days'>"+days.map(d=>"<article class='trip-day'><div class='trip-day-head'><span>"+d.label+"</span><strong>"+d.title+"</strong><em>"+d.plan.length+" stops</em></div><p class='day-description'>"+d.sub+"</p><div class='trip-stops'>"+d.plan.map((x,i)=>"<div class='trip-stop'><b>"+String(i+1).padStart(2,"0")+"</b><div><small>"+x[0]+"</small><strong>"+x[1]+"</strong><span>"+x[2]+"</span><label>"+categories[x[3]].icon+" "+categories[x[3]].label+"</label></div></div>").join("")+"</div></article>").join("")+"</div></section>";
   document.querySelector("#plan").scrollIntoView({behavior:"smooth",block:"start"});
