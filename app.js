@@ -275,7 +275,7 @@ async function runAgent(){
   }catch(e){message.textContent=e.message||"Agent failed.";status.textContent="";}
   finally{if(button)button.disabled=false;}
 }
-document.querySelector("#agent-add")?.addEventListener("click",openAgent);
+document.querySelector("#agent-add")?.addEventListener("click",openAgent);\ndocument.querySelector("#agent-fab")?.addEventListener("click",openAgent);
 document.querySelector("#agent-run")?.addEventListener("click",runAgent);
 document.querySelectorAll("[data-close-agent]").forEach(el=>el.addEventListener("click",closeAgent));
 document.querySelectorAll("[data-agent-example]").forEach(el=>el.addEventListener("click",()=>{document.querySelector("#agent-input").value=el.dataset.agentExample;document.querySelector("#agent-input").focus();}));
