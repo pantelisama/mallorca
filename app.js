@@ -60,6 +60,18 @@ const spots=[
   {n:"Santa Catalina streets",c:[39.5694,2.6388],cat:"instagram",d:"Low colourful façades and lively street scene."}
 ];
 
+
+const areas=[
+  {id:"oldtown",n:"Palma Old Town",type:"Historic",icon:"🏛️",c:[39.5717,2.6490],d:"Medieval lanes, courtyards, churches, palaces and the historic city centre.",p:[[39.5750,2.6460],[39.5748,2.6545],[39.5680,2.6540],[39.5675,2.6440],[39.5710,2.6415]]},
+  {id:"lonja",n:"La Lonja",type:"Bars & Food",icon:"🍸",c:[39.5685,2.6460],d:"Compact evening zone around the old maritime quarter: tapas, wine and bars.",p:[[39.5705,2.6418],[39.5718,2.6480],[39.5682,2.6500],[39.5665,2.6450]]},
+  {id:"santacatalina",n:"Santa Catalina",type:"Restaurants & Bars",icon:"🍽️",c:[39.5700,2.6388],d:"Neighbourhood market, restaurants, vermouth, bars and evening atmosphere.",p:[[39.5725,2.6355],[39.5720,2.6415],[39.5680,2.6420],[39.5675,2.6360]]},
+  {id:"esjonquet",n:"Es Jonquet",type:"Historic / Nightlife",icon:"🌙",c:[39.5680,2.6380],d:"Old fishermen's quarter with windmills, narrow streets and nightlife nearby.",p:[[39.5700,2.6348],[39.5705,2.6395],[39.5670,2.6410],[39.5660,2.6360]]},
+  {id:"born",n:"Passeig del Born",type:"Shopping & Architecture",icon:"🏙️",c:[39.5702,2.6480],d:"Grand central promenade with historic façades, cafés and shopping streets.",p:[[39.5720,2.6455],[39.5720,2.6500],[39.5688,2.6500],[39.5685,2.6460]]},
+  {id:"portixol",n:"Portixol",type:"Waterfront",icon:"🌊",c:[39.5620,2.6760],d:"Seafront promenade, small beaches, restaurants and sunset by the water.",p:[[39.5650,2.6690],[39.5650,2.6810],[39.5590,2.6820],[39.5585,2.6710]]},
+  {id:"terreno",n:"El Terreno",type:"Bars & Nightlife",icon:"🍸",c:[39.5638,2.6255],d:"West-side nightlife district between Bellver and the waterfront.",p:[[39.5680,2.6210],[39.5680,2.6310],[39.5600,2.6320],[39.5595,2.6220]]},
+  {id:"peregarau",n:"Pere Garau",type:"Market / Local",icon:"🥬",c:[39.5738,2.6570],d:"More everyday Palma: market, local shops and a less polished neighbourhood feel.",p:[[39.5770,2.6530],[39.5770,2.6620],[39.5710,2.6620],[39.5705,2.6540]]}
+];
+
 const days=[
   {id:"fri",label:"Fri 16",title:"Palma · Friday 16",sub:"Arrival · Old Town · food · culture · sunset · nightlife",plan:[
     ["Arrival","Palma Old Town","Start at Parc de la Mar → La Seu → Almudaina → old-town lanes → La Lonja → Born.","experiences","Easy first walk after landing."],
@@ -91,6 +103,13 @@ let currentDay="fri";
 const map=L.map("map",{zoomControl:true}).setView([39.570,2.648],14);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"© OpenStreetMap contributors"}).addTo(map);
 
+const areaLayer=L.layerGroup().addTo(map);
+areas.forEach(a=>{
+  const poly=L.polygon(a.p,{color:"#18211d",weight:1,fillOpacity:.12});
+  poly.bindPopup("<strong>"+a.icon+" "+a.n+"</strong><br><small>"+a.type+"</small><br>"+a.d);
+  poly.on("click",()=>showArea(a.id));
+  poly.addTo(areaLayer);
+});
 const markerLayers={};
 Object.keys(categories).forEach(cat=>{
   markerLayers[cat]=L.layerGroup().addTo(map);
@@ -103,7 +122,9 @@ Object.keys(categories).forEach(cat=>{
 
 function render(){
   document.querySelector("#days").innerHTML=days.map(d=>"<button class='"+(d.id===currentDay?"active":"")+"' onclick='selectDay(\""+d.id+"\",this)'>"+d.label+"</button>").join("");
-  document.querySelector("#filters").innerHTML=Object.entries(categories).map(([k,v])=>"<button class='filter active' data-cat='"+k+"' onclick='toggleCat(\""+k+"\",this)'>"+v.icon+" "+v.label+" <span>"+spots.filter(s=>s.cat===k).length+"</span></button>").join("");
+  document.querySelector("#filters").innerHTML=
+  "<div class='filter-group'><div class='filter-label'>FINDINGS</div>"+Object.entries(categories).map(([k,v])=>"<button class='filter active' data-cat='"+k+"' onclick='toggleCat(\""+k+"\",this)'>"+v.icon+" "+v.label+" <span>"+spots.filter(s=>s.cat===k).length+"</span></button>").join("")+"</div>"+
+  "<div class='filter-group'><div class='filter-label'>AREAS</div>"+areas.map(a=>"<button class='filter area-filter' onclick='focusArea(\""+a.id+"\")'>"+a.icon+" "+a.n+"</button>").join("")+"</div>";
   const d=days.find(x=>x.id===currentDay);
   document.querySelector("#plan").innerHTML=
     "<div class='plan-intro'><h2>"+d.title+"</h2><p>"+d.sub+"</p></div>"+
@@ -114,6 +135,13 @@ function render(){
   map.fitBounds(L.latLngBounds(spots.map(s=>s.c)),{padding:[40,40]});
 }
 function selectDay(id,btn){currentDay=id;document.querySelectorAll("#days button").forEach(b=>b.classList.remove("active"));if(btn)btn.classList.add("active");render()}
+function focusArea(id){
+  const a=areas.find(x=>x.id===id);
+  map.fitBounds(L.latLngBounds(a.p),{padding:[80,80]});
+  L.popup().setLatLng(a.c).setContent("<strong>"+a.icon+" "+a.n+"</strong><br><small>"+a.type+"</small><br>"+a.d).openOn(map);
+  document.querySelectorAll(".area-filter").forEach(b=>b.classList.remove("active"));
+}
+function showArea(id){focusArea(id)}
 function toggleCat(cat,btn){
   if(map.hasLayer(markerLayers[cat])){map.removeLayer(markerLayers[cat]);btn.classList.remove("active")}else{markerLayers[cat].addTo(map);btn.classList.add("active")}
 }
