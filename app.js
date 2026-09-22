@@ -188,6 +188,20 @@ async function drawRoute(id){
 function toggleRoute(){if(!routes[currentDay])return;routeVisible=!routeVisible;if(routeVisible){drawRoute(currentDay);routeLayer.addTo(map);}else{map.removeLayer(routeLayer);}const b=document.querySelector("#route-toggle");if(b){b.textContent=routeVisible?"Hide route":"Show route";b.classList.toggle("active",routeVisible);}}
 const markerLayers={};
 Object.keys(categories).forEach(cat=>{markerLayers[cat]=L.layerGroup().addTo(map);spots.filter(s=>s.cat===cat).forEach(s=>{const icon=L.divIcon({className:"spot-icon",html:"<span>"+categories[cat].icon+"</span>",iconSize:[34,34],iconAnchor:[17,17]});const gmap="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(s.n+", Mallorca, Spain");const marker=L.marker(s.c,{icon:icon}).addTo(markerLayers[cat]);marker.bindPopup("<strong>"+s.n+"</strong><br><a href=\""+gmap+"\" target=\"_blank\" rel=\"noopener noreferrer\">Open in Google Maps</a>");marker.on("click",()=>marker.openPopup());});});
+function addAgentMarkers(){
+  const seen=new Set();
+  Object.keys(markerLayers).forEach(cat=>markerLayers[cat].eachLayer(m=>{const p=m.getLatLng();seen.add(cat+"|"+p.lat.toFixed(6)+"|"+p.lng.toFixed(6));}));
+  spots.filter(s=>s.by==="Agent").forEach(s=>{
+    const cat=s.cat||"experiences";
+    if(!markerLayers[cat])return;
+    const key=cat+"|"+s.c[0].toFixed(6)+"|"+s.c[1].toFixed(6);
+    if(seen.has(key))return;
+    const icon=L.divIcon({className:"spot-icon",html:"<span>"+categories[cat].icon+"</span>",iconSize:[34,34],iconAnchor:[17,17]});
+    const gmap=s.googleMapsUrl||("https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(s.n+", Mallorca, Spain"));
+    const marker=L.marker(s.c,{icon}).addTo(markerLayers[cat]);
+    marker.bindPopup("<strong>"+s.n+"</strong><br><a href=\""+gmap+"\" target=\"_blank\" rel=\"noopener noreferrer\">Open in Google Maps</a>");
+  });
+}
 function render(){
 const day=days.find(d=>d.id===currentDay)||days[0];
 const dayCats=[...new Set(day.plan.map(x=>x[3]))];
@@ -253,6 +267,7 @@ async function runAgent(){
     const data=await res.json();
     if(!res.ok||!data.ok)throw new Error(data.error||"Agent failed");
     await loadAgentData();
+    addAgentMarkers();
     render();
     message.textContent=data.message||"Trip updated.";
     status.textContent="Updated";
@@ -265,4 +280,4 @@ document.querySelector("#agent-run")?.addEventListener("click",runAgent);
 document.querySelectorAll("[data-close-agent]").forEach(el=>el.addEventListener("click",closeAgent));
 document.querySelectorAll("[data-agent-example]").forEach(el=>el.addEventListener("click",()=>{document.querySelector("#agent-input").value=el.dataset.agentExample;document.querySelector("#agent-input").focus();}));
 document.querySelector("#agent-input")?.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key==="Enter")runAgent();});
-loadAgentData().then(render);
+loadAgentData().then(()=>{addAgentMarkers();render();});
