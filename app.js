@@ -124,7 +124,7 @@ Object.keys(categories).forEach(cat=>{
 function render(){
   const day=days.find(d=>d.id===currentDay)||days[0];
   document.querySelector("#days").innerHTML=days.map(d=>"<button class='"+(d.id===currentDay?"active":"")+"' onclick='selectDay(\\\""+d.id+"\\\")'>"+d.label+"</button>").join("")+"<button onclick='showAreas()'>Explore areas</button>";
-  document.querySelector("#filters").innerHTML=Object.entries(categories).map(([k,v])=>"<button class='filter' data-cat='"+k+"' onclick='toggleCat(\\\""+k+"\\\",this)'>"+v.icon+" "+v.label+" <span>"+spots.filter(s=>s.cat===k).length+"</span></button>").join("");
+  document.querySelector("#filters").innerHTML=Object.entries(categories).map(([k,v])=>"<button class='filter' data-cat='"+k+"' onclick='toggleCat(\\\""+k+"\\\",this)'>"+v.icon+" "+v.label+" <span>"+spots.filter(s=>s.cat===k).length+"</span></button>").join("")+"<button class='filter area-main-button' onclick='showAreas()'>📍 Περιοχές</button>";
 
   const cats=[...new Set(day.plan.map(x=>x[3]))];
   const daySpots=spots.filter(s=>cats.includes(s.cat));
