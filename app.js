@@ -102,13 +102,13 @@ Object.keys(categories).forEach(cat=>{
 });
 
 function render(){
-  document.querySelector("#days").innerHTML=days.map(d=>"<button class='"+(d.id===currentDay?"active":"")+"' onclick='selectDay(\""+d.id+"\")'>"+d.label+"</button>").join("");
+  document.querySelector("#days").innerHTML=days.map(d=>"<button class='"+(d.id===currentDay?"active":"")+"' onclick='selectDay(\""+d.id+"\",this)'>"+d.label+"</button>").join("");
   document.querySelector("#filters").innerHTML=Object.entries(categories).map(([k,v])=>"<button class='filter active' data-cat='"+k+"' onclick='toggleCat(\""+k+"\",this)'>"+v.icon+" "+v.label+" <span>"+spots.filter(s=>s.cat===k).length+"</span></button>").join("");
   const d=days.find(x=>x.id===currentDay);
   document.querySelector("#plan").innerHTML="<div class='plan-intro'><h2>"+d.title+"</h2><p>"+d.sub+"</p></div>"+d.plan.map(i=>"<article class='card'><div class='time'>"+i[0]+"</div><div class='title'>"+i[1]+"</div><div class='desc'>"+i[2]+"</div><span class='tag'>"+categories[i[3]].icon+" "+categories[i[3]].label+"</span><div class='route'>"+i[4]+"</div></article>").join("")+"<div class='all-spots'><b>"+spots.length+" Palma spots loaded</b><span>Click any map pin to open its Google Maps place search.</span></div>";
   map.fitBounds(L.latLngBounds(spots.map(s=>s.c)),{padding:[40,40]});
 }
-function selectDay(id){currentDay=id;document.querySelectorAll("#days button").forEach(b=>b.classList.remove("active"));event.currentTarget.classList.add("active");render()}
+function selectDay(id,btn){currentDay=id;document.querySelectorAll("#days button").forEach(b=>b.classList.remove("active"));if(btn)btn.classList.add("active");render()}
 function toggleCat(cat,btn){
   if(map.hasLayer(markerLayers[cat])){map.removeLayer(markerLayers[cat]);btn.classList.remove("active")}else{markerLayers[cat].addTo(map);btn.classList.add("active")}
 }
