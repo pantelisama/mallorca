@@ -2,7 +2,7 @@ const categories={
   food:{label:"Φαγητό",icon:"🍷"},
   sights:{label:"Αξιοθέατα",icon:"🏛️"},
   experiences:{label:"Experiences",icon:"✨"},
-  instagram:{label:"Instagrammable",icon:"📸"}
+  instagram:{label:"Instagrammable",icon:"📸"},
   hotels:{label:"Hotels",icon:"🏨"}
 };
 
