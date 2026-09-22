@@ -116,13 +116,14 @@ const routes={
   sat:{stops:[
     {n:"Palma",c:[39.5700,2.6480],type:"start",size:"small"},
     {n:"Caimari",c:[39.7744,2.8794],type:"village",size:"long",d:"Village stop — coffee / short wander."},
+    {n:"Photo stop · Tramuntana",c:[39.8498,2.9448],type:"photo",size:"small",d:"Demo photo stop — quick viewpoint / small roadside stop."},
     {n:"Santuari de Lluc",c:[39.8231,2.8830],type:"sight",size:"long",d:"Monastery, basilica and mountain surroundings."},
     {n:"Pollença Old Town",c:[39.8767,3.0164],type:"village",size:"long",d:"Old-town walk and Calvari."},
     {n:"Calvari Steps",c:[39.8769,3.0160],type:"sight",size:"small",d:"Historic staircase and viewpoint above Pollença."}
   ]},
   sun:{stops:[
     {n:"Pollença",c:[39.8767,3.0164],type:"start",size:"small"},
-    {n:"Port de Pollença",c:[39.9075,3.0815],type:"village",size:"long",d:"Waterfront breakfast / walk."},
+    {n:"Port de Pollença",c:[39.9084,3.0832],type:"village",size:"long",d:"Waterfront breakfast / walk."},
     {n:"Mirador Es Colomer",c:[39.9328,3.1832],type:"sight",size:"small",d:"Clifftop viewpoint over the Formentor peninsula."},
     {n:"Formentor Beach",c:[39.9357,3.2040],type:"sight",size:"long",d:"Beach and sea stop."},
     {n:"Cap de Formentor",c:[39.9600,3.2095],type:"sight",size:"long",d:"Dramatic northern tip and lighthouse viewpoint."},
@@ -160,7 +161,7 @@ async function drawRoute(id){
     const cls="route-pin route-"+x.type+" route-"+size;
     const iconSize=x.size==="long"?[38,38]:[26,26];
     const anchor=x.size==="long"?[19,19]:[13,13];
-    const glyph=x.type==="sight"?"◆":x.type==="village"?"●":x.type==="start"?"▶":"■";
+    const glyph=x.type==="sight"?"◆":x.type==="village"?"●":x.type==="photo"?"📷":x.type==="start"?"▶":"■";
     const icon=L.divIcon({className:cls,html:"<span>"+glyph+"</span>",iconSize:iconSize,iconAnchor:anchor});
     const marker=L.marker(x.c,{icon:icon}).addTo(routeLayer);
     marker.bindPopup("<strong>"+x.n+"</strong>"+(x.d?"<br><small>"+x.d+"</small>":""));
