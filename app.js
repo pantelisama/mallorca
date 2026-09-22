@@ -207,7 +207,18 @@ const pts=daySpots.map(s=>s.c).concat(dayVillages.map(v=>v.c));if(pts.length)map
 }
 function openSpot(i){const s=spots[i];if(!s)return;const gmap="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(s.n+", Mallorca, Spain");window.open(gmap,"_blank","noopener,noreferrer");}
 function openVillage(id){const v=villages.find(x=>x.id===id);if(!v)return;const d=v.data||{};let html="<section class='day-panel'><div class='findings-head'><div><h2>🏘️ "+v.name+"</h2><p class='day-description'>"+(d.description||"Village data")+"</p></div><button type='button' class='route-toggle' onclick='render()'>Back</button></div>";if(d.photos&&d.photos.length)html+="<div class='photo-grid'>"+d.photos.map(p=>"<img loading='lazy' src='"+p+"' alt='"+v.name+"'>").join("")+"</div>";if(d.rating)html+="<div class='spot-rating'>★★★★★ <strong>"+d.rating+"</strong> · "+(d.reviews||0).toLocaleString()+" reviews</div>";[["Food",d.food],["Sights",d.sights],["Experiences",d.experiences],["Instagrammable",d.instagram],["Hotels",d.hotels],["Notes",d.notes]].forEach(x=>{if(x[1]&&x[1].length)html+="<div class='day-card'><div class='day-content'><div class='time'>"+x[0]+"</div>"+x[1].map(t=>"<p>"+t+"</p>").join("")+"</div></div>";});if(d.parking)html+="<div class='day-card'><div class='day-content'><div class='time'>Parking</div><p>"+d.parking+"</p></div></div>";if(d.route)html+="<div class='day-card'><div class='day-content'><div class='time'>Route</div><p>"+d.route+"</p></div></div>";html+="</section>";document.querySelector("#plan").innerHTML=html;document.querySelector("#plan").scrollIntoView({behavior:"smooth",block:"start"});}
-document.addEventListener("click",e=>{const day=e.target.closest("#days [data-day]");if(day){currentDay=day.dataset.day;activeCats=new Set(Object.keys(categories));
+document.addEventListener("click",e=>{const day=e.target.closest("#days [data-day]");if(day){currentDay=day.dataset.day;activeCats=new Set(Object.keys(categories));render();return;}const village=e.target.closest("[data-village]");if(village){openVillage(village.dataset.village);return;}const cat=e.target.closest("#filters [data-cat]");if(cat){toggleCat(cat.dataset.cat,cat);return;}});
+function focusArea(id){const a=areas.find(x=>x.id===id);if(!a)return;map.fitBounds(L.latLngBounds(a.p),{padding:[80,80]});L.popup().setLatLng(a.c).setContent("<strong>"+a.icon+" "+a.n+"</strong><br><small>"+a.type+"</small><br>"+a.d).openOn(map);}
+function toggleCat(cat,btn){
+  if(activeCats.has(cat)){
+    activeCats.delete(cat);
+    map.removeLayer(markerLayers[cat]);
+  }else{
+    activeCats.add(cat);
+    markerLayers[cat].addTo(map);
+  }
+  render();
+}
 async function loadAgentData(){
   try{
     const res=await fetch("data/agent-items.json?ts="+Date.now());
@@ -233,15 +244,12 @@ async function runAgent(){
   const request=(input?.value||"").trim();
   if(!request)return;
   const base=window.MALLORCA_AGENT_URL||"";
-  if(!base){
-    message.textContent="Agent backend is not configured.";
-    return;
-  }
+  if(!base){message.textContent="Agent backend is not configured.";return;}
   message.textContent="Searching Google Maps and updating the trip…";
   status.textContent="Agent working…";
-  const button=document.querySelector("#agent-run"); if(button)button.disabled=true;
+  const button=document.querySelector("#agent-run");if(button)button.disabled=true;
   try{
-    const res=await fetch(base.replace(/\\/$/,"")+"/agent",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({request,day:currentDay})});
+    const res=await fetch(base.replace(/\/$/,"")+"/agent",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({request,day:currentDay})});
     const data=await res.json();
     if(!res.ok||!data.ok)throw new Error(data.error||"Agent failed");
     await loadAgentData();
@@ -249,26 +257,12 @@ async function runAgent(){
     message.textContent=data.message||"Trip updated.";
     status.textContent="Updated";
     setTimeout(()=>{status.textContent="";closeAgent();},900);
-  }catch(e){
-    message.textContent=e.message||"Agent failed.";
-    status.textContent="";
-  }finally{if(button)button.disabled=false;}
+  }catch(e){message.textContent=e.message||"Agent failed.";status.textContent="";}
+  finally{if(button)button.disabled=false;}
 }
 document.querySelector("#agent-add")?.addEventListener("click",openAgent);
 document.querySelector("#agent-run")?.addEventListener("click",runAgent);
 document.querySelectorAll("[data-close-agent]").forEach(el=>el.addEventListener("click",closeAgent));
 document.querySelectorAll("[data-agent-example]").forEach(el=>el.addEventListener("click",()=>{document.querySelector("#agent-input").value=el.dataset.agentExample;document.querySelector("#agent-input").focus();}));
 document.querySelector("#agent-input")?.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key==="Enter")runAgent();});
-loadAgentData().then(render);return;}const village=e.target.closest("[data-village]");if(village){openVillage(village.dataset.village);return;}const cat=e.target.closest("#filters [data-cat]");if(cat){toggleCat(cat.dataset.cat,cat);return;}});
-function focusArea(id){const a=areas.find(x=>x.id===id);if(!a)return;map.fitBounds(L.latLngBounds(a.p),{padding:[80,80]});L.popup().setLatLng(a.c).setContent("<strong>"+a.icon+" "+a.n+"</strong><br><small>"+a.type+"</small><br>"+a.d).openOn(map);}
-function toggleCat(cat,btn){
-  if(activeCats.has(cat)){
-    activeCats.delete(cat);
-    map.removeLayer(markerLayers[cat]);
-  }else{
-    activeCats.add(cat);
-    markerLayers[cat].addTo(map);
-  }
-  render();
-}
-render();
+loadAgentData().then(render);
