@@ -161,10 +161,10 @@ function render(){
 const day=days.find(d=>d.id===currentDay)||days[0];
 const dayCats=[...new Set(day.plan.map(x=>x[3]))];
 if(currentDay==="sat"||currentDay==="sun")dayCats.push("villages");
-document.querySelector("#days").innerHTML=days.map(d=>"<button type='button' class='"+(d.id===currentDay?"active":"")+"' data-day='"+d.id+"'>"+d.label+"</button>").join("");
-document.querySelector("#filters").innerHTML=Object.entries(categories).filter(([k])=>k!=="villages"||dayVillages.length>0).map(([k,v])=>"<button type='button' class='filter' data-cat='"+k+"'>"+v.icon+" "+v.label+" <span>"+(k==="villages"?dayVillages.length:spots.filter(s=>s.cat===k&&dayCats.includes(k)&&(!s.day||s.day==="both"||s.day===currentDay)).length)+"</span></button>").join("");
 const daySpots=spots.filter(s=>dayCats.includes(s.cat)&&(!s.day||s.day==="both"||s.day===currentDay));
 const dayVillages=villages.filter(v=>dayCats.includes("villages")&&(v.day==="both"||v.day===currentDay));
+document.querySelector("#days").innerHTML=days.map(d=>"<button type='button' class='"+(d.id===currentDay?"active":"")+"' data-day='"+d.id+"'>"+d.label+"</button>").join("");
+document.querySelector("#filters").innerHTML=Object.entries(categories).filter(([k])=>k!=="villages"||dayVillages.length>0).map(([k,v])=>"<button type='button' class='filter' data-cat='"+k+"'>"+v.icon+" "+v.label+" <span>"+(k==="villages"?dayVillages.length:spots.filter(s=>s.cat===k&&dayCats.includes(k)&&(!s.day||s.day==="both"||s.day===currentDay)).length)+"</span></button>").join("");
 document.querySelector("h1").textContent=day.title;document.querySelector(".sub").textContent=day.sub;
 routeVisible=false;map.removeLayer(routeLayer);
 const plan=day.plan.map((x,i)=>"<article class='day-card'><div class='day-number'>"+String(i+1).padStart(2,"0")+"</div><div class='day-content'><div class='time'>"+x[0]+"</div><h3>"+x[1]+"</h3><p>"+x[2]+"</p><span class='tag'>"+categories[x[3]].icon+" "+categories[x[3]].label+"</span><div class='route'>"+x[4]+"</div></div></article>").join("");
