@@ -146,6 +146,10 @@ function render(){
   map.fitBounds(L.latLngBounds(spots.map(s=>s.c)),{padding:[40,40]});
 }
 function selectDay(id){currentDay=id;render()}
+function showTripOverview(){
+  document.querySelector("#plan").innerHTML="<section class='trip-overview'><div class='findings-head'><div><h2>Full trip · 16—19 Oct</h2><p class='day-description'>Complete organised itinerary, day by day.</p></div><span>"+days.reduce((n,d)=>n+d.plan.length,0)+" stops</span></div><div class='trip-days'>"+days.map(d=>"<article class='trip-day'><div class='trip-day-head'><span>"+d.label+"</span><strong>"+d.title+"</strong><em>"+d.plan.length+" stops</em></div><p class='day-description'>"+d.sub+"</p><div class='trip-stops'>"+d.plan.map((x,i)=>"<div class='trip-stop'><b>"+String(i+1).padStart(2,"0")+"</b><div><small>"+x[0]+"</small><strong>"+x[1]+"</strong><span>"+x[2]+"</span><label>"+categories[x[3]].icon+" "+categories[x[3]].label+"</label></div></div>").join("")+"</div></article>").join("")+"</div></section>";
+  document.querySelector("#plan").scrollIntoView({behavior:"smooth",block:"start"});
+}
 function focusArea(id){
   const x=areas.find(a=>a.id===id);
   map.fitBounds(L.latLngBounds(x.p),{padding:[80,80]});
