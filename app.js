@@ -122,29 +122,24 @@ Object.keys(categories).forEach(cat=>{
 });
 
 function render(){
-  document.querySelector("#days").innerHTML=days.map(d=>"<button class='"+(d.id===currentDay?"active":"")+"' onclick='selectDay(\""+d.id+"\",this)'>"+d.label+"</button>").join("");
-  document.querySelector("#filters").innerHTML=
-  "<div class='filter-group'><div class='filter-label'>FINDINGS</div>"+Object.entries(categories).map(([k,v])=>"<button class='filter active' data-cat='"+k+"' onclick='toggleCat(\""+k+"\",this)'>"+v.icon+" "+v.label+" <span>"+spots.filter(s=>s.cat===k).length+"</span></button>").join("")+"</div>"+
-  "";
-  const d=days.find(x=>x.id===currentDay);
+  document.querySelector("#days").innerHTML=days.map(d=>"<button onclick='selectDay(\""+d.id+"\")'>"+d.label+"</button>").join("")+"<button onclick='showAreas()'>Explore areas</button>";
+  document.querySelector("#filters").innerHTML=Object.entries(categories).map(([k,v])=>"<button class='filter' data-cat='"+k+"' onclick='toggleCat(\""+k+"\",this)'>"+v.icon+" "+v.label+" <span>"+spots.filter(s=>s.cat===k).length+"</span></button>").join("");
   document.querySelector("#plan").innerHTML=
-    "<div class='plan-intro'><h2>"+d.title+"</h2><p>"+d.sub+"</p></div>"+
-    d.plan.map(i=>"<article class='card'><div class='time'>"+i[0]+"</div><div class='title'>"+i[1]+"</div><div class='desc'>"+i[2]+"</div><span class='tag'>"+categories[i[3]].icon+" "+categories[i[3]].label+"</span><div class='route'>"+i[4]+"</div></article>").join("")+
-    "<section class='findings'><div class='findings-head'><h2>Palma findings</h2><span>"+spots.length+" places</span></div><div class='photo-grid'>"+
-    spots.map((s,idx)=>"<article class='spot-card' onclick='openSpot("+idx+")'><img loading='lazy' src='"+(s.photo||"https://loremflickr.com/640/480/Mallorca,Palma?lock="+(idx+20))+"' alt='"+s.n+"'><div class='spot-info'><div class='spot-cat'>"+categories[s.cat].icon+" "+categories[s.cat].label+"</div><h3>"+s.n+"</h3>"+(s.rating?("<div class='spot-rating'>★★★★★ <strong>"+s.rating+"</strong> · "+(s.reviews||0).toLocaleString()+" reviews</div>"):"")+(s.type?("<p class='spot-type'>"+s.type+"</p>"):"")+"<p>"+s.d+"</p></div></article>").join("")+
-    "</div></section>"+
     "<section class='areas'><div class='findings-head'><h2>Explore Palma by area</h2><span>8 city zones</span></div><div class='area-grid'>"+
     areas.map(x=>"<article class='area-card' onclick='focusArea(\""+x.id+"\")'><div class='area-icon'>"+x.icon+"</div><div><div class='area-type'>"+x.type+"</div><h3>"+x.n+"</h3><p>"+x.d+"</p></div></article>").join("")+
+    "</div></section>"+
+    "<section class='findings'><div class='findings-head'><h2>Palma findings</h2><span>"+spots.length+" places</span></div><div class='photo-grid'>"+
+    spots.map((s,idx)=>"<article class='spot-card' onclick='openSpot("+idx+")'><img loading='lazy' src='"+(s.photo||"https://loremflickr.com/640/480/Mallorca,Palma?lock="+(idx+20))+"' alt='"+s.n+"'><div class='spot-info'><div class='spot-cat'>"+categories[s.cat].icon+" "+categories[s.cat].label+"</div><h3>"+s.n+"</h3>"+(s.rating?("<div class='spot-rating'>★★★★★ <strong>"+s.rating+"</strong> · "+(s.reviews||0).toLocaleString()+" reviews</div>"):"")+(s.type?("<p class='spot-type'>"+s.type+"</p>"):"")+"<p>"+s.d+"</p></div></article>").join("")+
     "</div></section>";
   map.fitBounds(L.latLngBounds(spots.map(s=>s.c)),{padding:[40,40]});
 }
-function selectDay(id,btn){currentDay=id;document.querySelectorAll("#days button").forEach(b=>b.classList.remove("active"));if(btn)btn.classList.add("active");render()}
+function selectDay(id){currentDay=id;render()}
 function focusArea(id){
-  const a=areas.find(x=>x.id===id);
-  map.fitBounds(L.latLngBounds(a.p),{padding:[80,80]});
-  L.popup().setLatLng(a.c).setContent("<strong>"+a.icon+" "+a.n+"</strong><br><small>"+a.type+"</small><br>"+a.d).openOn(map);
-  document.querySelectorAll(".area-filter").forEach(b=>b.classList.remove("active"));
+  const x=areas.find(a=>a.id===id);
+  map.fitBounds(L.latLngBounds(x.p),{padding:[80,80]});
+  L.popup().setLatLng(x.c).setContent("<strong>"+x.icon+" "+x.n+"</strong><br><small>"+x.type+"</small><br>"+x.d).openOn(map);
 }
+function showAreas(){document.querySelector(".areas")?.scrollIntoView({behavior:"smooth",block:"start")}
 function showArea(id){focusArea(id)}
 function toggleCat(cat,btn){
   if(map.hasLayer(markerLayers[cat])){map.removeLayer(markerLayers[cat]);btn.classList.remove("active")}else{markerLayers[cat].addTo(map);btn.classList.add("active")}
