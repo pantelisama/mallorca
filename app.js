@@ -62,12 +62,12 @@ const spots=[
   {n:"Santa Catalina streets",c:[39.5694,2.6388],cat:"instagram",d:"Low colourful façades and lively street scene."}
 ];
 
-  // VILLAGES
-  {n:"Caimari",c:[39.7744,2.8794],cat:"villages",day:"sat",d:"Small Tramuntana village and first stop on the Saturday drive from Palma towards Lluc."},
-  {n:"Lluc",c:[39.8231,2.8830],cat:"villages",day:"sat",d:"Mountain sanctuary area in the Tramuntana; a key Saturday stop before Pollença."},
-  {n:"Pollença",c:[39.8767,3.0164],cat:"villages",day:"both",d:"Historic northern town and base for Saturday night and the Sunday Formentor drive."},
-  {n:"Port de Pollença",c:[39.9075,3.0815],cat:"villages",day:"sun",d:"Seafront town and Sunday morning stop before heading up to Formentor."},
-  {n:"Formentor",c:[39.9340,3.1780],cat:"villages",day:"sun",d:"Northern peninsula route with mountain viewpoints, pine forest and sea."}
+const villages=[
+  {id:"caimari",name:"Caimari",c:[39.7744,2.8794],day:"sat",data:{description:"",photos:[],rating:null,reviews:null,food:[],sights:[],experiences:[],instagram:[],hotels:[],notes:[],by:"",parking:"",route:""}},
+  {id:"lluc",name:"Lluc",c:[39.8231,2.8830],day:"sat",data:{description:"",photos:[],rating:null,reviews:null,food:[],sights:[],experiences:[],instagram:[],hotels:[],notes:[],by:"",parking:"",route:""}},
+  {id:"pollenca",name:"Pollença",c:[39.8767,3.0164],day:"both",data:{description:"",photos:[],rating:null,reviews:null,food:[],sights:[],experiences:[],instagram:[],hotels:[],notes:[],by:"",parking:"",route:""}},
+  {id:"port-de-pollenca",name:"Port de Pollença",c:[39.9075,3.0815],day:"sun",data:{description:"",photos:[],rating:null,reviews:null,food:[],sights:[],experiences:[],instagram:[],hotels:[],notes:[],by:"",parking:"",route:""}},
+  {id:"formentor",name:"Formentor",c:[39.9340,3.1780],day:"sun",data:{description:"",photos:[],rating:null,reviews:null,food:[],sights:[],experiences:[],instagram:[],hotels:[],notes:[],by:"",parking:"",route:""}}
 ];
 
 const areas=[
@@ -144,8 +144,8 @@ function render(){
   const dayCats=[...new Set(day.plan.map(x=>x[3]))];
   if(currentDay==="sat"||currentDay==="sun")dayCats.push("villages");
   document.querySelector("#days").innerHTML=days.map(d=>"<button type='button' class='"+(d.id===currentDay?"active":"")+"' data-day='"+d.id+"'>"+d.label+"</button>").join("");
-  document.querySelector("#filters").innerHTML=Object.entries(categories).map(([k,v])=>"<button type='button' class='filter' data-cat='"+k+"'>"+v.icon+" "+v.label+" <span>"+spots.filter(s=>s.cat===k&&dayCats.includes(k)&&(!s.day||s.day==="both"||s.day===currentDay)).length+"</span></button>").join("");
-  const daySpots=spots.filter(s=>dayCats.includes(s.cat) && (!s.day || s.day==="both" || s.day===currentDay));
+  document.querySelector("#filters").innerHTML=Object.entries(categories).map(([k,v])=>"<button type='button' class='filter' data-cat='"+k+"'>"+v.icon+" "+v.label+" <span>"+k==="villages" ? villages.filter(v=>v.day==="both"||v.day===currentDay).length : spots.filter(s=>s.cat===k&&dayCats.includes(k)&&(!s.day||s.day==="both"||s.day===currentDay)).length+"</span></button>").join("");
+  const daySpots=spots.filter(s=>dayCats.includes(s.cat) && (!s.day || s.day==="both" || s.day===currentDay));\n  const dayVillages=villages.filter(v=>dayCats.includes("villages") && (v.day==="both" || v.day===currentDay));
   document.querySelector("h1").textContent=day.title;
   document.querySelector(".sub").textContent=day.sub;
   routeVisible=false;map.removeLayer(routeLayer);
@@ -155,6 +155,7 @@ function render(){
     "</div></section>"+
     "<section class='findings'><div class='findings-head'><h2>"+(currentDay==="sat"||currentDay==="sun"?"Day addons":"Palma addons")+"</h2><span>"+daySpots.length+" places</span></div><div class='photo-grid'>"+
     daySpots.map((s)=>{const idx=spots.indexOf(s);return "<article class='spot-card' onclick='openSpot("+idx+")'><img loading='lazy' src='"+(s.photo||"https://loremflickr.com/640/480/"+encodeURIComponent(s.n)+"?lock="+(idx+20))+"' alt='"+s.n+"'><div class='spot-info'><div class='spot-meta'><div class='spot-cat'>"+categories[s.cat].icon+" "+categories[s.cat].label+"</div>"+(s.by?"<span class='finder-tag'>"+s.by+"</span>":"")+"</div><h3>"+s.n+"</h3>"+(s.rating?"<div class='spot-rating'>★★★★★ <strong>"+s.rating+"</strong> · "+(s.reviews||0).toLocaleString()+" reviews</div>":"")+(s.type?"<p class='spot-type'>"+s.type+"</p>":"")+"<p>"+s.d+"</p></div></article>"}).join("")+
+    dayVillages.map(v=>"<article class='spot-card village-card' onclick='openVillage(\'"+v.id+"\')'><div class='spot-info'><div class='spot-meta'><div class='spot-cat'>🏘️ Villages</div>"+(v.data.by?"<span class='finder-tag'>"+v.data.by+"</span>":"")+"</div><h3>"+v.name+"</h3>"+(v.data.rating?"<div class='spot-rating'>★★★★★ <strong>"+v.data.rating+"</strong> · "+(v.data.reviews||0).toLocaleString()+" reviews</div>":"")+(v.data.description?"<p>"+v.data.description+"</p>":"<p>Open this village to see its own saved data.</p>")+"</div></article>").join("")+
     "</div></section>";
   if(routes[currentDay]){drawRoute(currentDay);routeLayer.addTo(map);routeVisible=true;const b=document.querySelector("#route-toggle");if(b){b.textContent="Hide route";b.classList.add("active");}}
   map.fitBounds(L.latLngBounds(daySpots.length?daySpots.map(s=>s.c):spots.map(s=>s.c)),{padding:[40,40]});
@@ -184,3 +185,19 @@ document.addEventListener("click",e=>{
 });
 
 function openSpot(idx){const s=spots[idx];const gmap="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(s.n+", Palma, Mallorca, Spain");window.open(gmap,"_blank","noopener,noreferrer");}
+function openVillage(id){
+  const v=villages.find(x=>x.id===id); if(!v)return;
+  const d=v.data||{};
+  const sections=[
+    ["Food",d.food],["Sights",d.sights],["Experiences",d.experiences],
+    ["Instagrammable",d.instagram],["Hotels",d.hotels],["Notes",d.notes]
+  ];
+  const html="<section class='day-panel'><div class='findings-head'><div><h2>🏘️ "+v.name+"</h2><p class='day-description'>"+(d.description||"Village data")+"</p></div><button type='button' class='route-toggle' onclick='render()'>Back</button></div>"+
+    (d.photos&&d.photos.length?"<div class='photo-grid'>"+d.photos.map(p=>"<img loading='lazy' src='"+p+"' alt='"+v.name+"'>").join("")+"</div>":"")+
+    (d.rating?"<div class='spot-rating'>★★★★★ <strong>"+d.rating+"</strong> · "+(d.reviews||0).toLocaleString()+" reviews</div>":"")+
+    sections.map(x=>x[1]&&x[1].length?"<div class='day-card'><div class='day-content'><div class='time'>"+x[0]+"</div><p>"+x[1].join("</p><p>")+"</p></div></div>":"").join("")+
+    (d.parking?"<div class='day-card'><div class='day-content'><div class='time'>Parking</div><p>"+d.parking+"</p></div></div>":"")+
+    (d.route?"<div class='day-card'><div class='day-content'><div class='time'>Route</div><p>"+d.route+"</p></div></div>":"")+"</section>";
+  document.querySelector("#plan").innerHTML=html;
+  document.querySelector("#plan").scrollIntoView({behavior:"smooth",block:"start"});
+}
