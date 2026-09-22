@@ -136,7 +136,7 @@ function render(){
     "<section class='day-panel'><div class='findings-head'><div><h2>"+day.label+" · Plan</h2><p class='day-description'>"+day.sub+"</p></div><span>"+day.plan.length+" stops</span></div><div class='day-grid'>"+
     day.plan.map((x,i)=>"<article class='day-card'><div class='day-number'>"+String(i+1).padStart(2,"0")+"</div><div class='day-content'><div class='time'>"+x[0]+"</div><h3>"+x[1]+"</h3><p>"+x[2]+"</p><span class='tag'>"+categories[x[3]].icon+" "+categories[x[3]].label+"</span><div class='route'>"+x[4]+"</div></div></article>").join("")+
     "</div></section>"+
-    "<section class='findings'><div class='findings-head'><h2>Places for this day</h2><span>"+daySpots.length+" places</span></div><div class='photo-grid'>"+
+    "<section class='findings'><div class='findings-head'><h2>Palma addons</h2><span>"+daySpots.length+" places</span></div><div class='photo-grid'>"+
     daySpots.map((s)=>{const idx=spots.indexOf(s);return "<article class='spot-card' onclick='openSpot("+idx+")'><img loading='lazy' src='"+(s.photo||"https://loremflickr.com/640/480/Mallorca,Palma?lock="+(idx+20))+"' alt='"+s.n+"'><div class='spot-info'><div class='spot-meta'><div class='spot-cat'>"+categories[s.cat].icon+" "+categories[s.cat].label+"</div>"+(s.by?("<span class='finder-tag'>"+s.by+"</span>"):"")+"</div><h3>"+s.n+"</h3>"+(s.rating?("<div class='spot-rating'>★★★★★ <strong>"+s.rating+"</strong> · "+(s.reviews||0).toLocaleString()+" reviews</div>"):"")+(s.type?("<p class='spot-type'>"+s.type+"</p>"):"")+"<p>"+s.d+"</p></div></article>"}).join("")+
     "</div></section>"+
     "<section class='areas'><div class='findings-head'><h2>Explore Palma by area</h2><span>8 city zones</span></div><div class='area-grid'>"+
