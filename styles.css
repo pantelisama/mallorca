@@ -19,3 +19,5 @@
 .route-pin.route-sight span{background:#8a6b35}
 .route-label{background:#fff;border:0;border-radius:5px;box-shadow:0 2px 8px #0002;color:#18211d;font-size:11px;font-weight:700;padding:3px 6px;white-space:nowrap}
 .route-label:before{border-top-color:#fff}
+
+.route-pin.route-photo span{background:#7b5aa6;color:#fff;font-size:14px}
