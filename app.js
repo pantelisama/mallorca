@@ -63,11 +63,11 @@ const spots=[
 ];
 
   // VILLAGES
-  {n:"Caimari",c:[39.7744,2.8794],cat:"villages",d:"Small Tramuntana village and first stop on the Saturday drive from Palma towards Lluc."},
-  {n:"Lluc",c:[39.8231,2.8830],cat:"villages",d:"Mountain sanctuary area in the Tramuntana; a key Saturday stop before Pollença."},
-  {n:"Pollença",c:[39.8767,3.0164],cat:"villages",d:"Historic northern town and base for Saturday night and the Sunday Formentor drive."},
-  {n:"Port de Pollença",c:[39.9075,3.0815],cat:"villages",d:"Seafront town and Sunday morning stop before heading up to Formentor."},
-  {n:"Formentor",c:[39.9340,3.1780],cat:"villages",d:"Northern peninsula route with mountain viewpoints, pine forest and sea."}
+  {n:"Caimari",c:[39.7744,2.8794],cat:"villages",day:"sat",d:"Small Tramuntana village and first stop on the Saturday drive from Palma towards Lluc."},
+  {n:"Lluc",c:[39.8231,2.8830],cat:"villages",day:"sat",d:"Mountain sanctuary area in the Tramuntana; a key Saturday stop before Pollença."},
+  {n:"Pollença",c:[39.8767,3.0164],cat:"villages",day:"both",d:"Historic northern town and base for Saturday night and the Sunday Formentor drive."},
+  {n:"Port de Pollença",c:[39.9075,3.0815],cat:"villages",day:"sun",d:"Seafront town and Sunday morning stop before heading up to Formentor."},
+  {n:"Formentor",c:[39.9340,3.1780],cat:"villages",day:"sun",d:"Northern peninsula route with mountain viewpoints, pine forest and sea."}
 ];
 
 const areas=[
@@ -144,8 +144,8 @@ function render(){
   const dayCats=[...new Set(day.plan.map(x=>x[3]))];
   if(currentDay==="sat"||currentDay==="sun")dayCats.push("villages");
   document.querySelector("#days").innerHTML=days.map(d=>"<button type='button' class='"+(d.id===currentDay?"active":"")+"' data-day='"+d.id+"'>"+d.label+"</button>").join("");
-  document.querySelector("#filters").innerHTML=Object.entries(categories).map(([k,v])=>"<button type='button' class='filter' data-cat='"+k+"'>"+v.icon+" "+v.label+" <span>"+spots.filter(s=>s.cat===k&&dayCats.includes(k)).length+"</span></button>").join("");
-  const daySpots=spots.filter(s=>dayCats.includes(s.cat));
+  document.querySelector("#filters").innerHTML=Object.entries(categories).map(([k,v])=>"<button type='button' class='filter' data-cat='"+k+"'>"+v.icon+" "+v.label+" <span>"+spots.filter(s=>s.cat===k&&dayCats.includes(k)&&(!s.day||s.day==="both"||s.day===currentDay)).length+"</span></button>").join("");
+  const daySpots=spots.filter(s=>dayCats.includes(s.cat) && (!s.day || s.day==="both" || s.day===currentDay));
   document.querySelector("h1").textContent=day.title;
   document.querySelector(".sub").textContent=day.sub;
   routeVisible=false;map.removeLayer(routeLayer);
