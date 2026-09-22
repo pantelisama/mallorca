@@ -3,6 +3,7 @@ const categories={
   sights:{label:"Αξιοθέατα",icon:"🏛️"},
   experiences:{label:"Experiences",icon:"✨"},
   instagram:{label:"Instagrammable",icon:"📸"}
+  hotels:{label:"Hotels",icon:"🏨"}
 };
 
 const spots=[
