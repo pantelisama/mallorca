@@ -3,7 +3,8 @@ const categories={
   sights:{label:"Αξιοθέατα",icon:"🏛️"},
   experiences:{label:"Experiences",icon:"✨"},
   instagram:{label:"Instagrammable",icon:"📸"},
-  hotels:{label:"Hotels",icon:"🏨"}
+  hotels:{label:"Hotels",icon:"🏨"},
+  villages:{label:"Villages",icon:"🏘️"}
 };
 
 const spots=[
@@ -61,6 +62,13 @@ const spots=[
   {n:"Santa Catalina streets",c:[39.5694,2.6388],cat:"instagram",d:"Low colourful façades and lively street scene."}
 ];
 
+  // VILLAGES
+  {n:"Caimari",c:[39.7744,2.8794],cat:"villages",d:"Small Tramuntana village and first stop on the Saturday drive from Palma towards Lluc."},
+  {n:"Lluc",c:[39.8231,2.8830],cat:"villages",d:"Mountain sanctuary area in the Tramuntana; a key Saturday stop before Pollença."},
+  {n:"Pollença",c:[39.8767,3.0164],cat:"villages",d:"Historic northern town and base for Saturday night and the Sunday Formentor drive."},
+  {n:"Port de Pollença",c:[39.9075,3.0815],cat:"villages",d:"Seafront town and Sunday morning stop before heading up to Formentor."},
+  {n:"Formentor",c:[39.9340,3.1780],cat:"villages",d:"Northern peninsula route with mountain viewpoints, pine forest and sea."}
+];
 
 const areas=[
   {id:"oldtown",n:"Old Town · Casc Antic",type:"History & architecture",icon:"🏛️",c:[39.5715,2.6490],d:"The historic core: La Seu, Almudaina, Banys Àrabs, courtyards, churches and medieval lanes.",p:[[39.5752,2.6460],[39.5748,2.6545],[39.5680,2.6540],[39.5674,2.6440],[39.5710,2.6415]]},
@@ -111,6 +119,16 @@ areas.forEach(a=>{
   poly.on("click",()=>showArea(a.id));
   poly.addTo(areaLayer);
 });
+
+const routes={
+  sat:{stops:[{n:"Palma",c:[39.5700,2.6480]},{n:"Caimari",c:[39.7744,2.8794]},{n:"Lluc",c:[39.8231,2.8830]},{n:"Pollença",c:[39.8767,3.0164]}]},
+  sun:{stops:[{n:"Pollença",c:[39.8767,3.0164]},{n:"Port de Pollença",c:[39.9075,3.0815]},{n:"Mirador Es Colomer",c:[39.9328,3.1832]},{n:"Formentor Beach",c:[39.9357,3.2040]},{n:"Cap de Formentor",c:[39.9600,3.2095]},{n:"Pollença",c:[39.8767,3.0164]}]}
+};
+let routeLayer=L.layerGroup();
+let routeVisible=false;
+function drawRoute(dayId){routeLayer.clearLayers();const r=routes[dayId];if(!r)return;L.polyline(r.stops.map(x=>x.c),{color:"#18211d",weight:4,opacity:.8,dashArray:"8 7"}).addTo(routeLayer);r.stops.forEach((x,i)=>{const icon=L.divIcon({className:"route-pin",html:"<span>"+(i+1)+"</span>",iconSize:[30,30],iconAnchor:[15,15]});L.marker(x.c,{icon}).bindTooltip((i+1)+". "+x.n,{direction:"top",offset:[0,-12]}).addTo(routeLayer);});}
+function toggleRoute(){if(!routes[currentDay])return;routeVisible=!routeVisible;if(routeVisible){drawRoute(currentDay);routeLayer.addTo(map);map.fitBounds(L.latLngBounds(routes[currentDay].stops.map(x=>x.c)),{padding:[60,60]});}else{map.removeLayer(routeLayer);}const b=document.querySelector("#route-toggle");if(b){b.textContent=routeVisible?"Hide route":"Show route";b.classList.toggle("active",routeVisible);}}
+
 const markerLayers={};
 Object.keys(categories).forEach(cat=>{
   markerLayers[cat]=L.layerGroup().addTo(map);
@@ -123,25 +141,23 @@ Object.keys(categories).forEach(cat=>{
 
 function render(){
   const day=days.find(d=>d.id===currentDay)||days[0];
-  document.querySelector("#days").innerHTML=days.map(d=>"<button class='"+(d.id===currentDay?"active":"")+"' onclick='selectDay(\\\""+d.id+"\\\")'>"+d.label+"</button>").join("")+"<button onclick='showAreas()'>Explore areas</button>";
-  document.querySelector("#filters").innerHTML=Object.entries(categories).map(([k,v])=>"<button class='filter' data-cat='"+k+"' onclick='toggleCat(\\\""+k+"\\\",this)'>"+v.icon+" "+v.label+" <span>"+spots.filter(s=>s.cat===k).length+"</span></button>").join("")+"<button class='filter area-main-button' onclick='showAreas()'>📍 Περιοχές</button>";
-
-  const cats=[...new Set(day.plan.map(x=>x[3]))];
-  const daySpots=spots.filter(s=>cats.includes(s.cat));
-
+  const dayCats=[...new Set(day.plan.map(x=>x[3]))];
+  if(currentDay==="sat"||currentDay==="sun")dayCats.push("villages");
+  document.querySelector("#days").innerHTML=days.map(d=>"<button type='button' class='"+(d.id===currentDay?"active":"")+"' data-day='"+d.id+"'>"+d.label+"</button>").join("");
+  document.querySelector("#filters").innerHTML=Object.entries(categories).map(([k,v])=>"<button type='button' class='filter' data-cat='"+k+"'>"+v.icon+" "+v.label+" <span>"+spots.filter(s=>s.cat===k&&dayCats.includes(k)).length+"</span></button>").join("");
+  const daySpots=spots.filter(s=>dayCats.includes(s.cat));
   document.querySelector("h1").textContent=day.title;
   document.querySelector(".sub").textContent=day.sub;
-
+  routeVisible=false;map.removeLayer(routeLayer);
   document.querySelector("#plan").innerHTML=
-    "<section class='day-panel'><div class='findings-head'><div><h2>"+day.label+" · Plan</h2><p class='day-description'>"+day.sub+"</p></div><span>"+day.plan.length+" stops</span></div><div class='day-grid'>"+
+    "<section class='day-panel'><div class='findings-head'><div><h2>"+day.label+" · Plan</h2><p class='day-description'>"+day.sub+"</p></div><div class='day-tools'>"+(routes[currentDay]?"<button type='button' id='route-toggle' class='route-toggle' onclick='toggleRoute()'>Show route</button>":"")+"<span>"+day.plan.length+" stops</span></div></div><div class='day-grid'>"+
     day.plan.map((x,i)=>"<article class='day-card'><div class='day-number'>"+String(i+1).padStart(2,"0")+"</div><div class='day-content'><div class='time'>"+x[0]+"</div><h3>"+x[1]+"</h3><p>"+x[2]+"</p><span class='tag'>"+categories[x[3]].icon+" "+categories[x[3]].label+"</span><div class='route'>"+x[4]+"</div></div></article>").join("")+
     "</div></section>"+
-    "<section class='findings'><div class='findings-head'><h2>Palma addons</h2><span>"+daySpots.length+" places</span></div><div class='photo-grid'>"+
-    daySpots.map((s)=>{const idx=spots.indexOf(s);return "<article class='spot-card' onclick='openSpot("+idx+")'><img loading='lazy' src='"+(s.photo||"https://loremflickr.com/640/480/Mallorca,Palma?lock="+(idx+20))+"' alt='"+s.n+"'><div class='spot-info'><div class='spot-meta'><div class='spot-cat'>"+categories[s.cat].icon+" "+categories[s.cat].label+"</div>"+(s.by?("<span class='finder-tag'>"+s.by+"</span>"):"")+"</div><h3>"+s.n+"</h3>"+(s.rating?("<div class='spot-rating'>★★★★★ <strong>"+s.rating+"</strong> · "+(s.reviews||0).toLocaleString()+" reviews</div>"):"")+(s.type?("<p class='spot-type'>"+s.type+"</p>"):"")+"<p>"+s.d+"</p></div></article>"}).join("")+
-    "</div></section>"+
-
-
-  map.fitBounds(L.latLngBounds(spots.map(s=>s.c)),{padding:[40,40]});
+    "<section class='findings'><div class='findings-head'><h2>"+(currentDay==="sat"||currentDay==="sun"?"Day addons":"Palma addons")+"</h2><span>"+daySpots.length+" places</span></div><div class='photo-grid'>"+
+    daySpots.map((s)=>{const idx=spots.indexOf(s);return "<article class='spot-card' onclick='openSpot("+idx+")'><img loading='lazy' src='"+(s.photo||"https://loremflickr.com/640/480/"+encodeURIComponent(s.n)+"?lock="+(idx+20))+"' alt='"+s.n+"'><div class='spot-info'><div class='spot-meta'><div class='spot-cat'>"+categories[s.cat].icon+" "+categories[s.cat].label+"</div>"+(s.by?"<span class='finder-tag'>"+s.by+"</span>":"")+"</div><h3>"+s.n+"</h3>"+(s.rating?"<div class='spot-rating'>★★★★★ <strong>"+s.rating+"</strong> · "+(s.reviews||0).toLocaleString()+" reviews</div>":"")+(s.type?"<p class='spot-type'>"+s.type+"</p>":"")+"<p>"+s.d+"</p></div></article>"}).join("")+
+    "</div></section>";
+  if(routes[currentDay]){drawRoute(currentDay);routeLayer.addTo(map);routeVisible=true;const b=document.querySelector("#route-toggle");if(b){b.textContent="Hide route";b.classList.add("active");}}
+  map.fitBounds(L.latLngBounds(daySpots.length?daySpots.map(s=>s.c):spots.map(s=>s.c)),{padding:[40,40]});
 }
 function selectDay(id){currentDay=id;render()}
 function showTripOverview(){
@@ -153,7 +169,7 @@ function focusArea(id){
   map.fitBounds(L.latLngBounds(x.p),{padding:[80,80]});
   L.popup().setLatLng(x.c).setContent("<strong>"+x.icon+" "+x.n+"</strong><br><small>"+x.type+"</small><br>"+x.d).openOn(map);
 }
-function showAreas(){document.querySelector(".areas")?.scrollIntoView({behavior:"smooth",block:"start"});}
+function showAreas(){}
 function showArea(id){focusArea(id)}
 function toggleCat(cat,btn){
   if(map.hasLayer(markerLayers[cat])){map.removeLayer(markerLayers[cat]);btn.classList.remove("active")}else{markerLayers[cat].addTo(map);btn.classList.add("active")}
