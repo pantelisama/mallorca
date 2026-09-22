@@ -144,8 +144,9 @@ function render(){
   const dayCats=[...new Set(day.plan.map(x=>x[3]))];
   if(currentDay==="sat"||currentDay==="sun")dayCats.push("villages");
   document.querySelector("#days").innerHTML=days.map(d=>"<button type='button' class='"+(d.id===currentDay?"active":"")+"' data-day='"+d.id+"'>"+d.label+"</button>").join("");
-  document.querySelector("#filters").innerHTML=Object.entries(categories).map(([k,v])=>"<button type='button' class='filter' data-cat='"+k+"'>"+v.icon+" "+v.label+" <span>"+k==="villages" ? villages.filter(v=>v.day==="both"||v.day===currentDay).length : spots.filter(s=>s.cat===k&&dayCats.includes(k)&&(!s.day||s.day==="both"||s.day===currentDay)).length+"</span></button>").join("");
-  const daySpots=spots.filter(s=>dayCats.includes(s.cat) && (!s.day || s.day==="both" || s.day===currentDay));\n  const dayVillages=villages.filter(v=>dayCats.includes("villages") && (v.day==="both" || v.day===currentDay));
+  document.querySelector("#filters").innerHTML=Object.entries(categories).map(([k,v])=>"<button type='button' class='filter' data-cat='"+k+"'>"+v.icon+" "+v.label+" <span>"+(k==="villages" ? villages.filter(v=>v.day==="both"||v.day===currentDay).length : spots.filter(s=>s.cat===k&&dayCats.includes(k)&&(!s.day||s.day==="both"||s.day===currentDay)).length)+"</span></button>").join("");
+  const daySpots=spots.filter(s=>dayCats.includes(s.cat) && (!s.day || s.day==="both" || s.day===currentDay));
+  const dayVillages=villages.filter(v=>dayCats.includes("villages") && (v.day==="both" || v.day===currentDay));
   document.querySelector("h1").textContent=day.title;
   document.querySelector(".sub").textContent=day.sub;
   routeVisible=false;map.removeLayer(routeLayer);
@@ -155,7 +156,7 @@ function render(){
     "</div></section>"+
     "<section class='findings'><div class='findings-head'><h2>"+(currentDay==="sat"||currentDay==="sun"?"Day addons":"Palma addons")+"</h2><span>"+daySpots.length+" places</span></div><div class='photo-grid'>"+
     daySpots.map((s)=>{const idx=spots.indexOf(s);return "<article class='spot-card' onclick='openSpot("+idx+")'><img loading='lazy' src='"+(s.photo||"https://loremflickr.com/640/480/"+encodeURIComponent(s.n)+"?lock="+(idx+20))+"' alt='"+s.n+"'><div class='spot-info'><div class='spot-meta'><div class='spot-cat'>"+categories[s.cat].icon+" "+categories[s.cat].label+"</div>"+(s.by?"<span class='finder-tag'>"+s.by+"</span>":"")+"</div><h3>"+s.n+"</h3>"+(s.rating?"<div class='spot-rating'>★★★★★ <strong>"+s.rating+"</strong> · "+(s.reviews||0).toLocaleString()+" reviews</div>":"")+(s.type?"<p class='spot-type'>"+s.type+"</p>":"")+"<p>"+s.d+"</p></div></article>"}).join("")+
-    dayVillages.map(v=>"<article class='spot-card village-card' onclick='openVillage(\'"+v.id+"\')'><div class='spot-info'><div class='spot-meta'><div class='spot-cat'>🏘️ Villages</div>"+(v.data.by?"<span class='finder-tag'>"+v.data.by+"</span>":"")+"</div><h3>"+v.name+"</h3>"+(v.data.rating?"<div class='spot-rating'>★★★★★ <strong>"+v.data.rating+"</strong> · "+(v.data.reviews||0).toLocaleString()+" reviews</div>":"")+(v.data.description?"<p>"+v.data.description+"</p>":"<p>Open this village to see its own saved data.</p>")+"</div></article>").join("")+
+    dayVillages.map(v=>"<article class='spot-card village-card' data-village='"+v.id+""><div class='spot-info'><div class='spot-meta'><div class='spot-cat'>🏘️ Villages</div>"+(v.data.by?"<span class='finder-tag'>"+v.data.by+"</span>":"")+"</div><h3>"+v.name+"</h3>"+(v.data.rating?"<div class='spot-rating'>★★★★★ <strong>"+v.data.rating+"</strong> · "+(v.data.reviews||0).toLocaleString()+" reviews</div>":"")+(v.data.description?"<p>"+v.data.description+"</p>":"<p>Open this village to see its own saved data.</p>")+"</div></article>").join("")+
     "</div></section>";
   if(routes[currentDay]){drawRoute(currentDay);routeLayer.addTo(map);routeVisible=true;const b=document.querySelector("#route-toggle");if(b){b.textContent="Hide route";b.classList.add("active");}}
   map.fitBounds(L.latLngBounds(daySpots.length?daySpots.map(s=>s.c):spots.map(s=>s.c)),{padding:[40,40]});
