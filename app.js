@@ -63,23 +63,23 @@ const spots=[
 
 
 const areas=[
-  {id:"oldtown",n:"Palma Old Town",type:"Historic",icon:"🏛️",c:[39.5717,2.6490],d:"Medieval lanes, courtyards, churches, palaces and the historic city centre.",p:[[39.5750,2.6460],[39.5748,2.6545],[39.5680,2.6540],[39.5675,2.6440],[39.5710,2.6415]]},
-  {id:"lonja",n:"La Lonja",type:"Bars & Food",icon:"🍸",c:[39.5685,2.6460],d:"Compact evening zone around the old maritime quarter: tapas, wine and bars.",p:[[39.5705,2.6418],[39.5718,2.6480],[39.5682,2.6500],[39.5665,2.6450]]},
-  {id:"santacatalina",n:"Santa Catalina",type:"Restaurants & Bars",icon:"🍽️",c:[39.5700,2.6388],d:"Neighbourhood market, restaurants, vermouth, bars and evening atmosphere.",p:[[39.5725,2.6355],[39.5720,2.6415],[39.5680,2.6420],[39.5675,2.6360]]},
-  {id:"esjonquet",n:"Es Jonquet",type:"Historic / Nightlife",icon:"🌙",c:[39.5680,2.6380],d:"Old fishermen's quarter with windmills, narrow streets and nightlife nearby.",p:[[39.5700,2.6348],[39.5705,2.6395],[39.5670,2.6410],[39.5660,2.6360]]},
-  {id:"born",n:"Passeig del Born",type:"Shopping & Architecture",icon:"🏙️",c:[39.5702,2.6480],d:"Grand central promenade with historic façades, cafés and shopping streets.",p:[[39.5720,2.6455],[39.5720,2.6500],[39.5688,2.6500],[39.5685,2.6460]]},
-  {id:"portixol",n:"Portixol",type:"Waterfront",icon:"🌊",c:[39.5620,2.6760],d:"Seafront promenade, small beaches, restaurants and sunset by the water.",p:[[39.5650,2.6690],[39.5650,2.6810],[39.5590,2.6820],[39.5585,2.6710]]},
-  {id:"terreno",n:"El Terreno",type:"Bars & Nightlife",icon:"🍸",c:[39.5638,2.6255],d:"West-side nightlife district between Bellver and the waterfront.",p:[[39.5680,2.6210],[39.5680,2.6310],[39.5600,2.6320],[39.5595,2.6220]]},
-  {id:"peregarau",n:"Pere Garau",type:"Market / Local",icon:"🥬",c:[39.5738,2.6570],d:"More everyday Palma: market, local shops and a less polished neighbourhood feel.",p:[[39.5770,2.6530],[39.5770,2.6620],[39.5710,2.6620],[39.5705,2.6540]]}
+  {id:"oldtown",n:"Old Town · Casc Antic",type:"History & architecture",icon:"🏛️",c:[39.5715,2.6490],d:"The historic core: La Seu, Almudaina, Banys Àrabs, courtyards, churches and medieval lanes.",p:[[39.5752,2.6460],[39.5748,2.6545],[39.5680,2.6540],[39.5674,2.6440],[39.5710,2.6415]]},
+  {id:"lonja",n:"La Lonja · Apuntadors",type:"Tapas, wine & evening bars",icon:"🍷",c:[39.5685,2.6460],d:"Dense evening food-and-drink quarter around La Lonja and Carrer dels Apuntadors.",p:[[39.5708,2.6418],[39.5718,2.6480],[39.5680,2.6500],[39.5663,2.6450]]},
+  {id:"santacatalina",n:"Santa Catalina · Fàbrica",type:"Restaurants & pedestrian streets",icon:"🍽️",c:[39.5698,2.6388],d:"Palma's food neighbourhood: Mercat, Carrer de la Fàbrica, Sant Magí, vermouth, tapas and bars.",p:[[39.5727,2.6353],[39.5720,2.6417],[39.5679,2.6420],[39.5673,2.6358]]},
+  {id:"born",n:"Born · Jaime III",type:"Shopping & grand boulevards",icon:"🛍️",c:[39.5703,2.6482],d:"Elegant central promenade, designer shops, cafés, Modernista façades and the main city-centre shopping streets.",p:[[39.5722,2.6452],[39.5721,2.6502],[39.5687,2.6501],[39.5684,2.6460]]},
+  {id:"marina",n:"Paseo Marítimo · Marina",type:"Clubs, marina & nightlife",icon:"🪩",c:[39.5660,2.6380],d:"The main waterfront nightlife strip: marina, late bars and clubs, especially later at night.",p:[[39.5690,2.6320],[39.5690,2.6450],[39.5630,2.6490],[39.5605,2.6380]]},
+  {id:"portixol",n:"Portixol · Es Molinar",type:"Sea, promenade & waterfront food",icon:"🌊",c:[39.5618,2.6760],d:"Former fishing-village waterfront with promenade, small beaches, restaurants and a calmer sea-facing atmosphere.",p:[[39.5650,2.6685],[39.5650,2.6815],[39.5585,2.6820],[39.5582,2.6705]]},
+  {id:"bellver",n:"Bellver · El Terreno",type:"Castle, views & west-side nightlife",icon:"🌲",c:[39.5628,2.6235],d:"Bellver forest and castle above the city, with El Terreno between the hill and waterfront.",p:[[39.5685,2.6185],[39.5685,2.6315],[39.5595,2.6325],[39.5590,2.6200]]},
+  {id:"peregarau",n:"Pere Garau · Mercat",type:"Local market & everyday Palma",icon:"🥬",c:[39.5738,2.6570],d:"A more everyday side of Palma: market, local shops, immigrant food culture and less polished streets.",p:[[39.5770,2.6530],[39.5770,2.6625],[39.5710,2.6625],[39.5705,2.6540]]}
 ];
 
 const days=[
   {id:"fri",label:"Fri 16",title:"Palma · Friday 16",sub:"Arrival · Old Town · food · culture · sunset · nightlife",plan:[
-    ["Arrival","Palma Old Town","Start at Parc de la Mar → La Seu → Almudaina → old-town lanes → La Lonja → Born.","experiences","Easy first walk after landing."],
-    ["Golden hour","Cathedral / Parc de la Mar","Do the cathedral reflection and waterfront before heading deeper into the old town.","instagram","Best light around sunset."],
-    ["Early evening","Old Town","Banys Àrabs → Santa Eulàlia → Plaça de Cort → Can Joan de s'Aigo → Plaça Major.","sights","Compact walk."],
-    ["Dinner","La Lonja / Santa Catalina","Choose between a tapas crawl around La Lonja or the more neighbourhood-focused Santa Catalina.","food","See the food category for the shortlist."],
-    ["Night option","Tablao Flamenco Alma","Flamenco is listed for Friday 16 Oct 2026; check the current listing and book ahead.","experiences","Optional depending on arrival energy."]
+    ["Arrival","Palma Old Town","Parc de la Mar → La Seu → Almudaina → old-town lanes → La Lonja → Born.","experiences","Easy first walk after landing."],
+    ["Golden hour","Cathedral / Parc de la Mar","Finish the waterfront and cathedral reflection around sunset.","instagram","Best light around sunset."],
+    ["Early evening","Old Town","Banys Àrabs → Santa Eulàlia → Plaça de Cort → Plaça Major.","sights","Compact walk through the historic core."],
+    ["Dinner","La Lonja or Santa Catalina","Pick the area that fits your mood: historic tapas/wine in La Lonja or the food-heavy neighbourhood streets of Santa Catalina.","food","The places themselves are in the findings below."],
+    ["Night option","Flamenco / nightlife","Optional depending on arrival energy.","experiences","Choose from the relevant places below."]
   ]},
   {id:"sat",label:"Sat 17",title:"Saturday 17 · Northern Tramuntana",sub:"Caimari · Lluc · Pollença · mountain roads · local food",plan:[
     ["Morning","Palma → Caimari","Leave Palma and drive towards Caimari for a coffee / short village stop before the mountains.","experiences","Keep the morning flexible."],
@@ -125,13 +125,16 @@ function render(){
   document.querySelector("#days").innerHTML=days.map(d=>"<button class='"+(d.id===currentDay?"active":"")+"' onclick='selectDay(\""+d.id+"\",this)'>"+d.label+"</button>").join("");
   document.querySelector("#filters").innerHTML=
   "<div class='filter-group'><div class='filter-label'>FINDINGS</div>"+Object.entries(categories).map(([k,v])=>"<button class='filter active' data-cat='"+k+"' onclick='toggleCat(\""+k+"\",this)'>"+v.icon+" "+v.label+" <span>"+spots.filter(s=>s.cat===k).length+"</span></button>").join("")+"</div>"+
-  "<div class='filter-group'><div class='filter-label'>AREAS</div>"+areas.map(a=>"<button class='filter area-filter' onclick='focusArea(\""+a.id+"\")'>"+a.icon+" "+a.n+"</button>").join("")+"</div>";
+  "";
   const d=days.find(x=>x.id===currentDay);
   document.querySelector("#plan").innerHTML=
     "<div class='plan-intro'><h2>"+d.title+"</h2><p>"+d.sub+"</p></div>"+
     d.plan.map(i=>"<article class='card'><div class='time'>"+i[0]+"</div><div class='title'>"+i[1]+"</div><div class='desc'>"+i[2]+"</div><span class='tag'>"+categories[i[3]].icon+" "+categories[i[3]].label+"</span><div class='route'>"+i[4]+"</div></article>").join("")+
     "<section class='findings'><div class='findings-head'><h2>Palma findings</h2><span>"+spots.length+" places</span></div><div class='photo-grid'>"+
     spots.map((s,idx)=>"<article class='spot-card' onclick='openSpot("+idx+")'><img loading='lazy' src='"+(s.photo||"https://loremflickr.com/640/480/Mallorca,Palma?lock="+(idx+20))+"' alt='"+s.n+"'><div class='spot-info'><div class='spot-cat'>"+categories[s.cat].icon+" "+categories[s.cat].label+"</div><h3>"+s.n+"</h3>"+(s.rating?("<div class='spot-rating'>★★★★★ <strong>"+s.rating+"</strong> · "+(s.reviews||0).toLocaleString()+" reviews</div>"):"")+(s.type?("<p class='spot-type'>"+s.type+"</p>"):"")+"<p>"+s.d+"</p></div></article>").join("")+
+    "</div></section>"+
+    "<section class='areas'><div class='findings-head'><h2>Explore Palma by area</h2><span>8 city zones</span></div><div class='area-grid'>"+
+    areas.map(x=>"<article class='area-card' onclick='focusArea(\""+x.id+"\")'><div class='area-icon'>"+x.icon+"</div><div><div class='area-type'>"+x.type+"</div><h3>"+x.n+"</h3><p>"+x.d+"</p></div></article>").join("")+
     "</div></section>";
   map.fitBounds(L.latLngBounds(spots.map(s=>s.c)),{padding:[40,40]});
 }
