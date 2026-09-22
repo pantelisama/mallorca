@@ -60,13 +60,33 @@ const spots=[
   {n:"Santa Catalina streets",c:[39.5694,2.6388],cat:"instagram",d:"Low colourful façades and lively street scene."}
 ];
 
-const dayPlan=[
-  ["Arrival","Palma Old Town","Start at Parc de la Mar → La Seu → Almudaina → old-town lanes → La Lonja → Born.","experiences","Easy first walk after landing."],
-  ["Golden hour","Cathedral / Parc de la Mar","Do the cathedral reflection and waterfront before heading deeper into the old town.","instagram","Best light around sunset."],
-  ["Early evening","Old Town","Banys Àrabs → Santa Eulàlia → Plaça de Cort → Can Joan de s'Aigo → Plaça Major.","sights","Compact walk."],
-  ["Dinner","La Lonja / Santa Catalina","Choose between a tapas crawl around La Lonja or the more neighbourhood-focused Santa Catalina.","food","See the food category for the shortlist."],
-  ["Night option","Tablao Flamenco Alma","Flamenco is listed for Friday 16 Oct 2026; current listings show evening performances.","experiences","Book if you want this to be the main night experience."]
+const days=[
+  {id:"fri",label:"Fri 16",title:"Palma · Friday 16",sub:"Arrival · Old Town · food · culture · sunset · nightlife",plan:[
+    ["Arrival","Palma Old Town","Start at Parc de la Mar → La Seu → Almudaina → old-town lanes → La Lonja → Born.","experiences","Easy first walk after landing."],
+    ["Golden hour","Cathedral / Parc de la Mar","Do the cathedral reflection and waterfront before heading deeper into the old town.","instagram","Best light around sunset."],
+    ["Early evening","Old Town","Banys Àrabs → Santa Eulàlia → Plaça de Cort → Can Joan de s'Aigo → Plaça Major.","sights","Compact walk."],
+    ["Dinner","La Lonja / Santa Catalina","Choose between a tapas crawl around La Lonja or the more neighbourhood-focused Santa Catalina.","food","See the food category for the shortlist."],
+    ["Night option","Tablao Flamenco Alma","Flamenco is listed for Friday 16 Oct 2026; check the current listing and book ahead.","experiences","Optional depending on arrival energy."]
+  ]},
+  {id:"sat",label:"Sat 17",title:"Saturday 17 · Northern Tramuntana",sub:"Caimari · Lluc · Pollença · mountain roads · local food",plan:[
+    ["Morning","Palma → Caimari","Leave Palma and drive towards Caimari for a coffee / short village stop before the mountains.","experiences","Keep the morning flexible."],
+    ["Late morning","Lluc","Continue through the Tramuntana to Santuari de Lluc and explore the monastery and mountain surroundings.","sights","Allow time for a short walk."],
+    ["Afternoon","Lluc → Pollença","Drive to Pollença, wander the old town and climb the Calvari steps if energy allows.","sights","Best late-afternoon light."],
+    ["Dinner","Pollença","Look for a local Mallorcan dinner rather than eating on the busiest tourist strip.","food","Reserve if you find a specific restaurant you want."]
+  ]},
+  {id:"sun",label:"Sun 18",title:"Sunday 18 · Pollença → Formentor",sub:"Port de Pollença · Formentor · viewpoints · sea",plan:[
+    ["Morning","Pollença → Port de Pollença","Head to the coast for breakfast and a waterfront walk.","food","Go early for easier parking."],
+    ["Late morning","Mirador Es Colomer","Drive towards Formentor and stop at the famous viewpoint above the cliffs.","instagram","Allow time for the walk to the viewpoint."],
+    ["Afternoon","Formentor Beach","Continue to Platja de Formentor for sea, pine trees and a slower afternoon.","experiences","Check road/access conditions on the day."],
+    ["Late afternoon","Cap de Formentor","Continue as far as access allows; lighthouse / cliff views depend on current road restrictions.","instagram","Sunset option if timing works."],
+    ["Evening","Return to Pollença","Dinner and a relaxed final evening in Pollença.","food","Keep it simple after the drive."]
+  ]},
+  {id:"mon",label:"Mon 19",title:"Monday 19 · Palma → Airport",sub:"Breakfast · short Palma walk · airport",plan:[
+    ["Morning","Palma","Breakfast and one last short walk through the old town / waterfront.","food","Keep plenty of airport buffer."],
+    ["Departure","Palma → PMI","Return rental car if applicable and head to Palma airport.","experiences","Flight is midday."]
+  ]}
 ];
+let currentDay="fri";
 
 const map=L.map("map",{zoomControl:true}).setView([39.570,2.648],14);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"© OpenStreetMap contributors"}).addTo(map);
@@ -76,16 +96,19 @@ Object.keys(categories).forEach(cat=>{
   markerLayers[cat]=L.layerGroup().addTo(map);
   spots.filter(s=>s.cat===cat).forEach(s=>{
     const icon=L.divIcon({className:"spot-icon",html:"<span>"+categories[cat].icon+"</span>",iconSize:[34,34],iconAnchor:[17,17]});
-    L.marker(s.c,{icon}).addTo(markerLayers[cat]).bindPopup("<b>"+categories[cat].icon+" "+s.n+"</b><br><span>"+s.d+"</span>"+(s.tip?"<br><small>Tip: "+s.tip+"</small>":""));
+    const gmap="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(s.n+", Palma, Mallorca, Spain");
+    L.marker(s.c,{icon}).addTo(markerLayers[cat]).on("click",()=>window.open(gmap,"_blank","noopener,noreferrer"));
   });
 });
 
 function render(){
-  document.querySelector("#days").innerHTML="<button class='active'>Fri 16</button>";
+  document.querySelector("#days").innerHTML=days.map(d=>"<button class='"+(d.id===currentDay?"active":"")+"' onclick='selectDay(\""+d.id+"\")'>"+d.label+"</button>").join("");
   document.querySelector("#filters").innerHTML=Object.entries(categories).map(([k,v])=>"<button class='filter active' data-cat='"+k+"' onclick='toggleCat(\""+k+"\",this)'>"+v.icon+" "+v.label+" <span>"+spots.filter(s=>s.cat===k).length+"</span></button>").join("");
-  document.querySelector("#plan").innerHTML="<div class='plan-intro'><h2>Palma · Friday 16</h2><p>Arrival day — keep the route compact, then choose food / flamenco / drinks depending on energy.</p></div>"+dayPlan.map(i=>"<article class='card'><div class='time'>"+i[0]+"</div><div class='title'>"+i[1]+"</div><div class='desc'>"+i[2]+"</div><span class='tag'>"+categories[i[3]].icon+" "+categories[i[3]].label+"</span><div class='route'>"+i[4]+"</div></article>").join("")+"<div class='all-spots'><b>"+spots.length+" Palma spots loaded</b><span>Tap map pins or use the category filters above.</span></div>";
+  const d=days.find(x=>x.id===currentDay);
+  document.querySelector("#plan").innerHTML="<div class='plan-intro'><h2>"+d.title+"</h2><p>"+d.sub+"</p></div>"+d.plan.map(i=>"<article class='card'><div class='time'>"+i[0]+"</div><div class='title'>"+i[1]+"</div><div class='desc'>"+i[2]+"</div><span class='tag'>"+categories[i[3]].icon+" "+categories[i[3]].label+"</span><div class='route'>"+i[4]+"</div></article>").join("")+"<div class='all-spots'><b>"+spots.length+" Palma spots loaded</b><span>Click any map pin to open its Google Maps place search.</span></div>";
   map.fitBounds(L.latLngBounds(spots.map(s=>s.c)),{padding:[40,40]});
 }
+function selectDay(id){currentDay=id;document.querySelectorAll("#days button").forEach(b=>b.classList.remove("active"));event.currentTarget.classList.add("active");render()}
 function toggleCat(cat,btn){
   if(map.hasLayer(markerLayers[cat])){map.removeLayer(markerLayers[cat]);btn.classList.remove("active")}else{markerLayers[cat].addTo(map);btn.classList.add("active")}
 }
