@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+echo "Running Mallorca pre-commit checks..."
+command -v node >/dev/null 2>&1 || { echo "ERROR: Node.js is required."; exit 1; }
+node --check app.js
+node scripts/validate-html.js
+echo "Pre-commit checks passed."
