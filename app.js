@@ -161,4 +161,6 @@ function toggleCat(cat,btn){
 }
 render();
 
+document.querySelector("#days").addEventListener("click",function(e){const b=e.target.closest("button[data-day]");if(!b)return;currentDay=b.dataset.day;render();});
+
 function openSpot(idx){const s=spots[idx];const gmap="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(s.n+", Palma, Mallorca, Spain");window.open(gmap,"_blank","noopener,noreferrer");}
