@@ -181,7 +181,7 @@ async function drawRoute(id){
     const glyph=x.type==="sight"?"◆":x.type==="village"?"●":x.type==="photo"?"📷":x.type==="start"?"▶":"■";
     const icon=L.divIcon({className:cls,html:"<span>"+glyph+"</span>",iconSize:iconSize,iconAnchor:anchor});
     const marker=L.marker(x.c,{icon:icon}).addTo(routeLayer);
-    const gmap="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(x.n+", Mallorca, Spain");marker.bindPopup("<strong>"+x.n+"</strong>"+(x.d?"<br><small>"+x.d+"</small>":"")+"<br><a href=\""+gmap+"\" target=\"_blank\" rel=\"noopener noreferrer\">Open in Google Maps</a>");
+    const gmap="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(x.n+", Mallorca, Spain");marker.bindPopup("<div class=\"route-popup\" data-gmap=\""+gmap+"\"><strong>"+x.n+"</strong>"+(x.d?"<br><small>"+x.d+"</small>":"")+"<br><span>Open in Google Maps →</span></div>");marker.on("popupopen",e=>{const el=e.popup.getElement()?.querySelector(".route-popup");if(el)el.onclick=()=>window.open(el.dataset.gmap,"_blank","noopener,noreferrer");});
     marker.bindTooltip(x.n,{permanent:true,direction:"top",offset:[0,x.size==="long"?-22:-16],className:"route-label"});
   });
 }
