@@ -108,99 +108,36 @@ const days=[
   ]}
 ];
 let currentDay="fri";
-
 const map=L.map("map",{zoomControl:true}).setView([39.570,2.648],14);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"© OpenStreetMap contributors"}).addTo(map);
-
 const areaLayer=L.layerGroup().addTo(map);
-areas.forEach(a=>{
-  const poly=L.polygon(a.p,{color:"#18211d",weight:1,fillOpacity:.12});
-  poly.bindPopup("<strong>"+a.icon+" "+a.n+"</strong><br><small>"+a.type+"</small><br>"+a.d);
-  poly.on("click",()=>showArea(a.id));
-  poly.addTo(areaLayer);
-});
-
-const routes={
-  sat:{stops:[{n:"Palma",c:[39.5700,2.6480]},{n:"Caimari",c:[39.7744,2.8794]},{n:"Lluc",c:[39.8231,2.8830]},{n:"Pollença",c:[39.8767,3.0164]}]},
-  sun:{stops:[{n:"Pollença",c:[39.8767,3.0164]},{n:"Port de Pollença",c:[39.9075,3.0815]},{n:"Mirador Es Colomer",c:[39.9328,3.1832]},{n:"Formentor Beach",c:[39.9357,3.2040]},{n:"Cap de Formentor",c:[39.9600,3.2095]},{n:"Pollença",c:[39.8767,3.0164]}]}
-};
-let routeLayer=L.layerGroup();
-let routeVisible=false;
-function drawRoute(dayId){routeLayer.clearLayers();const r=routes[dayId];if(!r)return;L.polyline(r.stops.map(x=>x.c),{color:"#18211d",weight:4,opacity:.8,dashArray:"8 7"}).addTo(routeLayer);r.stops.forEach((x,i)=>{const icon=L.divIcon({className:"route-pin",html:"<span>"+(i+1)+"</span>",iconSize:[30,30],iconAnchor:[15,15]});L.marker(x.c,{icon}).bindTooltip((i+1)+". "+x.n,{direction:"top",offset:[0,-12]}).addTo(routeLayer);});}
-function toggleRoute(){if(!routes[currentDay])return;routeVisible=!routeVisible;if(routeVisible){drawRoute(currentDay);routeLayer.addTo(map);map.fitBounds(L.latLngBounds(routes[currentDay].stops.map(x=>x.c)),{padding:[60,60]});}else{map.removeLayer(routeLayer);}const b=document.querySelector("#route-toggle");if(b){b.textContent=routeVisible?"Hide route":"Show route";b.classList.toggle("active",routeVisible);}}
-
+areas.forEach(a=>{const poly=L.polygon(a.p,{color:"#18211d",weight:1,fillOpacity:.12});poly.bindPopup("<strong>"+a.icon+" "+a.n+"</strong><br><small>"+a.type+"</small><br>"+a.d);poly.on("click",()=>focusArea(a.id));poly.addTo(areaLayer);});
+const routes={sat:{stops:[{n:"Palma",c:[39.5700,2.6480]},{n:"Caimari",c:[39.7744,2.8794]},{n:"Lluc",c:[39.8231,2.8830]},{n:"Pollença",c:[39.8767,3.0164]}]},sun:{stops:[{n:"Pollença",c:[39.8767,3.0164]},{n:"Port de Pollença",c:[39.9075,3.0815]},{n:"Mirador Es Colomer",c:[39.9328,3.1832]},{n:"Formentor Beach",c:[39.9357,3.2040]},{n:"Cap de Formentor",c:[39.9600,3.2095]},{n:"Pollença",c:[39.8767,3.0164]}]}};
+let routeLayer=L.layerGroup(),routeVisible=false;
+function drawRoute(id){routeLayer.clearLayers();const r=routes[id];if(!r)return;L.polyline(r.stops.map(x=>x.c),{color:"#18211d",weight:4,opacity:.8,dashArray:"8 7"}).addTo(routeLayer);r.stops.forEach((x,i)=>{const icon=L.divIcon({className:"route-pin",html:"<span>"+(i+1)+"</span>",iconSize:[30,30],iconAnchor:[15,15]});L.marker(x.c,{icon:icon}).bindTooltip((i+1)+". "+x.n,{direction:"top",offset:[0,-12]}).addTo(routeLayer);});}
+function toggleRoute(){if(!routes[currentDay])return;routeVisible=!routeVisible;if(routeVisible){drawRoute(currentDay);routeLayer.addTo(map);}else{map.removeLayer(routeLayer);}const b=document.querySelector("#route-toggle");if(b){b.textContent=routeVisible?"Hide route":"Show route";b.classList.toggle("active",routeVisible);}}
 const markerLayers={};
-Object.keys(categories).forEach(cat=>{
-  markerLayers[cat]=L.layerGroup().addTo(map);
-  spots.filter(s=>s.cat===cat).forEach(s=>{
-    const icon=L.divIcon({className:"spot-icon",html:"<span>"+categories[cat].icon+"</span>",iconSize:[34,34],iconAnchor:[17,17]});
-    const gmap="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(s.n+", Palma, Mallorca, Spain");
-    L.marker(s.c,{icon}).addTo(markerLayers[cat]).on("click",()=>window.open(gmap,"_blank","noopener,noreferrer"));
-  });
-});
-
+Object.keys(categories).forEach(cat=>{markerLayers[cat]=L.layerGroup().addTo(map);spots.filter(s=>s.cat===cat).forEach(s=>{const icon=L.divIcon({className:"spot-icon",html:"<span>"+categories[cat].icon+"</span>",iconSize:[34,34],iconAnchor:[17,17]});const gmap="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(s.n+", Mallorca, Spain");L.marker(s.c,{icon:icon}).addTo(markerLayers[cat]).on("click",()=>window.open(gmap,"_blank","noopener,noreferrer"));});});
 function render(){
-  const day=days.find(d=>d.id===currentDay)||days[0];
-  const dayCats=[...new Set(day.plan.map(x=>x[3]))];
-  if(currentDay==="sat"||currentDay==="sun")dayCats.push("villages");
-  document.querySelector("#days").innerHTML=days.map(d=>"<button type='button' class='"+(d.id===currentDay?"active":"")+"' data-day='"+d.id+"'>"+d.label+"</button>").join("");
-  document.querySelector("#filters").innerHTML=Object.entries(categories).map(([k,v])=>"<button type='button' class='filter' data-cat='"+k+"'>"+v.icon+" "+v.label+" <span>"+(k==="villages" ? villages.filter(v=>v.day==="both"||v.day===currentDay).length : spots.filter(s=>s.cat===k&&dayCats.includes(k)&&(!s.day||s.day==="both"||s.day===currentDay)).length)+"</span></button>").join("");
-  const daySpots=spots.filter(s=>dayCats.includes(s.cat) && (!s.day || s.day==="both" || s.day===currentDay));
-  const dayVillages=villages.filter(v=>dayCats.includes("villages") && (v.day==="both" || v.day===currentDay));
-  document.querySelector("h1").textContent=day.title;
-  document.querySelector(".sub").textContent=day.sub;
-  routeVisible=false;map.removeLayer(routeLayer);
-  document.querySelector("#plan").innerHTML=
-    "<section class='day-panel'><div class='findings-head'><div><h2>"+day.label+" · Plan</h2><p class='day-description'>"+day.sub+"</p></div><div class='day-tools'>"+(routes[currentDay]?"<button type='button' id='route-toggle' class='route-toggle' onclick='toggleRoute()'>Show route</button>":"")+"<span>"+day.plan.length+" stops</span></div></div><div class='day-grid'>"+
-    day.plan.map((x,i)=>"<article class='day-card'><div class='day-number'>"+String(i+1).padStart(2,"0")+"</div><div class='day-content'><div class='time'>"+x[0]+"</div><h3>"+x[1]+"</h3><p>"+x[2]+"</p><span class='tag'>"+categories[x[3]].icon+" "+categories[x[3]].label+"</span><div class='route'>"+x[4]+"</div></div></article>").join("")+
-    "</div></section>"+
-    "<section class='findings'><div class='findings-head'><h2>"+(currentDay==="sat"||currentDay==="sun"?"Day addons":"Palma addons")+"</h2><span>"+daySpots.length+" places</span></div><div class='photo-grid'>"+
-    daySpots.map((s)=>{const idx=spots.indexOf(s);return "<article class='spot-card' onclick='openSpot("+idx+")'><img loading='lazy' src='"+(s.photo||"https://loremflickr.com/640/480/"+encodeURIComponent(s.n)+"?lock="+(idx+20))+"' alt='"+s.n+"'><div class='spot-info'><div class='spot-meta'><div class='spot-cat'>"+categories[s.cat].icon+" "+categories[s.cat].label+"</div>"+(s.by?"<span class='finder-tag'>"+s.by+"</span>":"")+"</div><h3>"+s.n+"</h3>"+(s.rating?"<div class='spot-rating'>★★★★★ <strong>"+s.rating+"</strong> · "+(s.reviews||0).toLocaleString()+" reviews</div>":"")+(s.type?"<p class='spot-type'>"+s.type+"</p>":"")+"<p>"+s.d+"</p></div></article>"}).join("")+
-    dayVillages.map(v=>"<article class='spot-card village-card' data-village='"+v.id+""><div class='spot-info'><div class='spot-meta'><div class='spot-cat'>🏘️ Villages</div>"+(v.data.by?"<span class='finder-tag'>"+v.data.by+"</span>":"")+"</div><h3>"+v.name+"</h3>"+(v.data.rating?"<div class='spot-rating'>★★★★★ <strong>"+v.data.rating+"</strong> · "+(v.data.reviews||0).toLocaleString()+" reviews</div>":"")+(v.data.description?"<p>"+v.data.description+"</p>":"<p>Open this village to see its own saved data.</p>")+"</div></article>").join("")+
-    "</div></section>";
-  if(routes[currentDay]){drawRoute(currentDay);routeLayer.addTo(map);routeVisible=true;const b=document.querySelector("#route-toggle");if(b){b.textContent="Hide route";b.classList.add("active");}}
-  map.fitBounds(L.latLngBounds(daySpots.length?daySpots.map(s=>s.c):spots.map(s=>s.c)),{padding:[40,40]});
+const day=days.find(d=>d.id===currentDay)||days[0];
+const dayCats=[...new Set(day.plan.map(x=>x[3]))];
+if(currentDay==="sat"||currentDay==="sun")dayCats.push("villages");
+document.querySelector("#days").innerHTML=days.map(d=>"<button type='button' class='"+(d.id===currentDay?"active":"")+"' data-day='"+d.id+"'>"+d.label+"</button>").join("");
+document.querySelector("#filters").innerHTML=Object.entries(categories).map(([k,v])=>"<button type='button' class='filter' data-cat='"+k+"'>"+v.icon+" "+v.label+" <span>"+(k==="villages"?villages.filter(v=>v.day==="both"||v.day===currentDay).length:spots.filter(s=>s.cat===k&&dayCats.includes(k)&&(!s.day||s.day==="both"||s.day===currentDay)).length)+"</span></button>").join("");
+const daySpots=spots.filter(s=>dayCats.includes(s.cat)&&(!s.day||s.day==="both"||s.day===currentDay));
+const dayVillages=villages.filter(v=>dayCats.includes("villages")&&(v.day==="both"||v.day===currentDay));
+document.querySelector("h1").textContent=day.title;document.querySelector(".sub").textContent=day.sub;
+routeVisible=false;map.removeLayer(routeLayer);
+const plan=day.plan.map((x,i)=>"<article class='day-card'><div class='day-number'>"+String(i+1).padStart(2,"0")+"</div><div class='day-content'><div class='time'>"+x[0]+"</div><h3>"+x[1]+"</h3><p>"+x[2]+"</p><span class='tag'>"+categories[x[3]].icon+" "+categories[x[3]].label+"</span><div class='route'>"+x[4]+"</div></div></article>").join("");
+const cards=daySpots.map(s=>{const i=spots.indexOf(s);return "<article class='spot-card' onclick='openSpot("+i+")'><img loading='lazy' src='"+(s.photo||"https://loremflickr.com/640/480/"+encodeURIComponent(s.n)+"?lock="+(i+20))+"' alt='"+s.n+"'><div class='spot-info'><div class='spot-cat'>"+categories[s.cat].icon+" "+categories[s.cat].label+"</div><h3>"+s.n+"</h3>"+(s.rating?"<div class='spot-rating'>★★★★★ <strong>"+s.rating+"</strong> · "+(s.reviews||0).toLocaleString()+" reviews</div>":"")+(s.type?"<p class='spot-type'>"+s.type+"</p>":"")+"<p>"+s.d+"</p></div></article>";}).join("");
+const villagesHtml=dayVillages.map(v=>"<article class='spot-card village-card' data-village='"+v.id+"'><div class='spot-info'><div class='spot-cat'>🏘️ Villages</div><h3>"+v.name+"</h3>"+(v.data.rating?"<div class='spot-rating'>★★★★★ <strong>"+v.data.rating+"</strong> · "+(v.data.reviews||0).toLocaleString()+" reviews</div>":"")+"<p>"+(v.data.description||"Open this village to see its own saved data.")+"</p></div></article>").join("");
+document.querySelector("#plan").innerHTML="<section class='day-panel'><div class='findings-head'><div><h2>"+day.label+" · Plan</h2><p class='day-description'>"+day.sub+"</p></div><div class='day-tools'>"+(routes[currentDay]?"<button type='button' id='route-toggle' class='route-toggle' onclick='toggleRoute()'>Show route</button>":"")+"<span>"+day.plan.length+" stops</span></div></div><div class='day-grid'>"+plan+"</div></section><section class='findings'><div class='findings-head'><h2>"+(currentDay==="sat"||currentDay==="sun"?"Day addons":"Palma addons")+"</h2><span>"+(daySpots.length+dayVillages.length)+" places</span></div><div class='photo-grid'>"+cards+villagesHtml+"</div></section>";
+if(routes[currentDay]){drawRoute(currentDay);routeLayer.addTo(map);routeVisible=true;const b=document.querySelector("#route-toggle");if(b){b.textContent="Hide route";b.classList.add("active");}}
+const pts=daySpots.map(s=>s.c).concat(dayVillages.map(v=>v.c));if(pts.length)map.fitBounds(L.latLngBounds(pts),{padding:[40,40]});
 }
-function selectDay(id){currentDay=id;render()}
-function showTripOverview(){
-  document.querySelector("#plan").innerHTML="<section class='trip-overview'><div class='findings-head'><div><h2>Full trip · 16—19 Oct</h2><p class='day-description'>Complete organised itinerary, day by day.</p></div><span>"+days.reduce((n,d)=>n+d.plan.length,0)+" stops</span></div><div class='trip-days'>"+days.map(d=>"<article class='trip-day'><div class='trip-day-head'><span>"+d.label+"</span><strong>"+d.title+"</strong><em>"+d.plan.length+" stops</em></div><p class='day-description'>"+d.sub+"</p><div class='trip-stops'>"+d.plan.map((x,i)=>"<div class='trip-stop'><b>"+String(i+1).padStart(2,"0")+"</b><div><small>"+x[0]+"</small><strong>"+x[1]+"</strong><span>"+x[2]+"</span><label>"+categories[x[3]].icon+" "+categories[x[3]].label+"</label></div></div>").join("")+"</div></article>").join("")+"</div></section>";
-  document.querySelector("#plan").scrollIntoView({behavior:"smooth",block:"start"});
-}
-function focusArea(id){
-  const x=areas.find(a=>a.id===id);
-  map.fitBounds(L.latLngBounds(x.p),{padding:[80,80]});
-  L.popup().setLatLng(x.c).setContent("<strong>"+x.icon+" "+x.n+"</strong><br><small>"+x.type+"</small><br>"+x.d).openOn(map);
-}
-function showAreas(){}
-function showArea(id){focusArea(id)}
-function toggleCat(cat,btn){
-  if(map.hasLayer(markerLayers[cat])){map.removeLayer(markerLayers[cat]);btn.classList.remove("active")}else{markerLayers[cat].addTo(map);btn.classList.add("active")}
-}
+function openSpot(i){const s=spots[i];if(!s)return;window.open("https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(s.n+", Mallorca, Spain"),"_blank","noopener,noreferrer");}
+function openVillage(id){const v=villages.find(x=>x.id===id);if(!v)return;const d=v.data||{};let html="<section class='day-panel'><div class='findings-head'><div><h2>🏘️ "+v.name+"</h2><p class='day-description'>"+(d.description||"Village data")+"</p></div><button type='button' class='route-toggle' onclick='render()'>Back</button></div>";if(d.photos&&d.photos.length)html+="<div class='photo-grid'>"+d.photos.map(p=>"<img loading='lazy' src='"+p+"' alt='"+v.name+"'>").join("")+"</div>";if(d.rating)html+="<div class='spot-rating'>★★★★★ <strong>"+d.rating+"</strong> · "+(d.reviews||0).toLocaleString()+" reviews</div>";[["Food",d.food],["Sights",d.sights],["Experiences",d.experiences],["Instagrammable",d.instagram],["Hotels",d.hotels],["Notes",d.notes]].forEach(x=>{if(x[1]&&x[1].length)html+="<div class='day-card'><div class='day-content'><div class='time'>"+x[0]+"</div>"+x[1].map(t=>"<p>"+t+"</p>").join("")+"</div></div>";});if(d.parking)html+="<div class='day-card'><div class='day-content'><div class='time'>Parking</div><p>"+d.parking+"</p></div></div>";if(d.route)html+="<div class='day-card'><div class='day-content'><div class='time'>Route</div><p>"+d.route+"</p></div></div>";html+="</section>";document.querySelector("#plan").innerHTML=html;document.querySelector("#plan").scrollIntoView({behavior:"smooth",block:"start"});}
+document.addEventListener("click",e=>{const day=e.target.closest("#days [data-day]");if(day){currentDay=day.dataset.day;render();return;}const village=e.target.closest("[data-village]");if(village){openVillage(village.dataset.village);return;}const cat=e.target.closest("#filters [data-cat]");if(cat){toggleCat(cat.dataset.cat,cat);return;}});
+function focusArea(id){const a=areas.find(x=>x.id===id);if(!a)return;map.fitBounds(L.latLngBounds(a.p),{padding:[80,80]});L.popup().setLatLng(a.c).setContent("<strong>"+a.icon+" "+a.n+"</strong><br><small>"+a.type+"</small><br>"+a.d).openOn(map);}
+function toggleCat(cat,btn){if(map.hasLayer(markerLayers[cat])){map.removeLayer(markerLayers[cat]);btn.classList.remove("active");}else{markerLayers[cat].addTo(map);btn.classList.add("active");}}
 render();
-
-document.addEventListener("click",e=>{
-  const dayBtn=e.target.closest("#days [data-day]");
-  if(dayBtn){currentDay=dayBtn.dataset.day;render();return;}
-  const villageCard=e.target.closest("[data-village]");
-  if(villageCard){openVillage(villageCard.dataset.village);return;}
-  const catBtn=e.target.closest("#filters [data-cat]");
-  if(catBtn){toggleCat(catBtn.dataset.cat,catBtn);return;}
-});
-
-function openSpot(idx){const s=spots[idx];const gmap="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(s.n+", Palma, Mallorca, Spain");window.open(gmap,"_blank","noopener,noreferrer");}
-function openVillage(id){
-  const v=villages.find(x=>x.id===id); if(!v)return;
-  const d=v.data||{};
-  const sections=[
-    ["Food",d.food],["Sights",d.sights],["Experiences",d.experiences],
-    ["Instagrammable",d.instagram],["Hotels",d.hotels],["Notes",d.notes]
-  ];
-  const html="<section class='day-panel'><div class='findings-head'><div><h2>🏘️ "+v.name+"</h2><p class='day-description'>"+(d.description||"Village data")+"</p></div><button type='button' class='route-toggle' onclick='render()'>Back</button></div>"+
-    (d.photos&&d.photos.length?"<div class='photo-grid'>"+d.photos.map(p=>"<img loading='lazy' src='"+p+"' alt='"+v.name+"'>").join("")+"</div>":"")+
-    (d.rating?"<div class='spot-rating'>★★★★★ <strong>"+d.rating+"</strong> · "+(d.reviews||0).toLocaleString()+" reviews</div>":"")+
-    sections.map(x=>x[1]&&x[1].length?"<div class='day-card'><div class='day-content'><div class='time'>"+x[0]+"</div><p>"+x[1].join("</p><p>")+"</p></div></div>":"").join("")+
-    (d.parking?"<div class='day-card'><div class='day-content'><div class='time'>Parking</div><p>"+d.parking+"</p></div></div>":"")+
-    (d.route?"<div class='day-card'><div class='day-content'><div class='time'>Route</div><p>"+d.route+"</p></div></div>":"")+"</section>";
-  document.querySelector("#plan").innerHTML=html;
-  document.querySelector("#plan").scrollIntoView({behavior:"smooth",block:"start"});
-}
