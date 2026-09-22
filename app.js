@@ -124,7 +124,7 @@ Object.keys(categories).forEach(cat=>{
 function render(){
   const day=days.find(d=>d.id===currentDay)||days[0];
 
-  document.querySelector("#days").innerHTML=days.map(d=>
+  document.querySelector("#days").innerHTML=days.map(d=>"<button type=\"button\" class=\""+(d.id===currentDay?"active":"")+"\" data-day=\""+d.id+"\">"+d.label+"</button>").join("");
     "<button class=\""+(d.id===currentDay?"active":"")+"\" data-day=\""+d.id+"\">"+d.label+"</button>"
   ).join("");
 
@@ -155,23 +155,6 @@ function render(){
 }
 
 function selectDay(id){currentDay=id;render()}
-document.querySelector("#days").addEventListener("click",e=>{const b=e.target.closest("[data-day]");if(b)selectDay(b.dataset.day)});
-function showTripOverview(){
-  document.querySelector("#plan").innerHTML="<section class='trip-overview'><div class='findings-head'><div><h2>Full trip · 16—19 Oct</h2><p class='day-description'>Complete organised itinerary, day by day.</p></div><span>"+days.reduce((n,d)=>n+d.plan.length,0)+" stops</span></div><div class='trip-days'>"+days.map(d=>"<article class='trip-day'><div class='trip-day-head'><span>"+d.label+"</span><strong>"+d.title+"</strong><em>"+d.plan.length+" stops</em></div><p class='day-description'>"+d.sub+"</p><div class='trip-stops'>"+d.plan.map((x,i)=>"<div class='trip-stop'><b>"+String(i+1).padStart(2,"0")+"</b><div><small>"+x[0]+"</small><strong>"+x[1]+"</strong><span>"+x[2]+"</span><label>"+categories[x[3]].icon+" "+categories[x[3]].label+"</label></div></div>").join("")+"</div></article>").join("")+"</div></section>";
-  document.querySelector("#plan").scrollIntoView({behavior:"smooth",block:"start"});
-}
-function focusArea(id){
-  const x=areas.find(a=>a.id===id);
-  map.fitBounds(L.latLngBounds(x.p),{padding:[80,80]});
-  L.popup().setLatLng(x.c).setContent("<strong>"+x.icon+" "+x.n+"</strong><br><small>"+x.type+"</small><br>"+x.d).openOn(map);
-}
-function showAreas(){document.querySelector(".areas")?.scrollIntoView({behavior:"smooth",block:"start"});}
-function showArea(id){focusArea(id)}
-function toggleCat(cat,btn){
-  if(map.hasLayer(markerLayers[cat])){map.removeLayer(markerLayers[cat]);btn.classList.remove("active")}else{markerLayers[cat].addTo(map);btn.classList.add("active")}
-}
-render();
-
-document.querySelector("#days").addEventListener("click",function(e){const b=e.target.closest("button[data-day]");if(!b)return;currentDay=b.dataset.day;render();});
+document.querySelector("#days").addEventListener("click",e=>{const b=e.target.closest("[data-day]");if(b){currentDay=b.dataset.day;render();}});
 
 function openSpot(idx){const s=spots[idx];const gmap="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(s.n+", Palma, Mallorca, Spain");window.open(gmap,"_blank","noopener,noreferrer");}
