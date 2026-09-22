@@ -139,7 +139,7 @@ function focusArea(id){
   map.fitBounds(L.latLngBounds(x.p),{padding:[80,80]});
   L.popup().setLatLng(x.c).setContent("<strong>"+x.icon+" "+x.n+"</strong><br><small>"+x.type+"</small><br>"+x.d).openOn(map);
 }
-function showAreas(){document.querySelector(".areas")?.scrollIntoView({behavior:"smooth",block:"start")}
+function showAreas(){document.querySelector(".areas")?.scrollIntoView({behavior:"smooth",block:"start"});}
 function showArea(id){focusArea(id)}
 function toggleCat(cat,btn){
   if(map.hasLayer(markerLayers[cat])){map.removeLayer(markerLayers[cat]);btn.classList.remove("active")}else{markerLayers[cat].addTo(map);btn.classList.add("active")}
