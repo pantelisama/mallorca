@@ -181,7 +181,7 @@ async function drawRoute(id){
     const glyph=x.type==="sight"?"◆":x.type==="village"?"●":x.type==="photo"?"📷":x.type==="start"?"▶":"■";
     const icon=L.divIcon({className:cls,html:"<span>"+glyph+"</span>",iconSize:iconSize,iconAnchor:anchor});
     const marker=L.marker(x.c,{icon:icon}).addTo(routeLayer);
-    marker.bindPopup("<strong>"+x.n+"</strong>"+(x.d?"<br><small>"+x.d+"</small>":""));
+    const gmap="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(x.n+", Mallorca, Spain");marker.bindPopup("<strong>"+x.n+"</strong>"+(x.d?"<br><small>"+x.d+"</small>":"")+"<br><a href=\""+gmap+"\" target=\"_blank\" rel=\"noopener noreferrer\">Open in Google Maps</a>");
     marker.bindTooltip(x.n,{permanent:true,direction:"top",offset:[0,x.size==="long"?-22:-16],className:"route-label"});
   });
 }
