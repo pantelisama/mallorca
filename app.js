@@ -124,7 +124,7 @@ Object.keys(categories).forEach(cat=>{
 function render(){
   const day=days.find(d=>d.id===currentDay)||days[0];
   document.querySelector("#days").innerHTML=days.map(d=>"<button class='"+(d.id===currentDay?"active":"")+"' onclick='selectDay(\\\""+d.id+"\\\")'>"+d.label+"</button>").join("")+"<button onclick='showAreas()'>Explore areas</button>";
-  document.querySelector("#filters").innerHTML=Object.entries(categories).map(([k,v])=>"<button class='filter' data-cat='"+k+"' onclick='toggleCat(\\\""+k+"\\\",this)'>"+v.icon+" "+v.label+" <span>"+spots.filter(s=>s.cat===k).length+"</span></button>").join("")+"<button class='filter area-main-button' onclick='showAreas()'>📍 Περιοχές</button>";
+  document.querySelector("#filters").innerHTML=Object.entries(categories).map(([k,v])=>"<button class='filter' data-cat='"+k+"' onclick='toggleCat(\\\""+k+"\\\",this)'>"+v.icon+" "+v.label+" <span>"+spots.filter(s=>s.cat===k).length+"</span></button>").join("");
 
   const cats=[...new Set(day.plan.map(x=>x[3]))];
   const daySpots=spots.filter(s=>cats.includes(s.cat));
@@ -139,9 +139,7 @@ function render(){
     "<section class='findings'><div class='findings-head'><h2>Palma addons</h2><span>"+daySpots.length+" places</span></div><div class='photo-grid'>"+
     daySpots.map((s)=>{const idx=spots.indexOf(s);return "<article class='spot-card' onclick='openSpot("+idx+")'><img loading='lazy' src='"+(s.photo||"https://loremflickr.com/640/480/Mallorca,Palma?lock="+(idx+20))+"' alt='"+s.n+"'><div class='spot-info'><div class='spot-meta'><div class='spot-cat'>"+categories[s.cat].icon+" "+categories[s.cat].label+"</div>"+(s.by?("<span class='finder-tag'>"+s.by+"</span>"):"")+"</div><h3>"+s.n+"</h3>"+(s.rating?("<div class='spot-rating'>★★★★★ <strong>"+s.rating+"</strong> · "+(s.reviews||0).toLocaleString()+" reviews</div>"):"")+(s.type?("<p class='spot-type'>"+s.type+"</p>"):"")+"<p>"+s.d+"</p></div></article>"}).join("")+
     "</div></section>"+
-    "<section class='areas'><div class='findings-head'><h2>Explore Palma by area</h2><span>8 city zones</span></div><div class='area-grid'>"+
-    areas.map(x=>"<article class='area-card' onclick='focusArea(\\\""+x.id+"\\\")'><div class='area-icon'>"+x.icon+"</div><div><div class='area-type'>"+x.type+"</div><h3>"+x.n+"</h3><p>"+x.d+"</p></div></article>").join("")+
-    "</div></section>";
+    "
 
   map.fitBounds(L.latLngBounds(spots.map(s=>s.c)),{padding:[40,40]});
 }
