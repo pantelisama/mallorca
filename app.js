@@ -112,9 +112,44 @@ const map=L.map("map",{zoomControl:true}).setView([39.570,2.648],14);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"© OpenStreetMap contributors"}).addTo(map);
 const areaLayer=L.layerGroup().addTo(map);
 areas.forEach(a=>{const poly=L.polygon(a.p,{color:"#18211d",weight:1,fillOpacity:.12});poly.bindPopup("<strong>"+a.icon+" "+a.n+"</strong><br><small>"+a.type+"</small><br>"+a.d);poly.on("click",()=>focusArea(a.id));poly.addTo(areaLayer);});
-const routes={sat:{stops:[{n:"Palma",c:[39.5700,2.6480]},{n:"Caimari",c:[39.7744,2.8794]},{n:"Lluc",c:[39.8231,2.8830]},{n:"Pollença",c:[39.8767,3.0164]}]},sun:{stops:[{n:"Pollença",c:[39.8767,3.0164]},{n:"Port de Pollença",c:[39.9075,3.0815]},{n:"Mirador Es Colomer",c:[39.9328,3.1832]},{n:"Formentor Beach",c:[39.9357,3.2040]},{n:"Cap de Formentor",c:[39.9600,3.2095]},{n:"Pollença",c:[39.8767,3.0164]}]}};
+const routes={
+  sat:{stops:[
+    {n:"Palma",c:[39.5700,2.6480],type:"start"},
+    {n:"Caimari",c:[39.7744,2.8794],type:"village"},
+    {n:"Santuari de Lluc",c:[39.8231,2.8830],type:"sight",d:"Monastery, basilica and mountain surroundings."},
+    {n:"Pollença Old Town",c:[39.8767,3.0164],type:"village"},
+    {n:"Calvari Steps",c:[39.8769,3.0160],type:"sight",d:"Historic staircase and viewpoint above Pollença."}
+  ]},
+  sun:{stops:[
+    {n:"Pollença",c:[39.8767,3.0164],type:"start"},
+    {n:"Port de Pollença",c:[39.9075,3.0815],type:"village"},
+    {n:"Mirador Es Colomer",c:[39.9328,3.1832],type:"sight",d:"Clifftop viewpoint over the Formentor peninsula."},
+    {n:"Formentor Beach",c:[39.9357,3.2040],type:"sight",d:"Pine-backed beach and sea stop."},
+    {n:"Cap de Formentor",c:[39.9600,3.2095],type:"sight",d:"Dramatic northern tip and lighthouse viewpoint."},
+    {n:"Pollença",c:[39.8767,3.0164],type:"end"}
+  ]}
+};
 let routeLayer=L.layerGroup(),routeVisible=false;
-function drawRoute(id){routeLayer.clearLayers();const r=routes[id];if(!r)return;L.polyline(r.stops.map(x=>x.c),{color:"#18211d",weight:4,opacity:.8,dashArray:"8 7"}).addTo(routeLayer);r.stops.forEach((x,i)=>{const icon=L.divIcon({className:"route-pin",html:"<span>"+(i+1)+"</span>",iconSize:[30,30],iconAnchor:[15,15]});L.marker(x.c,{icon:icon}).bindTooltip((i+1)+". "+x.n,{direction:"top",offset:[0,-12]}).addTo(routeLayer);});}
+async function drawRoute(id){
+  routeLayer.clearLayers();
+  const r=routes[id]; if(!r) return;
+  // Follow the actual road network instead of drawing straight lines between stops.
+  const coords=r.stops.map(x=>x.c[1]+","+x.c[0]).join(";");
+  let geometry=null;
+  try{
+    const res=await fetch("https://router.project-osrm.org/route/v1/driving/"+coords+"?overview=full&geometries=geojson&steps=false");
+    if(res.ok){const data=await res.json();if(data.routes&&data.routes[0])geometry=data.routes[0].geometry.coordinates.map(p=>[p[1],p[0]]);}
+  }catch(e){}
+  const line=geometry||r.stops.map(x=>x.c);
+  L.polyline(line,{color:"#18211d",weight:5,opacity:.85}).addTo(routeLayer);
+  r.stops.forEach((x,i)=>{
+    const cls=x.type==="sight"?"route-pin route-sight":"route-pin";
+    const icon=L.divIcon({className:cls,html:"<span>"+(i+1)+"</span>",iconSize:[30,30],iconAnchor:[15,15]});
+    const marker=L.marker(x.c,{icon:icon}).addTo(routeLayer);
+    marker.bindPopup("<strong>"+(i+1)+". "+x.n+"</strong>"+(x.d?"<br><small>"+x.d+"</small>":""));
+    marker.bindTooltip((i+1)+". "+x.n,{direction:"top",offset:[0,-12]});
+  });
+}
 function toggleRoute(){if(!routes[currentDay])return;routeVisible=!routeVisible;if(routeVisible){drawRoute(currentDay);routeLayer.addTo(map);}else{map.removeLayer(routeLayer);}const b=document.querySelector("#route-toggle");if(b){b.textContent=routeVisible?"Hide route":"Show route";b.classList.toggle("active",routeVisible);}}
 const markerLayers={};
 Object.keys(categories).forEach(cat=>{markerLayers[cat]=L.layerGroup().addTo(map);spots.filter(s=>s.cat===cat).forEach(s=>{const icon=L.divIcon({className:"spot-icon",html:"<span>"+categories[cat].icon+"</span>",iconSize:[34,34],iconAnchor:[17,17]});const gmap="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(s.n+", Mallorca, Spain");L.marker(s.c,{icon:icon}).addTo(markerLayers[cat]).on("click",()=>window.open(gmap,"_blank","noopener,noreferrer"));});});
