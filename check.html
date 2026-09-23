@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="el"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Έλεγχος έκδοσης</title>
+<style>
+body{margin:0;font:16px/1.5 system-ui,Arial,sans-serif;background:#f6f5f0;color:#18211d;padding:24px}
+h1{font-size:20px;margin:0 0 16px}
+.box{background:#fff;border:1px solid #ddd;border-radius:14px;padding:18px;margin:0 0 14px}
+.big{font-size:22px;font-weight:700;margin:0 0 6px}
+.ok{color:#1b7a3d}.bad{color:#b3261e}.wait{color:#777}
+small{color:#666;display:block;margin-top:6px;word-break:break-all}
+a.btn{display:block;text-align:center;background:#146BFF;color:#fff;text-decoration:none;font-weight:700;padding:14px;border-radius:12px;margin-top:8px}
+</style></head>
+<body>
+<h1>Έλεγχος έκδοσης · Mallorca</h1>
+<div class="box" id="server"><p class="big wait">Ελέγχω τον server…</p></div>
+<div class="box" id="browser"><p class="big wait">Ελέγχω τον browser σου…</p></div>
+<a class="btn" href="neo.html">Άνοιξε το site</a>
+<script>
+var bust = "?nocache=" + Date.now() + Math.random();
+function set(id, cls, title, detail){
+  document.getElementById(id).innerHTML =
+    '<p class="big ' + cls + '">' + title + '</p><small>' + detail + '</small>';
+}
+// 1. What the server sends when we force a fresh copy (no cache allowed).
+fetch("app.js" + bust, {cache:"no-store"}).then(function(r){ return r.text(); }).then(function(t){
+  var neo = t.indexOf("Cal\u00f3 des Moro") > -1 && t.indexOf("Mirador des Colomer") > -1;
+  set("server", neo ? "ok" : "bad",
+      neo ? "✅ Ο server έχει τη ΝΕΑ έκδοση" : "❌ Ο server έχει την ΠΑΛΙΑ έκδοση",
+      neo ? "Βρέθηκαν οι νέες στάσεις (Caló des Moro, Mirador des Colomer)."
+          : "Δεν βρέθηκαν οι νέες στάσεις στο app.js.");
+}).catch(function(e){ set("server","bad","⚠️ Απέτυχε ο έλεγχος", String(e)); });
+
+// 2. What the browser gives us normally: if this differs, it is serving from its cache.
+fetch("app.js", {cache:"default"}).then(function(r){ return r.text(); }).then(function(t){
+  var neo = t.indexOf("Cal\u00f3 des Moro") > -1;
+  set("browser", neo ? "ok" : "bad",
+      neo ? "✅ Ο browser σου βλέπει τη ΝΕΑ" : "❌ Ο browser σου δείχνει ΑΠΟΘΗΚΕΥΜΕΝΗ παλιά",
+      neo ? "Δεν υπάρχει πρόβλημα cache."
+          : "Καθάρισε ιστορικό/δεδομένα ιστότοπου ή δοκίμασε ιδιωτική περιήγηση.");
+}).catch(function(e){ set("browser","bad","⚠️ Απέτυχε ο έλεγχος", String(e)); });
+</script>
+</body></html>
