@@ -1,29 +1,53 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+name: Validate and deploy Mallorca planner
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
-  group: "pages"
+  group: pages
   cancel-in-progress: true
 
 jobs:
-  # Single deploy job since we're just deploying
+  validate:
+    name: Validate planner
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate JavaScript syntax
+        run: node --check app.js
+      - name: Validate HTML structure and JS integrity
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const html = fs.readFileSync('index.html', 'utf8');
+          const js = fs.readFileSync('app.js', 'utf8');
+          const css = fs.readFileSync('styles.css', 'utf8');
+          const requiredHtml = ['id="map"', 'id="plan"', 'id="days"', 'id="filters"', 'app.js'];
+          for (const x of requiredHtml) if (!html.includes(x)) throw new Error('Missing required HTML: ' + x);
+          for (const x of ['function render()', 'function openSpot(', 'function openVillage(', 'function toggleRoute(', 'render();']) if (!js.includes(x)) throw new Error('Missing required JS: ' + x);
+          if (/\\n/.test(js)) throw new Error('Literal \\n sequence found in app.js');
+          if (/mallorca-agent|agent-modal|agent-add|MALLORCA_AGENT_URL/.test(html + js + css)) throw new Error('Removed AI/agent artifact found');
+          for (const x of ['.spot-card', '.day-panel', '.photo-grid', '.route-pin']) if (!css.includes(x)) throw new Error('Missing required CSS: ' + x);
+          console.log('Static integrity checks passed');
+          NODE
+      - name: Run Node tests
+        run: npm test
+
   deploy:
+    name: Deploy to GitHub Pages
+    needs: validate
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -36,8 +60,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          path: "."
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
