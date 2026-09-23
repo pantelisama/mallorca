@@ -46,7 +46,7 @@ async function drawRoute(id){
     }catch(e){}
   }
   if(geometry){
-    L.polyline(geometry,{color:"#18211d",weight:5,opacity:.85}).addTo(routeLayer);
+    L.polyline(geometry,{color:"#146BFF",weight:6,opacity:.95,lineCap:"round",lineJoin:"round"}).addTo(routeLayer);
   }
   r.stops.forEach((x,i)=>{
     const size=x.size==="long"?"large":"small";
