@@ -230,6 +230,56 @@ const markerLayers={};
 Object.keys(categories).forEach(cat=>{markerLayers[cat]=leafletReady?L.layerGroup().addTo(map):null;if(!leafletReady)return;spots.filter(s=>s.cat===cat).forEach(s=>{const icon=L.divIcon({className:"spot-icon",html:"<span>"+categories[cat].icon+"</span>",iconSize:[34,34],iconAnchor:[17,17]});const gmap="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(s.n+", Mallorca, Spain");L.marker(s.c,{icon:icon}).addTo(markerLayers[cat]).on("click",()=>window.open(gmap,"_blank","noopener,noreferrer"));});});
 // Spots without an explicit day are Palma places, so only show them on the Palma days.
 function spotOnDay(s,dayId){return s.day?(s.day==="both"||s.day===dayId):(dayId==="fri"||dayId==="mon");}
+// Optional Google Maps Platform key (Places API "New"). Restrict it to pantelisama.github.io in Google Cloud.
+// With a key, cards show Google photos, stars and review counts; without one, photos come from Wikimedia Commons.
+const GOOGLE_MAPS_KEY="";
+const ENRICH_STORE="mallorca-enrich-v1";
+let enrich={};
+try{enrich=JSON.parse(localStorage.getItem(ENRICH_STORE)||"{}")||{};}catch(e){enrich={};}
+function saveEnrich(){try{localStorage.setItem(ENRICH_STORE,JSON.stringify(enrich));}catch(e){}}
+function spotData(s){const e=enrich[s.n]||{};return {photo:s.photo||e.photo||"",rating:s.rating||e.rating||null,reviews:s.reviews||e.reviews||null,gmap:e.gmap||""};}
+function spotCardHtml(s){
+  const i=spots.indexOf(s);const cat=categories[s.cat];const x=spotData(s);
+  const media=x.photo?"<img loading='lazy' src='"+escAttr(x.photo)+"' alt='"+escAttr(s.n)+"'>":"<div class='spot-photo-empty spot-photo-"+s.cat+"'><span>"+cat.icon+"</span></div>";
+  const rating=x.rating?"<span class='stars'>★ "+x.rating.toFixed(1)+"</span> · "+(x.reviews||0).toLocaleString()+" reviews":"<span class='stars'>★</span> Google Maps";
+  return "<article class='spot-card' data-spot-index='"+i+"' tabindex='0' role='button'><div class='spot-photo'>"+media+"</div><div class='spot-info'><div class='spot-meta'><div class='spot-cat'>"+cat.icon+" "+cat.label+"</div>"+(s.by?"<span class='finder-tag'>"+s.by+"</span>":"")+"</div><h3>"+s.n+"</h3>"+(s.type?"<p class='spot-type'>"+s.type+"</p>":"")+"<p>"+s.d+"</p><div class='spot-rating'>"+rating+" →</div></div></article>";
+}
+async function fetchGooglePlace(s){
+  const res=await fetch("https://places.googleapis.com/v1/places:searchText",{method:"POST",headers:{"Content-Type":"application/json","X-Goog-Api-Key":GOOGLE_MAPS_KEY,"X-Goog-FieldMask":"places.rating,places.userRatingCount,places.photos,places.googleMapsUri"},body:JSON.stringify({textQuery:s.n+", Mallorca, Spain",maxResultCount:1,locationBias:{circle:{center:{latitude:s.c[0],longitude:s.c[1]},radius:1500}}})});
+  if(!res.ok)return null;
+  const p=((await res.json()).places||[])[0];if(!p)return null;
+  const photo=p.photos&&p.photos[0]?"https://places.googleapis.com/v1/"+p.photos[0].name+"/media?maxWidthPx=640&key="+GOOGLE_MAPS_KEY:"";
+  return {photo:photo,rating:p.rating||null,reviews:p.userRatingCount||null,gmap:p.googleMapsUri||""};
+}
+async function fetchCommonsPhoto(s){
+  // Real photos taken at (or right next to) the place's coordinates.
+  const url="https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=geosearch&ggscoord="+s.c[0]+"%7C"+s.c[1]+"&ggsradius=250&ggsnamespace=6&ggslimit=10&prop=imageinfo&iiprop=url%7Cmime&iiurlwidth=640";
+  const res=await fetch(url);if(!res.ok)return null;
+  const pages=Object.values(((await res.json()).query||{}).pages||{}).sort((a,b)=>(a.index||0)-(b.index||0));
+  const words=s.n.toLowerCase().split(/[^a-zà-ÿ]+/).filter(w=>w.length>3);
+  const imgs=pages.filter(p=>p.imageinfo&&p.imageinfo[0]&&/jpeg|png/.test(p.imageinfo[0].mime)&&p.imageinfo[0].thumburl);
+  const best=imgs.find(p=>words.some(w=>p.title.toLowerCase().includes(w)))||imgs[0];
+  return best?{photo:best.imageinfo[0].thumburl}:null;
+}
+let enrichQueue=[],enrichRunning=false;
+function enrichSpots(list){
+  // Load the day being viewed first.
+  const todo=list.filter(s=>!enrich[s.n]);
+  enrichQueue=todo.concat(enrichQueue.filter(s=>!todo.includes(s)));
+  if(enrichRunning||typeof fetch!=="function")return;
+  enrichRunning=true;
+  (async()=>{
+    while(enrichQueue.length){
+      const s=enrichQueue.shift();let data=null;
+      try{data=GOOGLE_MAPS_KEY?await fetchGooglePlace(s):null;}catch(e){}
+      if(!data||!data.photo){try{const c=await fetchCommonsPhoto(s);if(c)data=Object.assign({},data||{},c);}catch(e){}}
+      enrich[s.n]=data||{};saveEnrich();
+      const card=document.querySelector("#plan [data-spot-index='"+spots.indexOf(s)+"']");
+      if(card&&data)card.outerHTML=spotCardHtml(s);
+    }
+    enrichRunning=false;
+  })();
+}
 function render(){
 const day=days.find(d=>d.id===currentDay)||days[0];
 const dayCats=Object.keys(categories).filter(k=>k!=="villages");
@@ -241,13 +291,14 @@ document.querySelector("#filters").innerHTML=Object.entries(categories).filter((
 document.querySelector("h1").textContent=day.title;document.querySelector(".sub").textContent=day.sub;
 routeVisible=false;routeToken++;if(map)map.removeLayer(routeLayer);
 const plan=day.plan.map((x,i)=>"<article class='day-card'><div class='day-number'>"+String(i+1).padStart(2,"0")+"</div><div class='day-content'><div class='time'>"+x[0]+"</div><h3>"+x[1]+"</h3><p>"+x[2]+"</p><span class='tag'>"+categories[x[3]].icon+" "+categories[x[3]].label+"</span><div class='route'>"+x[4]+"</div></div></article>").join("");
-const cards=daySpots.map(s=>{const i=spots.indexOf(s);const cat=categories[s.cat];const media=s.photo?"<img loading='lazy' src='"+escAttr(s.photo)+"' alt='"+escAttr(s.n)+"'>":"<div class='spot-photo-empty spot-photo-"+s.cat+"'><span>"+cat.icon+"</span></div>";const rating=s.rating?"<span class='stars'>★ "+s.rating+"</span> · "+(s.reviews||0).toLocaleString()+" reviews":"<span class='stars'>★</span> Google Maps";return "<article class='spot-card' data-spot-index='"+i+"' tabindex='0' role='button'><div class='spot-photo'>"+media+"</div><div class='spot-info'><div class='spot-meta'><div class='spot-cat'>"+cat.icon+" "+cat.label+"</div>"+(s.by?"<span class='finder-tag'>"+s.by+"</span>":"")+"</div><h3>"+s.n+"</h3>"+(s.type?"<p class='spot-type'>"+s.type+"</p>":"")+"<p>"+s.d+"</p><div class='spot-rating'>"+rating+" →</div></div></article>";}).join("");
+const cards=daySpots.map(spotCardHtml).join("");
 const villagesHtml=dayVillages.map(v=>"<article class='spot-card village-card' data-village='"+v.id+"'><div class='spot-info'><div class='spot-cat'>🏘️ Villages</div><h3>"+v.name+"</h3>"+(v.data.rating?"<div class='spot-rating'>★★★★★ <strong>"+v.data.rating+"</strong> · "+(v.data.reviews||0).toLocaleString()+" reviews</div>":"")+"<p>"+(v.data.description||"Open this village to see its own saved data.")+"</p></div></article>").join("");
 document.querySelector("#plan").innerHTML="<section class='day-panel'><div class='findings-head'><div><h2>"+day.label+" · Plan</h2><p class='day-description'>"+day.sub+"</p></div><div class='day-tools'>"+(routes[currentDay]?"<button type='button' id='route-toggle' class='route-toggle' onclick='toggleRoute()'>Show route</button>":"")+"<span>"+day.plan.length+" stops</span></div></div><div class='day-grid'>"+plan+"</div></section><section class='findings'><div class='findings-head'><h2>"+(currentDay==="sat"||currentDay==="sun"?"Day addons":"Palma addons")+"</h2><span>"+(daySpots.length+dayVillages.length)+" places</span></div><div class='photo-grid'>"+cards+villagesHtml+"</div></section>";
 if(routes[currentDay]&&map){drawRoute(currentDay);routeLayer.addTo(map);routeVisible=true;const b=document.querySelector("#route-toggle");if(b){b.textContent="Hide route";b.classList.add("active");}}
 const pts=daySpots.map(s=>s.c).concat(dayVillages.map(v=>v.c));if(map&&pts.length)map.fitBounds(L.latLngBounds(pts),{padding:[40,40]});
+enrichSpots(daySpots);
 }
-function openSpot(i){const s=spots[i];if(!s)return;window.open("https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(s.n+", Mallorca, Spain"),"_blank","noopener,noreferrer");}
+function openSpot(i){const s=spots[i];if(!s)return;window.open(spotData(s).gmap||"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(s.n+", Mallorca, Spain"),"_blank","noopener,noreferrer");}
 function openVillage(id){const v=villages.find(x=>x.id===id);if(!v)return;const d=v.data||{};let html="<section class='day-panel'><div class='findings-head'><div><h2>🏘️ "+v.name+"</h2><p class='day-description'>"+(d.description||"Village data")+"</p></div><button type='button' class='route-toggle' onclick='render()'>Back</button></div>";if(d.photos&&d.photos.length)html+="<div class='photo-grid'>"+d.photos.map(p=>"<img loading='lazy' src='"+escAttr(p)+"' alt='"+escAttr(v.name)+"'>").join("")+"</div>";if(d.rating)html+="<div class='spot-rating'>★★★★★ <strong>"+d.rating+"</strong> · "+(d.reviews||0).toLocaleString()+" reviews</div>";[["Food",d.food],["Sights",d.sights],["Experiences",d.experiences],["Instagrammable",d.instagram],["Hotels",d.hotels],["Notes",d.notes]].forEach(x=>{if(x[1]&&x[1].length)html+="<div class='day-card'><div class='day-content'><div class='time'>"+x[0]+"</div>"+x[1].map(t=>"<p>"+t+"</p>").join("")+"</div></div>";});if(d.parking)html+="<div class='day-card'><div class='day-content'><div class='time'>Parking</div><p>"+d.parking+"</p></div></div>";if(d.route)html+="<div class='day-card'><div class='day-content'><div class='time'>Route</div><p>"+d.route+"</p></div></div>";html+="</section>";document.querySelector("#plan").innerHTML=html;document.querySelector("#plan").scrollIntoView({behavior:"smooth",block:"start"});}
 document.addEventListener("click",e=>{const day=e.target.closest("#days [data-day]");if(day){currentDay=day.dataset.day;render();return;}const village=e.target.closest("[data-village]");if(village){openVillage(village.dataset.village);return;}const spot=e.target.closest("[data-spot-index]");if(spot){openSpot(Number(spot.dataset.spotIndex));return;}const cat=e.target.closest("#filters [data-cat]");if(cat){toggleCat(cat.dataset.cat,cat);return;}});
 document.addEventListener("keydown",e=>{if(e.key!=="Enter"&&e.key!==" ")return;const spot=e.target.closest("[data-spot-index]");if(spot){e.preventDefault();openSpot(Number(spot.dataset.spotIndex));}});
