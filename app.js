@@ -7,68 +7,9 @@ const categories={
   villages:{label:"Villages",icon:"🏘️"}
 };
 
-const spots=[
-  // FOOD
-  {n:"Mercat de l'Olivar",c:[39.5749,2.6537],cat:"food",d:"Working food market — jamón, seafood, cheese, olives, local products.",tip:"Go before lunch."},
-  {n:"Mercat de Santa Catalina",c:[39.5692,2.6396],cat:"food",d:"Local market, tapas bars, seafood, vermouth and lively neighbourhood atmosphere."},
-  {n:"La Rosa Vermutería",c:[39.5730,2.6480],cat:"food",d:"Vermouth, tortilla, croquettes and Mallorcan small plates."},
-  {n:"El Camino",c:[39.5719,2.6460],cat:"food",d:"Popular tapas / small plates and natural wine."},
-  {n:"Bar España",c:[39.5748,2.6515],cat:"food",d:"No-frills tapas and montaditos near Plaça d'Espanya."},
-  {n:"Can Joan de s'Aigo",c:[39.5740,2.6500],cat:"food",d:"Historic stop for ensaïmada, ice cream and almond drinks."},
-  {n:"Patrón Lunares",c:[39.5702,2.6388],cat:"food",d:"Santa Catalina seafood and rice dishes."},
-  {n:"Casa Gallega",c:[39.5757,2.6540],cat:"food",d:"Traditional Galician seafood, pulpo and padrón peppers."},
-  {n:"La Lonja tapas area",c:[39.5680,2.6460],cat:"food",d:"Dense evening tapas / wine-bar zone around the old maritime quarter."},
-  {n:"Carrer de la Fàbrica",c:[39.5700,2.6380],cat:"food",d:"Pedestrianised Santa Catalina restaurant street."},
+const spots=[];
 
-  // SIGHTS
-  {n:"La Seu Cathedral",c:[39.5676,2.6487],cat:"sights",d:"Palma's landmark Gothic cathedral beside the sea."},
-  {n:"Palau de l'Almudaina",c:[39.5678,2.6470],cat:"sights",d:"Royal palace with Roman, Islamic and Gothic layers."},
-  {n:"Banys Àrabs",c:[39.5722,2.6491],cat:"sights",d:"Atmospheric 10th–12th century Arab baths."},
-  {n:"Es Baluard Museu",c:[39.5702,2.6420],cat:"sights",d:"Contemporary art inside the historic city walls."},
-  {n:"Passeig del Born",c:[39.5700,2.6480],cat:"sights",d:"Tree-lined historic promenade, cafés and elegant façades."},
-  {n:"Plaça de Cort",c:[39.5708,2.6508],cat:"sights",d:"City Hall square and the famous old olive tree."},
-  {n:"Plaça Major",c:[39.5727,2.6515],cat:"sights",d:"Central Palma square and gateway to the upper old town."},
-  {n:"Plaça de la Reina",c:[39.5700,2.6465],cat:"sights",d:"Historic square linking Born, La Lonja and the cathedral."},
-  {n:"Santa Eulàlia",c:[39.5713,2.6505],cat:"sights",d:"Historic Gothic church in the old town."},
-  {n:"Baluard de Sant Pere",c:[39.5700,2.6400],cat:"sights",d:"Historic bastion with city / harbour views."},
-  {n:"Can Balaguer",c:[39.5708,2.6488],cat:"sights",d:"Beautiful preserved Palma courtyard house; free entry."},
-  {n:"Casal Solleric",c:[39.5701,2.6478],cat:"sights",d:"Baroque palace on the Born, used for exhibitions."},
-  {n:"Can Casasayas",c:[39.5720,2.6470],cat:"sights",d:"Modernist twin façades — one of Palma's best architectural details."},
-  {n:"Jewish Quarter / Carrer de Can Serra",c:[39.5720,2.6500],cat:"sights",d:"Quiet medieval lanes and historic Jewish-quarter traces."},
-  {n:"Bellver Castle",c:[39.5630,2.6190],cat:"sights",d:"Circular Gothic castle above Palma with panoramic views."},
-  {n:"Sant Francesc Basilica",c:[39.5697,2.6518],cat:"sights",d:"Gothic church and atmospheric cloister."},
-  {n:"Plaça d'Espanya",c:[39.5754,2.6535],cat:"sights",d:"Main transport square and northern gateway to central Palma."},
-
-  // EXPERIENCES
-  {n:"Tablao Flamenco Alma",c:[39.5731,2.6398],cat:"experiences",d:"Intimate flamenco tablao; Friday 16 Oct listings include evening shows.",tip:"Book ahead."},
-  {n:"Parc de la Mar",c:[39.5660,2.6502],cat:"experiences",d:"Waterfront park and classic cathedral reflection viewpoint."},
-  {n:"Old Town courtyard walk",c:[39.5718,2.6490],cat:"experiences",d:"Wander the hidden patios and stone lanes between La Seu and Plaça Major."},
-  {n:"La Lonja evening walk",c:[39.5682,2.6458],cat:"experiences",d:"Historic maritime quarter that comes alive around sunset."},
-  {n:"Santa Catalina evening",c:[39.5695,2.6390],cat:"experiences",d:"Market → vermouth → tapas → bars; one of Palma's liveliest local areas."},
-  {n:"Portixol waterfront",c:[39.5633,2.6768],cat:"experiences",d:"Seafront walk east of the centre, useful if you want sea rather than old town."},
-  {n:"Baluard des Príncep",c:[39.5670,2.6517],cat:"experiences",d:"Medieval defensive wall area and quieter waterfront views."},
-  {n:"Palma sunset waterfront",c:[39.5664,2.6489],cat:"experiences",d:"Golden-hour walk between Parc de la Mar and the harbour."},
-
-  // INSTAGRAMMABLE
-  {n:"Cathedral × Parc de la Mar reflection",c:[39.5663,2.6505],cat:"instagram",d:"The classic Palma reflection shot."},
-  {n:"La Seu stone steps / sea",c:[39.5677,2.6481],cat:"instagram",d:"Cathedral façade with sea and palms."},
-  {n:"Passeig del Born",c:[39.5700,2.6480],cat:"instagram",d:"Long symmetrical tree-lined composition."},
-  {n:"Can Casasayas",c:[39.5720,2.6470],cat:"instagram",d:"Curved Modernista balconies and twin façades."},
-  {n:"Can Corbella",c:[39.5722,2.6510],cat:"instagram",d:"Decorative neo-Mudéjar façade near the old town centre."},
-  {n:"Patio / old-town doorway",c:[39.5715,2.6497],cat:"instagram",d:"Look for open historic courtyards and oversized wooden doors."},
-  {n:"La Lonja alleys",c:[39.5681,2.6453],cat:"instagram",d:"Stone lanes, Gothic architecture and evening light."},
-  {n:"Baluard de Sant Pere viewpoint",c:[39.5700,2.6400],cat:"instagram",d:"Elevated view over the old walls and bay."},
-  {n:"Bellver panorama",c:[39.5630,2.6190],cat:"instagram",d:"Best broad city panorama if you have time for the uphill detour."},
-  {n:"Santa Catalina streets",c:[39.5694,2.6388],cat:"instagram",d:"Low colourful façades and lively street scene."}
-];
-
-const villages=[
-  {id:"caimari",name:"Caimari",c:[39.7744,2.8794],day:"sat",data:{description:"",photos:[],rating:null,reviews:null,food:[],sights:[],experiences:[],instagram:[],hotels:[],notes:[],by:"",parking:"",route:""}},
-  {id:"lluc",name:"Lluc",c:[39.8231,2.8830],day:"sat",data:{description:"",photos:[],rating:null,reviews:null,food:[],sights:[],experiences:[],instagram:[],hotels:[],notes:[],by:"",parking:"",route:""}},
-  {id:"pollenca",name:"Pollença",c:[39.8767,3.0164],day:"both",data:{description:"",photos:[],rating:null,reviews:null,food:[],sights:[],experiences:[],instagram:[],hotels:[],notes:[],by:"",parking:"",route:""}},
-  {id:"port-de-pollenca",name:"Port de Pollença",c:[39.9075,3.0815],day:"sun",data:{description:"",photos:[],rating:null,reviews:null,food:[],sights:[],experiences:[],instagram:[],hotels:[],notes:[],by:"",parking:"",route:""}},
-  {id:"formentor",name:"Formentor",c:[39.9340,3.1780],day:"sun",data:{description:"",photos:[],rating:null,reviews:null,food:[],sights:[],experiences:[],instagram:[],hotels:[],notes:[],by:"",parking:"",route:""}}
-];
+const villages=[];
 
 const areas=[
   {id:"oldtown",n:"Old Town · Casc Antic",type:"History & architecture",icon:"🏛️",c:[39.5715,2.6490],d:"The historic core: La Seu, Almudaina, Banys Àrabs, courtyards, churches and medieval lanes.",p:[[39.5752,2.6460],[39.5748,2.6545],[39.5680,2.6540],[39.5674,2.6440],[39.5710,2.6415]]},
@@ -112,24 +53,7 @@ const map=L.map("map",{zoomControl:true}).setView([39.570,2.648],14);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"© OpenStreetMap contributors"}).addTo(map);
 const areaLayer=L.layerGroup().addTo(map);
 areas.forEach(a=>{const poly=L.polygon(a.p,{color:"#18211d",weight:1,fillOpacity:.12});poly.bindPopup("<strong>"+a.icon+" "+a.n+"</strong><br><small>"+a.type+"</small><br>"+a.d);poly.on("click",()=>focusArea(a.id));poly.addTo(areaLayer);});
-const routes={
-  sat:{stops:[
-    {n:"Palma",c:[39.5700,2.6480],type:"start",size:"small"},
-    {n:"Caimari",c:[39.7744,2.8794],type:"village",size:"long",d:"Village stop — coffee / short wander."},
-    {n:"Photo stop · Tramuntana",c:[39.8498,2.9448],type:"photo",size:"small",d:"Demo photo stop — quick viewpoint / small roadside stop."},
-    {n:"Santuari de Lluc",c:[39.8231,2.8830],type:"sight",size:"long",d:"Monastery, basilica and mountain surroundings."},
-    {n:"Pollença Old Town",c:[39.8767,3.0164],type:"village",size:"long",d:"Old-town walk and Calvari."},
-    {n:"Calvari Steps",c:[39.8769,3.0160],type:"sight",size:"small",d:"Historic staircase and viewpoint above Pollença."}
-  ]},
-  sun:{stops:[
-    {n:"Pollença",c:[39.8767,3.0164],type:"start",size:"small"},
-    {n:"Port de Pollença",c:[39.9084,3.0832],type:"village",size:"long",d:"Waterfront breakfast / walk."},
-    {n:"Mirador Es Colomer",c:[39.9328,3.1832],type:"sight",size:"small",d:"Clifftop viewpoint over the Formentor peninsula."},
-    {n:"Formentor Beach",c:[39.9357,3.2040],type:"sight",size:"long",d:"Beach and sea stop."},
-    {n:"Cap de Formentor",c:[39.9600,3.2095],type:"sight",size:"long",d:"Dramatic northern tip and lighthouse viewpoint."},
-    {n:"Pollença",c:[39.8767,3.0164],type:"end",size:"small"}
-  ]}
-};
+const routes={};
 let routeLayer=L.layerGroup(),routeVisible=false;
 async function drawRoute(id){
   routeLayer.clearLayers();
