@@ -140,9 +140,10 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--mares);outline-offs
 .day-panel{margin-top:4px}
 
 @media(max-width:1000px){
-  body{display:block}
-  main{height:46vh;min-height:280px;position:sticky;top:0;z-index:500;border-bottom:1px solid var(--line)}
-  aside{padding:18px 16px 44px}
+  /* The map comes after the content in the HTML, so flex order pulls it back to the top. */
+  body{display:flex;flex-direction:column;height:auto;min-height:100%}
+  main{order:-1;height:46vh;min-height:280px;position:sticky;top:0;z-index:500;border-bottom:1px solid var(--line)}
+  aside{order:1;padding:18px 16px 44px}
   #plan{display:flex;flex-direction:column;gap:22px}
   #plan .day-panel{order:1;position:static;width:100%}
   #plan .findings{order:2}
