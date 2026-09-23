@@ -306,4 +306,34 @@ function focusArea(id){const a=areas.find(x=>x.id===id);if(!a||!map||!leafletRea
 function toggleCat(cat,btn){if(!leafletReady||!map||!markerLayers[cat])return;if(map.hasLayer(markerLayers[cat])){map.removeLayer(markerLayers[cat]);btn.classList.remove("active");}else{markerLayers[cat].addTo(map);btn.classList.add("active");}}
 
 
+// Live GPS position (works on HTTPS, e.g. GitHub Pages; the phone asks for location permission).
+let meMarker=null,meCircle=null,locating=false,followMe=false;
+function mapToast(msg){const el=document.querySelector("#map");if(!el)return;let t=el.querySelector(".map-toast");if(!t){t=document.createElement("div");t.className="map-toast";el.appendChild(t);}t.textContent=msg;clearTimeout(mapToast.t);mapToast.t=setTimeout(()=>t.remove(),4000);}
+function locateBtn(){return document.querySelector(".locate-btn");}
+function startLocate(){
+  if(!map)return;
+  if(!navigator.geolocation){mapToast("GPS is not available on this device.");return;}
+  followMe=true;
+  if(meMarker){map.setView(meMarker.getLatLng(),Math.max(map.getZoom(),15));}
+  if(locating)return;
+  locating=true;const b=locateBtn();if(b)b.classList.add("searching");
+  map.locate({watch:true,enableHighAccuracy:true,setView:false,maximumAge:10000,timeout:20000});
+}
+if(map){
+  const Locate=L.Control.extend({options:{position:"topleft"},onAdd:function(){const b=L.DomUtil.create("button","locate-btn");b.type="button";b.title="Show my location";b.setAttribute("aria-label","Show my location");b.innerHTML="📍";L.DomEvent.disableClickPropagation(b);L.DomEvent.on(b,"click",startLocate);return b;}});
+  map.addControl(new Locate());
+  map.on("locationfound",e=>{
+    const b=locateBtn();if(b){b.classList.remove("searching");b.classList.add("active");}
+    if(!meMarker){
+      meCircle=L.circle(e.latlng,{radius:e.accuracy,color:"#146BFF",weight:1,fillOpacity:.12,interactive:false}).addTo(map);
+      meMarker=L.marker(e.latlng,{icon:L.divIcon({className:"me-dot",html:"<span></span>",iconSize:[24,24],iconAnchor:[12,12]}),zIndexOffset:1000}).addTo(map).bindPopup("You are here");
+    }else{meMarker.setLatLng(e.latlng);meCircle.setLatLng(e.latlng).setRadius(e.accuracy);}
+    if(followMe){map.setView(e.latlng,Math.max(map.getZoom(),15));followMe=false;}
+  });
+  map.on("locationerror",e=>{
+    locating=false;const b=locateBtn();if(b)b.classList.remove("searching","active");
+    mapToast(e.code===1?"Location permission denied — allow it in your browser settings.":"Could not get your location.");
+  });
+}
+
 render();

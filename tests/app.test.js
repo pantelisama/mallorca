@@ -74,6 +74,8 @@ function runApp({ withLeaflet }) {
     addLayer() {},
     removeLayer() {},
     fitBounds() {},
+    on() { return this; },
+    addControl() { return this; },
   };
   const L = {
     map: () => map,
@@ -83,6 +85,7 @@ function runApp({ withLeaflet }) {
     divIcon: () => ({}),
     marker: () => layer(),
     latLngBounds: points => points,
+    Control: { extend: () => function () {} },
     popup: () => ({ setLatLng() { return this; }, setContent() { return this; }, openOn() { return this; } })
   };
 
