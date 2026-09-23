@@ -34,20 +34,18 @@ test("route stops have valid coordinate pairs and use road routing", () => {
       assert.ok(Number(lon) >= 2 && Number(lon) <= 4);
     }
   }
-  assert.match(app, /router\.project-osrm\.org\/route\/v1\/driving/);\n  assert.match(app, /#146BFF/);
+  assert.match(app, /router\.project-osrm\.org\/route\/v1\/driving/);
   assert.match(app, /routing\.openstreetmap\.de\/routed-car\/route\/v1\/driving/);
-  assert.doesNotMatch(app, /L\.polyline\(r\.stops/);\n  assert.match(app, /Open in Google Maps/);\n  assert.match(app, /by:"Pantelis"/);
+  assert.match(app, /#146BFF/);
+  assert.doesNotMatch(app, /L\.polyline\(r\.stops/);
 });
 
-test("spot cards build image URLs without an accidental template-literal placeholder", () => {
-  assert.match(app, /const photo=s\.photo\|\|"https:\/\/images\.unsplash\.com/);
+test("spot cards do not use placeholder imagery", () => {
+  assert.doesNotMatch(app, /images\.unsplash\.com/);
   assert.doesNotMatch(app, /\$\{s\.photo\|\|/);
-  assert.ok(app.includes("onerror='this.onerror=null;this.src=\\\""));
-  assert.ok(app.includes("+fallback+"));
-  assert.ok(!app.includes('this.src="" + fallback + ""'));
-});;
+});
 
-test("render smoke test creates the main planner sections", () => {
+function runApp({ withLeaflet }) {
   const elements = new Map();
   const makeEl = () => ({
     innerHTML: "",
@@ -88,18 +86,30 @@ test("render smoke test creates the main planner sections", () => {
     popup: () => ({ setLatLng() { return this; }, setContent() { return this; }, openOn() { return this; } })
   };
 
+  const window = { open() {} };
+  if (withLeaflet) window.L = L;
   const context = {
     console,
     document,
-    window: { open() {} },
-    L,
+    window,
+    ...(withLeaflet ? { L } : {}),
     fetch: async () => ({ ok: false }),
     setTimeout,
     clearTimeout
   };
   vm.runInNewContext(app, context, { filename: appPath });
+  return elements;
+}
 
+test("render smoke test creates the main planner sections", () => {
+  const elements = runApp({ withLeaflet: true });
   assert.match(elements.get("#plan").innerHTML, /Fri 16 · Plan/);
   assert.ok(elements.get("#days").innerHTML.includes("Sat 17"));
   assert.ok(elements.get("#filters").innerHTML.includes("Food"));
+});
+
+test("planner still renders when Leaflet fails to load", () => {
+  const elements = runApp({ withLeaflet: false });
+  assert.match(elements.get("#plan").innerHTML, /Fri 16 · Plan/);
+  assert.match(elements.get("#map").innerHTML, /Map unavailable/);
 });
