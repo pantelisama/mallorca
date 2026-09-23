@@ -240,29 +240,16 @@ const P = {
                tip:"Η οροσειρά της δυτικής ακτής (UNESCO). Valldemossa, Sóller και Fornalutx βρίσκονται εδώ, και ο δρόμος Ma-10 είναι από τους ωραιότερους για οδήγηση."}
 };
 
-/* ---------- Trips ---------- */
+/* ---------- Trip: Saturday & Sunday ---------- */
 const SECTIONS = [
-  { key:"trip1", label:"Trip 1",
-    title:"Γύρος του νησιού",
-    note:"Από την Palma δυτικά, μετά στην Tramuntana και καταλήγουμε στον βορρά.",
-    stops:["palma","illeta","granfolies","valldemossa","soller","fornalutx","pollenca","portpollenca","muro"] },
-  { key:"trip2", label:"Trip 2",
-    days:[
-      {label:"Μέρα 1", title:"Νότος: calas", note:"Αν είναι Σάββατο, ξεκινήστε από το market στο Santanyí. Όλα είναι σε απόσταση 15 λεπτών.",
-       stops:["santanyi","calodesmoro","llombards","salines"]},
-      {label:"Μέρα 2", title:"Cap de Formentor", note:"Ξεκινήστε νωρίς για το πάρκινγκ στο Mirador.",
-       stops:["colomer","formentor"]},
-      {label:"Μέρα 3", title:"Sóller", note:"Πόλη το πρωί, λιμάνι και ηλιοβασίλεμα το απόγευμα.",
-       stops:["soller","portsoller"]},
-      {label:"Μέρα 4", title:"Ανατολή", note:"Κολύμπι το πρωί, Porto Cristo για φαγητό.",
-       stops:["romantica","portocristo"]},
-      {label:"Μέρα 5", title:"Χωριά της Tramuntana", note:"Fornalutx το πρωί, Valldemossa για μεσημέρι.",
-       stops:["fornalutx","valldemossa"]}
-    ]},
-  { key:"food", label:"Φαγητό & extra", flat:true,
-    title:"Φαγητό & extra",
-    note:"Τα αγαπημένα, χωρίς σειρά.",
-    stops:["fika","cuba","illeta","santanyi","tramuntana"] }
+  { key:"sat", label:"Σάββατο 17",
+    title:"Σάββατο 17: Νότος, Ανατολή & Palma",
+    note:"Πρωινό στο Fika, market στο Santanyí (μόνο Σάββατο ως τις 14:00), calas, ανατολική ακτή και βράδυ στην Palma.",
+    stops:["fika","santanyi","calodesmoro","llombards","salines","romantica","portocristo","palma","cuba"] },
+  { key:"sun", label:"Κυριακή 18",
+    title:"Κυριακή 18: Δύση, Tramuntana & Βορράς",
+    note:"Beach club και φαγητό στα νοτιοδυτικά, μετά τα χωριά της Tramuntana, και καταλήγουμε στο Formentor και στην Platja de Muro.",
+    stops:["granfolies","illeta","valldemossa","soller","portsoller","fornalutx","pollenca","portpollenca","colomer","formentor","muro"] }
 ];
 
 /* ---------- Helpers ---------- */
@@ -362,7 +349,7 @@ function selectSection(idx, dayIdx){
     days.hidden = true;
     show(s);
   }
-  try { localStorage.setItem("mallorca-view", JSON.stringify([idx, dayIdx || 0])); } catch(e){}
+  try { localStorage.setItem("mallorca-view-v2", JSON.stringify([idx, dayIdx || 0])); } catch(e){}
 }
 
 /* ---------- Fuel / supermarkets / toilets (OpenStreetMap, whole island) ---------- */
@@ -514,7 +501,7 @@ initPoi();
 const main = document.getElementById("mainTabs");
 SECTIONS.forEach((s, i) => main.appendChild(tabButton(s.label, i === 0, () => selectSection(i, 0))));
 let start = [0, 0];
-try { const saved = JSON.parse(localStorage.getItem("mallorca-view")); if (Array.isArray(saved)) start = saved; } catch(e){}
+try { const saved = JSON.parse(localStorage.getItem("mallorca-view-v2")); if (Array.isArray(saved)) start = saved; } catch(e){}
 if (!SECTIONS[start[0]]) start = [0, 0];
 selectSection(start[0], start[1]);
 </script>
