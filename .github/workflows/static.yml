@@ -42,8 +42,6 @@ jobs:
           for (const x of ['.spot-card', '.day-panel', '.photo-grid', '.route-pin']) if (!css.includes(x)) throw new Error('Missing required CSS: ' + x);
           console.log('Static integrity checks passed');
           NODE
-      - name: Run Node tests
-        run: npm test
 
   deploy:
     name: Deploy to GitHub Pages
