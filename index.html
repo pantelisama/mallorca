@@ -1,8 +1,522 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#18211d"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Mallorca"><title>Mallorca — Palma Friday</title>
-<link rel="stylesheet" href="styles.css?v=37"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"></head>
-<body><aside><div class="brand">MALLORCA <span>16—19 OCT 2026</span></div><h1>Palma · Friday 16</h1><p class="sub">Arrival · Old Town · food · culture · sunset · nightlife</p>
-<nav id="days"></nav><div id="filters"></div><section id="plan"></section></aside><main id="map"></main>
-<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>if(!window.L){document.write('<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"><\/script>');}</script>
-<script src="app.js?v=37"></script></body></html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mallorca · 16–19 Οκτ 2026</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏝️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css">
+<style>
+:root{
+  --salt:#EAF1F1;
+  --paper:#FFFFFF;
+  --ink:#12303B;
+  --muted:#557079;
+  --sea:#0E5A70;
+  --mares:#C0913F;   /* golden marès sandstone */
+  --pine:#2F5D4A;
+  --line:#CFDCDC;
+  --star:#B7802A;
+  --radius-lg:22px;
+  --radius-sm:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --salt:#0C1F26; --paper:#132C35; --ink:#E6EFEF; --muted:#93AEB5;
+    --sea:#5FB8CC; --mares:#E0B566; --pine:#7FC0A2; --line:#24444F; --star:#E6B35C;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:auto}
+body{
+  background:var(--salt);color:var(--ink);
+  font-family:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:16px;line-height:1.5;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+a{color:inherit}
+.wrap{max-width:760px;margin:0 auto;padding:0 18px}
+
+/* Header */
+header{padding:36px 0 18px}
+.dates{color:var(--mares);font-weight:600;font-size:15px;margin:0 0 6px}
+h1{
+  font-family:"Gloock",Georgia,serif;font-weight:400;
+  font-size:clamp(56px,16vw,120px);line-height:.9;margin:0;letter-spacing:-.01em;
+  color:var(--sea);
+}
+.sub{color:var(--muted);margin:12px 0 0;max-width:46ch}
+
+/* Tabs */
+nav.tabs{
+  position:sticky;top:0;z-index:1000;background:var(--salt);
+  padding:12px 0 10px;border-bottom:1px solid var(--line);
+}
+.tabrow{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.tabrow::-webkit-scrollbar{display:none}
+.tab{
+  flex:0 0 auto;border:1px solid var(--line);background:var(--paper);color:var(--ink);
+  font:600 15px/1 "Figtree",system-ui,sans-serif;padding:11px 16px;border-radius:999px;cursor:pointer;
+}
+.tab[aria-selected="true"]{background:var(--sea);border-color:var(--sea);color:var(--salt)}
+.daytabs{margin-top:8px}
+.daytabs .tab{font-size:14px;padding:8px 13px}
+.daytabs .tab[aria-selected="true"]{background:var(--mares);border-color:var(--mares);color:#1b1206}
+.tab:focus-visible,.btn:focus-visible{outline:3px solid var(--mares);outline-offset:2px}
+
+/* Map */
+#map{
+  height:320px;margin:18px 0 8px;border-radius:var(--radius-lg);
+  border:1px solid var(--line);background:var(--paper);
+}
+.leaflet-container{font-family:"Figtree",system-ui,sans-serif}
+.pin{
+  width:28px;height:28px;border-radius:50%;background:var(--sea);color:#fff;
+  display:grid;place-items:center;font:700 13px/1 "Figtree",sans-serif;
+  border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35);
+}
+
+/* POI layers (fuel, supermarkets, toilets) */
+.layers{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}
+.layer{
+  --c:var(--sea);
+  border:1.5px dashed var(--line);background:transparent;color:var(--muted);cursor:pointer;
+  -webkit-tap-highlight-color:transparent;user-select:none;
+  font:600 14px/1 "Figtree",system-ui,sans-serif;padding:9px 12px;border-radius:999px;
+}
+.layer[aria-pressed="false"]{opacity:.7}
+.layer[aria-pressed="true"]{background:var(--c);border:1.5px solid var(--c);color:#fff}
+.layer[aria-pressed="true"]::before{content:"✓ "}
+.layer:focus-visible{outline:3px solid var(--mares);outline-offset:2px}
+.poi-status{color:var(--muted);font-size:13px;margin:6px 0 0;min-height:1.2em}
+.poi{
+  width:26px;height:26px;border-radius:50%;background:#fff;display:grid;place-items:center;
+  font-size:15px;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,.35);
+}
+.poi-cluster{
+  width:36px;height:36px;border-radius:50%;display:grid;place-items:center;
+  font:700 12px/1 "Figtree",sans-serif;color:#fff;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35);
+}
+.poi-cluster span{font-size:14px;margin-right:1px}
+.popup-poi strong{display:block;font-size:14px}
+.popup-poi small{color:#557079}
+.popup-poi a{display:inline-block;margin-top:6px;font-weight:600;color:#0E5A70}
+
+/* Section head */
+.head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:22px 0 4px;flex-wrap:wrap}
+h2{font-family:"Gloock",Georgia,serif;font-weight:400;font-size:34px;line-height:1.05;margin:0}
+.note{color:var(--muted);margin:6px 0 0;font-size:15px}
+.btn{
+  display:inline-flex;align-items:center;gap:6px;text-decoration:none;cursor:pointer;
+  font:600 14px/1 "Figtree",system-ui,sans-serif;padding:10px 14px;border-radius:var(--radius-sm);
+  border:1px solid var(--line);background:var(--paper);color:var(--ink);
+}
+.btn.primary{background:var(--pine);border-color:var(--pine);color:#fff}
+
+/* Route list: the journey line */
+ol.route{list-style:none;margin:18px 0 40px;padding:0;position:relative}
+ol.route::before{
+  content:"";position:absolute;left:17px;top:18px;bottom:18px;width:2px;
+  background:repeating-linear-gradient(to bottom,var(--mares) 0 6px,transparent 6px 12px);
+}
+ol.route.flat::before{display:none}
+.stop{position:relative;padding-left:52px;margin-bottom:14px}
+.num{
+  position:absolute;left:0;top:14px;width:36px;height:36px;border-radius:50%;
+  background:var(--sea);color:#fff;display:grid;place-items:center;font-weight:700;
+  border:3px solid var(--salt);
+}
+.flat .stop{padding-left:0}
+.flat .num{display:none}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-lg);padding:16px 18px}
+.card h3{margin:0;font-size:19px;font-weight:700;line-height:1.25}
+.meta{display:flex;flex-wrap:wrap;gap:4px 12px;margin:4px 0 0;color:var(--muted);font-size:14px}
+.stars{color:var(--star);font-weight:700}
+.tag{color:var(--pine);font-weight:600}
+.tip{margin:10px 0 12px;max-width:60ch}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+
+footer{color:var(--muted);font-size:13px;padding:10px 0 40px;border-top:1px solid var(--line)}
+@media (max-width:480px){
+  #map{height:260px}
+  h2{font-size:28px}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <p class="dates">16–19 Οκτωβρίου 2026</p>
+  <h1>Mallorca</h1>
+  <p class="sub">Διαδρομές, παραλίες και φαγητό. Πάτα «Πλοήγηση» και ανοίγει όλη η διαδρομή στο Google Maps.</p>
+</header>
+
+<nav class="tabs" aria-label="Ενότητες">
+  <div class="wrap">
+    <div class="tabrow" role="tablist" id="mainTabs"></div>
+    <div class="tabrow daytabs" role="tablist" id="dayTabs" hidden></div>
+  </div>
+</nav>
+
+<main class="wrap">
+  <div class="layers" id="layerBtns" aria-label="Εμφάνιση στον χάρτη"></div>
+  <p class="poi-status" id="poiStatus" aria-live="polite"></p>
+  <div id="map" role="img" aria-label="Χάρτης με τις στάσεις"></div>
+  <div class="head">
+    <div>
+      <h2 id="title"></h2>
+      <p class="note" id="note"></p>
+    </div>
+    <a class="btn primary" id="navBtn" target="_blank" rel="noopener">Πλοήγηση</a>
+  </div>
+  <ol class="route" id="list"></ol>
+</main>
+
+<footer class="wrap">
+  Τα αστέρια είναι από το Google Maps, όπως ήταν τον Σεπτέμβριο 2026. Χάρτης, βενζινάδικα, μάρκετ και τουαλέτες: © OpenStreetMap contributors.
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
+<script>
+/* ---------- Places (hardcoded) ---------- */
+const P = {
+  palma:      {name:"Palma", lat:39.5696, lng:2.6502, q:"Palma de Mallorca",
+               tip:"Παλιά πόλη, καθεδρικός La Seu και βόλτα στη Santa Catalina."},
+  illeta:     {name:"Restaurant Illeta", area:"Camp de Mar", lat:39.5369, lng:2.4223, id:"ChIJ3UzHtyknmBIRrrMQWJLDMz4",
+               rating:4.3, reviews:8563, price:"€€€",
+               tip:"Το εστιατόριο πάνω στο νησάκι με την ξύλινη γέφυρα. Κάντε κράτηση και στοχεύστε στο ηλιοβασίλεμα."},
+  granfolies: {name:"Gran Folies Beach Club", area:"Cala Llamp, Port d'Andratx", lat:39.5345, lng:2.3881, id:"ChIJNZ_PjqUmmBIRUcbKeHIy20c",
+               rating:4.2, reviews:2719, price:"€€€€", hours:"10:30–00:00",
+               tip:"Ξαπλώστρες, πισίνα και βράχια πάνω από τη θάλασσα. Ακριβό, αλλά είναι ο πιο εύκολος τρόπος να χαρείτε το Cala Llamp."},
+  valldemossa:{name:"Valldemossa", lat:39.7115, lng:2.6226, id:"ChIJ_8aKugPulxIRPhKWi-dSSJI",
+               tip:"Πέτρινο χωριό στην Tramuntana με το μοναστήρι (Cartoixa). Δοκιμάστε coca de patata."},
+  soller:     {name:"Sóller", lat:39.7671, lng:2.7158, id:"ChIJM-1gD7_olxIRLkJeJ-gfAbA",
+               tip:"Κεντρική πλατεία με καφέ και πορτοκαλεώνες. Το ιστορικό τραμ κατεβαίνει στο λιμάνι."},
+  portsoller: {name:"Port de Sóller", lat:39.7952, lng:2.6975, id:"ChIJl4UEL_vllxIRYD5Xf3GvAgo",
+               tip:"Κλειστός κόλπος, παραλιακός πεζόδρομος. Ωραίο για ηλιοβασίλεμα και φαγητό δίπλα στο νερό."},
+  fornalutx:  {name:"Fornalutx", lat:39.7822, lng:2.7410, id:"ChIJnVSoEX_olxIRWKzSqbgNHFM",
+               tip:"Από τα πιο όμορφα χωριά του νησιού, 10 λεπτά από το Sóller. Σκαλιστά πέτρινα σοκάκια, λίγο περπάτημα."},
+  pollenca:   {name:"Pollença", lat:39.8772, lng:3.0162, id:"ChIJA1Fe26DWlxIRN0Vzy9Fe7Co",
+               tip:"Ανεβείτε τα σκαλιά του Calvari για θέα, και μετά καφές στην Plaça Major."},
+  portpollenca:{name:"Port de Pollença", lat:39.9064, lng:3.0827, id:"ChIJi5g3vtnUlxIRkD9Xf3GvAgo",
+               tip:"Ήρεμος κόλπος με πεζόδρομο κάτω από τα πεύκα (Pine Walk). Καλή βάση για το Formentor."},
+  muro:       {name:"Platja de Muro", lat:39.8089, lng:3.1182, id:"ChIJubjzdB8tlhIRSDf8v7sB_tQ",
+               rating:4.7, reviews:5124,
+               tip:"Μεγάλη αμμουδιά με ρηχά τιρκουάζ νερά. Εύκολη μέρα παραλίας με ό,τι χρειάζεστε δίπλα."},
+  santanyi:   {name:"Santanyí Market", lat:39.3545, lng:3.1290, id:"ChIJkYyBKABVlhIRDGwY7VJ7V8Q",
+               rating:4.2, reviews:964, hours:"Τετ & Σαβ 9:00–14:00", tag:"Μόνο Τετάρτη & Σάββατο",
+               tip:"Πάνω από 150 πάγκοι με τοπικά προϊόντα και χειροτεχνία. Το Σάββατο 17/10 πέφτει μέρα market. Πηγαίνετε νωρίς για πάρκινγκ."},
+  calodesmoro:{name:"Caló des Moro", lat:39.3136, lng:3.1214, id:"ChIJI1J5hBhVlhIRp9hdEN6Mb70",
+               rating:4.5, reviews:9471,
+               tip:"Περίπου 20–30 λεπτά περπάτημα από το πάρκινγκ, με σκαλιά και βράχια στο τέλος. Κλειστά παπούτσια, νερό, πηγαίνετε νωρίς."},
+  llombards:  {name:"Cala Llombards", lat:39.3236, lng:3.1384, id:"ChIJVeh_8XBVlhIRwdKT2E34tF0",
+               rating:4.4, reviews:3500,
+               tip:"Λίγα λεπτά από το Caló des Moro. Αμμουδιά με βράχια δεξιά κι αριστερά και beach bar."},
+  salines:    {name:"Ses Salines", lat:39.3385, lng:3.0530, id:"ChIJQySexaCrlxIRHTOd-3ErxFE",
+               tip:"Ήσυχο χωριό κοντά στις αλυκές και στην παραλία Es Trenc. Καλό για βραδινό φαγητό μετά τις παραλίες."},
+  colomer:    {name:"Mirador des Colomer", area:"στον δρόμο για Formentor", lat:39.9290, lng:3.1104, id:"ChIJJ52E3ccrlhIRLy7Wu8FMFJE",
+               rating:4.8, reviews:11497,
+               tip:"Η πιο διάσημη θέα της χερσονήσου. Λίγες θέσεις πάρκινγκ, οπότε πρωί."},
+  formentor:  {name:"Cap de Formentor", area:"Φάρος", lat:39.9615, lng:3.2123, id:"ChIJ7cvfEgyHvRIRWPnEwKaGszQ",
+               tip:"Φιδωτός δρόμος ως τον φάρο. Σε ορισμένες περιόδους κόβεται για ΙΧ μετά την παραλία Formentor, οπότε τσεκάρετε πριν ξεκινήσετε."},
+  romantica:  {name:"Cala Romàntica", area:"S'Estany d'en Mas", lat:39.5197, lng:3.3037, q:"Cala Romàntica Mallorca",
+               tip:"Μικρός αμμουδερός κόλπος με καθαρά νερά, πιο ήσυχος από τις διάσημες calas."},
+  portocristo:{name:"Porto Cristo", lat:39.5441, lng:3.3368, id:"ChIJJej1xztBlhIRJkZuo0aGlHs",
+               tip:"Λιμανάκι με εστιατόρια. Δίπλα οι σπηλιές Coves del Drac, αν θέλετε κάτι διαφορετικό."},
+  fika:       {name:"Fika Farina", area:"Bakery, Palma", lat:39.5708, lng:2.6522, id:"ChIJEUGWH06TlxIRWMOerVXhUb4",
+               rating:4.8, reviews:1858, price:"€", hours:"8:00–20:00",
+               tip:"Σουηδικός φούρνος δίπλα στην Plaça Major. Cinnamon και cardamom buns. Μόνο take-away, έχει ουρά και ξεπουλάει, οπότε νωρίς."},
+  cuba:       {name:"Cuba Skybar", area:"Hostal Cuba, Santa Catalina", lat:39.5702, lng:2.6392, id:"ChIJqYJwzUeTlxIRJB_vuDoI9sg",
+               rating:3.4, reviews:198, price:"€€", hours:"16:30–22:30",
+               tip:"Rooftop με θέα σε καθεδρικό και λιμάνι. Γεμίζει γρήγορα, ανεβείτε λίγο πριν το ηλιοβασίλεμα."},
+  tramuntana: {name:"Serra de Tramuntana", area:"Οροσειρά", lat:39.75, lng:2.70, q:"Serra de Tramuntana",
+               tip:"Η οροσειρά της δυτικής ακτής (UNESCO). Valldemossa, Sóller και Fornalutx βρίσκονται εδώ, και ο δρόμος Ma-10 είναι από τους ωραιότερους για οδήγηση."}
+};
+
+/* ---------- Trips ---------- */
+const SECTIONS = [
+  { key:"trip1", label:"Trip 1",
+    title:"Γύρος του νησιού",
+    note:"Από την Palma δυτικά, μετά στην Tramuntana και καταλήγουμε στον βορρά.",
+    stops:["palma","illeta","granfolies","valldemossa","soller","fornalutx","pollenca","portpollenca","muro"] },
+  { key:"trip2", label:"Trip 2",
+    days:[
+      {label:"Μέρα 1", title:"Νότος: calas", note:"Αν είναι Σάββατο, ξεκινήστε από το market στο Santanyí. Όλα είναι σε απόσταση 15 λεπτών.",
+       stops:["santanyi","calodesmoro","llombards","salines"]},
+      {label:"Μέρα 2", title:"Cap de Formentor", note:"Ξεκινήστε νωρίς για το πάρκινγκ στο Mirador.",
+       stops:["colomer","formentor"]},
+      {label:"Μέρα 3", title:"Sóller", note:"Πόλη το πρωί, λιμάνι και ηλιοβασίλεμα το απόγευμα.",
+       stops:["soller","portsoller"]},
+      {label:"Μέρα 4", title:"Ανατολή", note:"Κολύμπι το πρωί, Porto Cristo για φαγητό.",
+       stops:["romantica","portocristo"]},
+      {label:"Μέρα 5", title:"Χωριά της Tramuntana", note:"Fornalutx το πρωί, Valldemossa για μεσημέρι.",
+       stops:["fornalutx","valldemossa"]}
+    ]},
+  { key:"food", label:"Φαγητό & extra", flat:true,
+    title:"Φαγητό & extra",
+    note:"Τα αγαπημένα, χωρίς σειρά.",
+    stops:["fika","cuba","illeta","santanyi","tramuntana"] }
+];
+
+/* ---------- Helpers ---------- */
+const nf = new Intl.NumberFormat("el-GR");
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function placeUrl(p){
+  const q = encodeURIComponent(p.q || (p.name + (p.area ? ", " + p.area : "") + ", Mallorca"));
+  return "https://www.google.com/maps/search/?api=1&query=" + q + (p.id ? "&query_place_id=" + p.id : "");
+}
+function routeUrl(places){
+  const c = p => p.lat + "," + p.lng;
+  if (places.length === 1) return placeUrl(places[0]);
+  const o = places[0], d = places[places.length - 1];
+  const w = places.slice(1, -1).map(c).join("|");
+  return "https://www.google.com/maps/dir/?api=1&travelmode=driving&origin=" + c(o) +
+         "&destination=" + c(d) + (w ? "&waypoints=" + encodeURIComponent(w) : "");
+}
+
+/* ---------- Map ---------- */
+let map = null, layer = null;
+function initMap(){
+  if (!window.L) { document.getElementById("map").hidden = true; return; }
+  map = L.map("map", {scrollWheelZoom:false, zoomControl:true});
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom:18, attribution:"© OpenStreetMap"
+  }).addTo(map);
+  layer = L.layerGroup().addTo(map);
+}
+function drawMap(places, numbered){
+  if (!map) return;
+  layer.clearLayers();
+  const pts = places.map(p => [p.lat, p.lng]);
+  if (numbered && pts.length > 1){
+    L.polyline(pts, {color:getComputedStyle(document.documentElement).getPropertyValue("--mares").trim() || "#C0913F",
+                     weight:3, dashArray:"6 8"}).addTo(layer);
+  }
+  places.forEach((p, i) => {
+    const icon = L.divIcon({className:"", html:'<div class="pin">' + (numbered ? i + 1 : "•") + "</div>",
+                            iconSize:[28,28], iconAnchor:[14,14]});
+    L.marker([p.lat, p.lng], {icon, title:p.name}).addTo(layer)
+      .bindPopup("<strong>" + esc(p.name) + "</strong>" + (p.rating ? "<br>★ " + p.rating : ""));
+  });
+  if (pts.length === 1) map.setView(pts[0], 12);
+  else map.fitBounds(pts, {padding:[30,30]});
+}
+
+/* ---------- Render ---------- */
+function card(p, i){
+  const meta = [];
+  if (p.area) meta.push(esc(p.area));
+  if (p.rating) meta.push('<span class="stars">★ ' + p.rating.toFixed(1) + '</span> (' + nf.format(p.reviews) + ')');
+  if (p.price) meta.push(p.price);
+  if (p.hours) meta.push(esc(p.hours));
+  return '<li class="stop"><span class="num" aria-hidden="true">' + (i + 1) + '</span>' +
+    '<div class="card"><h3>' + esc(p.name) + '</h3>' +
+    (meta.length ? '<p class="meta">' + meta.join("<span aria-hidden=\"true\">|</span>") + '</p>' : '') +
+    (p.tag ? '<p class="meta tag">' + esc(p.tag) + '</p>' : '') +
+    '<p class="tip">' + esc(p.tip) + '</p>' +
+    '<div class="actions"><a class="btn" target="_blank" rel="noopener" href="' + placeUrl(p) + '">Φωτογραφίες & reviews στο Google Maps</a></div>' +
+    '</div></li>';
+}
+
+function show(view){
+  const places = view.stops.map(k => P[k]);
+  document.getElementById("title").textContent = view.title;
+  document.getElementById("note").textContent = view.note || "";
+  const list = document.getElementById("list");
+  list.className = "route" + (view.flat ? " flat" : "");
+  list.innerHTML = places.map(card).join("");
+  const nav = document.getElementById("navBtn");
+  nav.hidden = !!view.flat;
+  nav.href = routeUrl(places);
+  drawMap(places, !view.flat);
+}
+
+function tabButton(label, selected, onClick){
+  const b = document.createElement("button");
+  b.className = "tab"; b.type = "button"; b.setAttribute("role", "tab");
+  b.setAttribute("aria-selected", selected ? "true" : "false");
+  b.textContent = label; b.addEventListener("click", onClick);
+  return b;
+}
+
+function selectSection(idx, dayIdx){
+  const s = SECTIONS[idx];
+  const main = document.getElementById("mainTabs");
+  [...main.children].forEach((b, i) => b.setAttribute("aria-selected", i === idx ? "true" : "false"));
+  const days = document.getElementById("dayTabs");
+  days.innerHTML = "";
+  if (s.days){
+    days.hidden = false;
+    const d = dayIdx || 0;
+    s.days.forEach((day, i) => days.appendChild(tabButton(day.label, i === d, () => selectSection(idx, i))));
+    show(s.days[d]);
+  } else {
+    days.hidden = true;
+    show(s);
+  }
+  try { localStorage.setItem("mallorca-view", JSON.stringify([idx, dayIdx || 0])); } catch(e){}
+}
+
+/* ---------- Fuel / supermarkets / toilets (OpenStreetMap, whole island) ---------- */
+const POI_TYPES = {
+  fuel:   {label:"Βενζινάδικα",   one:"Βενζινάδικο", icon:"⛽", color:"#C0392B", test:t => t.amenity === "fuel"},
+  market: {label:"Σούπερ μάρκετ", one:"Σούπερ μάρκετ", icon:"🛒", color:"#2F5D4A", test:t => t.shop === "supermarket"},
+  wc:     {label:"Τουαλέτες",     one:"Τουαλέτα", icon:"🚻", color:"#0E5A70", test:t => t.amenity === "toilets"},
+  food:   {label:"Φαγητό",        one:"Φαγητό",   icon:"🍽️", color:"#B7802A", fixed:["fika","cuba","illeta","granfolies"]}
+};
+const OSM_TYPES = Object.keys(POI_TYPES).filter(k => POI_TYPES[k].test);
+const MALLORCA_BBOX = "39.25,2.30,39.97,3.48"; // south,west,north,east
+const POI_CACHE_KEY = "mallorca-poi-v1";
+const POI_MAX_AGE = 7 * 24 * 3600 * 1000;      // refresh weekly
+const OVERPASS = ["https://overpass-api.de/api/interpreter",
+                  "https://overpass.kumi.systems/api/interpreter"];
+const poiLayers = {};
+let poiOn = {fuel:true, market:true, wc:true, food:true};
+try { const s = JSON.parse(localStorage.getItem("mallorca-poi-on")); if (s) poiOn = Object.assign(poiOn, s); } catch(e){}
+
+function setPoiStatus(t){ document.getElementById("poiStatus").textContent = t; }
+
+async function fetchPoi(){
+  try {
+    const c = JSON.parse(localStorage.getItem(POI_CACHE_KEY));
+    if (c && Date.now() - c.t < POI_MAX_AGE) return c.items;
+  } catch(e){}
+  const q = '[out:json][timeout:60];(' +
+    'nwr["amenity"="fuel"](' + MALLORCA_BBOX + ');' +
+    'nwr["shop"="supermarket"](' + MALLORCA_BBOX + ');' +
+    'nwr["amenity"="toilets"](' + MALLORCA_BBOX + ');' +
+    ');out center tags;';
+  let lastErr;
+  for (const url of OVERPASS){
+    try {
+      const r = await fetch(url, {method:"POST", body:"data=" + encodeURIComponent(q),
+                                  headers:{"Content-Type":"application/x-www-form-urlencoded"}});
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      const j = await r.json();
+      const items = j.elements.map(e => {
+        const lat = e.lat ?? e.center?.lat, lng = e.lon ?? e.center?.lon, t = e.tags || {};
+        const type = OSM_TYPES.find(k => POI_TYPES[k].test(t));
+        if (!type || lat == null) return null;
+        return {type, lat:+lat.toFixed(5), lng:+lng.toFixed(5),
+                name:t.name || t.brand || "", brand:t.brand || "",
+                hours:t.opening_hours || "", fee:t.fee || ""};
+      }).filter(Boolean);
+      try { localStorage.setItem(POI_CACHE_KEY, JSON.stringify({t:Date.now(), items})); } catch(e){}
+      return items;
+    } catch(e){ lastErr = e; }
+  }
+  // Network failed: fall back to an old cache if there is one
+  try { const c = JSON.parse(localStorage.getItem(POI_CACHE_KEY)); if (c) return c.items; } catch(e){}
+  throw lastErr;
+}
+
+function poiPopup(p){
+  const T = POI_TYPES[p.type];
+  const nav = "https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=" + p.lat + "," + p.lng;
+  const extra = [];
+  if (p.brand && p.brand !== p.name) extra.push(esc(p.brand));
+  if (p.hours) extra.push(esc(p.hours));
+  if (p.type === "wc" && p.fee) extra.push(p.fee === "no" ? "Δωρεάν" : "Με χρέωση");
+  return '<div class="popup-poi"><strong>' + T.icon + " " + esc(p.name || T.one) + '</strong>' +
+         (extra.length ? "<small>" + extra.join(" | ") + "</small><br>" : "") +
+         '<a href="' + nav + '" target="_blank" rel="noopener">Πλοήγηση εδώ</a></div>';
+}
+
+function makeGroup(k){
+  const T = POI_TYPES[k];
+  return L.markerClusterGroup({
+      showCoverageOnHover:false, maxClusterRadius:45,
+      iconCreateFunction: c => L.divIcon({className:"",
+        html:'<div class="poi-cluster" style="background:' + T.color + '"><span>' + T.icon + '</span>' + c.getChildCount() + '</div>',
+        iconSize:[36,36], iconAnchor:[18,18]})
+  });
+}
+function poiIcon(k){
+  return L.divIcon({className:"", html:'<div class="poi">' + POI_TYPES[k].icon + '</div>', iconSize:[26,26], iconAnchor:[13,13]});
+}
+function buildPoiLayers(items){
+  OSM_TYPES.forEach(k => {
+    const T = POI_TYPES[k];
+    const group = makeGroup(k);
+    const icon = L.divIcon({className:"", html:'<div class="poi">' + T.icon + '</div>', iconSize:[26,26], iconAnchor:[13,13]});
+    items.filter(p => p.type === k).forEach(p =>
+      group.addLayer(L.marker([p.lat, p.lng], {icon, title:p.name || T.label}).bindPopup(() => poiPopup(p))));
+    poiLayers[k] = group;
+    applyLayer(k);
+  });
+  const n = k => items.filter(p => p.type === k).length;
+  setPoiStatus("⛽ " + n("fuel") + "  🛒 " + n("market") + "  🚻 " + n("wc") + " σε όλο το νησί. Κάνε zoom out για να τα δεις όλα.");
+}
+
+function buildFoodLayer(){
+  const group = makeGroup("food");
+  POI_TYPES.food.fixed.forEach(key => {
+    const p = P[key];
+    const html = '<div class="popup-poi"><strong>🍽️ ' + esc(p.name) + '</strong>' +
+      '<small>' + [p.area && esc(p.area), p.rating && ("★ " + p.rating.toFixed(1)), p.hours && esc(p.hours)].filter(Boolean).join(" | ") + '</small><br>' +
+      '<a href="' + placeUrl(p) + '" target="_blank" rel="noopener">Google Maps</a></div>';
+    group.addLayer(L.marker([p.lat, p.lng], {icon:poiIcon("food"), title:p.name}).bindPopup(html));
+  });
+  poiLayers.food = group;
+  applyLayer("food");
+}
+
+/* Show/hide a layer immediately so it always matches its button */
+function applyLayer(k){
+  const g = poiLayers[k];
+  if (!g || !map) return;
+  if (poiOn[k]) { if (!map.hasLayer(g)) map.addLayer(g); }
+  else {
+    const pop = map._popup;
+    if (pop && pop._source && g.hasLayer(pop._source)) map.closePopup();
+    if (map.hasLayer(g)) map.removeLayer(g);
+  }
+}
+
+function initPoiButtons(){
+  const box = document.getElementById("layerBtns");
+  Object.keys(POI_TYPES).forEach(k => {
+    const T = POI_TYPES[k];
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "layer";
+    b.setAttribute("aria-pressed", poiOn[k] ? "true" : "false");
+    b.style.setProperty("--c", T.color);
+    b.textContent = T.icon + " " + T.label;
+    b.addEventListener("click", () => {
+      poiOn[k] = !poiOn[k];
+      b.setAttribute("aria-pressed", poiOn[k] ? "true" : "false");
+      applyLayer(k);
+      try { localStorage.setItem("mallorca-poi-on", JSON.stringify(poiOn)); } catch(e){}
+    });
+    box.appendChild(b);
+  });
+}
+
+async function initPoi(){
+  if (!map || !L.markerClusterGroup) { document.getElementById("layerBtns").hidden = true; return; }
+  initPoiButtons();
+  buildFoodLayer();
+  setPoiStatus("Φόρτωση βενζινάδικων, σούπερ μάρκετ και τουαλετών…");
+  try { buildPoiLayers(await fetchPoi()); }
+  catch(e){ setPoiStatus("Δεν φορτώθηκαν τα βενζινάδικα/μάρκετ/τουαλέτες. Έλεγξε τη σύνδεση και ανανέωσε τη σελίδα."); }
+}
+
+initMap();
+initPoi();
+const main = document.getElementById("mainTabs");
+SECTIONS.forEach((s, i) => main.appendChild(tabButton(s.label, i === 0, () => selectSection(i, 0))));
+let start = [0, 0];
+try { const saved = JSON.parse(localStorage.getItem("mallorca-view")); if (Array.isArray(saved)) start = saved; } catch(e){}
+if (!SECTIONS[start[0]]) start = [0, 0];
+selectSection(start[0], start[1]);
+</script>
+</body>
+</html>
