@@ -111,15 +111,15 @@ function runApp({ withLeaflet }) {
 
 test("render smoke test creates the main planner sections", () => {
   const elements = runApp({ withLeaflet: true });
-  assert.match(elements.get("#plan").innerHTML, /Fri 16 · Plan/);
-  assert.ok(elements.get("#days").innerHTML.includes("Sat 17"));
-  assert.ok(elements.get("#filters").innerHTML.includes("Food"));
+  assert.match(elements.get("#plan").innerHTML, /Παρ 16 · Πρόγραμμα/);
+  assert.ok(elements.get("#days").innerHTML.includes("Σαβ 17"));
+  assert.ok(elements.get("#filters").innerHTML.includes("Φαγητό"));
 });
 
 test("planner still renders when Leaflet fails to load", () => {
   const elements = runApp({ withLeaflet: false });
-  assert.match(elements.get("#plan").innerHTML, /Fri 16 · Plan/);
-  assert.match(elements.get("#map").innerHTML, /Map unavailable/);
+  assert.match(elements.get("#plan").innerHTML, /Παρ 16 · Πρόγραμμα/);
+  assert.match(elements.get("#map").innerHTML, /Ο χάρτης δεν φόρτωσε/);
 });
 
 test("index.html loads the planner shell and app.js", () => {
@@ -157,7 +157,7 @@ test("Saturday renders numbered stops with stars and a Google Maps route link", 
   const elements = runApp({ withLeaflet: true });
   elements.clickDay("sat");
   const html = elements.get("#plan").innerHTML;
-  assert.match(html, /Sat 17 · Plan/);
+  assert.match(html, /Σαβ 17 · Πρόγραμμα/);
   assert.match(html, /Caló des Moro/);
   assert.match(html, /★ 4\.5/);
   assert.match(html, /google\.com\/maps\/dir\//);
@@ -179,7 +179,7 @@ test("Monday keeps the Palma plan with an airport navigation link", () => {
   const elements = runApp({ withLeaflet: true });
   elements.clickDay("mon");
   const html = elements.get("#plan").innerHTML;
-  assert.match(html, /Mon 19 · Plan/);
+  assert.match(html, /Δευ 19 · Πρόγραμμα/);
   assert.match(html, /Palma Airport/);
-  assert.match(html, /Palma addons/);
+  assert.match(html, /Αποθηκευμένα μέρη · Palma/);
 });

@@ -1,11 +1,11 @@
 const categories={
-  food:{label:"Food",icon:"🍷"},
-  sights:{label:"Sights",icon:"🏛️"},
-  beaches:{label:"Beaches",icon:"🏖️"},
-  experiences:{label:"Experiences",icon:"✨"},
-  instagram:{label:"Instagrammable",icon:"📸"},
-  hotels:{label:"Hotels",icon:"🏨"},
-  villages:{label:"Villages",icon:"🏘️"}
+  food:{label:"Φαγητό",icon:"🍷"},
+  sights:{label:"Αξιοθέατα",icon:"🏛️"},
+  beaches:{label:"Παραλίες",icon:"🏖️"},
+  experiences:{label:"Εμπειρίες",icon:"✨"},
+  instagram:{label:"Φωτογραφίες",icon:"📸"},
+  hotels:{label:"Ξενοδοχεία",icon:"🏨"},
+  villages:{label:"Χωριά",icon:"🏘️"}
 };
 
 // Google Maps stars (rating + review count) are hardcoded per place, as shown on Google Maps.
@@ -109,18 +109,18 @@ const areas=[
 ];
 
 const days=[
-  {id:"fri",label:"Fri 16",title:"Palma · Friday 16",sub:"Arrival · Old Town · food · culture · sunset · nightlife",nav:{n:"Palma Old Town",c:[39.5696,2.6502]},plan:[
-    ["Arrival","Palma Old Town","Parc de la Mar → La Seu → Almudaina → old-town lanes → La Lonja → Born.","experiences","Easy first walk after landing."],
-    ["Golden hour","Cathedral / Parc de la Mar","Finish the waterfront and cathedral reflection around sunset.","instagram","Best light around sunset."],
-    ["Early evening","Old Town","Banys Àrabs → Santa Eulàlia → Plaça de Cort → Plaça Major.","sights","Compact walk through the historic core."],
-    ["Dinner","La Lonja or Santa Catalina","Pick the area that fits your mood: historic tapas/wine in La Lonja or the food-heavy neighbourhood streets of Santa Catalina.","food","The places themselves are in the findings below."],
-    ["Night option","Flamenco / nightlife","Optional depending on arrival energy.","experiences","Choose from the relevant places below."]
+  {id:"fri",label:"Παρ 16",title:"Παρασκευή 16 · Palma",sub:"Άφιξη · παλιά πόλη · φαγητό · ηλιοβασίλεμα",nav:{n:"Palma Old Town",c:[39.5696,2.6502]},plan:[
+    ["Άφιξη","Παλιά πόλη","Parc de la Mar → La Seu → Almudaina → σοκάκια → La Lonja → Born.","experiences","Χαλαρή πρώτη βόλτα μετά την πτήση."],
+    ["Ηλιοβασίλεμα","Καθεδρικός / Parc de la Mar","Παραλιακή βόλτα και ο καθεδρικός καθρεφτισμένος στο νερό.","instagram","Το καλύτερο φως λίγο πριν τη δύση."],
+    ["Νωρίς το βράδυ","Παλιά πόλη","Banys Àrabs → Santa Eulàlia → Plaça de Cort → Plaça Major.","sights","Μικρή διαδρομή στο ιστορικό κέντρο."],
+    ["Δείπνο","La Lonja ή Santa Catalina","Tapas και κρασί στη La Lonja, ή τα εστιατόρια της Santa Catalina.","food","Τα μαγαζιά είναι στα αποθηκευμένα μέρη πιο κάτω."],
+    ["Προαιρετικά","Flamenco / ποτό","Ανάλογα με το πόσο κουρασμένοι είστε από το ταξίδι.","experiences","Διάλεξε από τα μέρη πιο κάτω."]
   ]},
-  {id:"sat",label:"Sat 17",title:"Saturday 17 · South & East coast",sub:"Fika · Santanyí market · calas · Ses Salines · Cala Romàntica · Porto Cristo · Cuba Skybar",note:"Πρωινό στο Fika, market στο Santanyí (μόνο Σάββατο ως τις 14:00), calas, ανατολική ακτή και βράδυ στην Palma."},
-  {id:"sun",label:"Sun 18",title:"Sunday 18 · West, Tramuntana & North",sub:"Gran Folies · Illeta · Valldemossa · Sóller · Fornalutx · Pollença · Formentor · Platja de Muro",note:"Beach club και φαγητό στα νοτιοδυτικά, μετά τα χωριά της Tramuntana, και καταλήγουμε στο Formentor και στην Platja de Muro."},
-  {id:"mon",label:"Mon 19",title:"Monday 19 · Palma → Airport",sub:"Breakfast · short Palma walk · airport",nav:{n:"Palma Airport (PMI)",c:[39.5517,2.7388]},plan:[
-    ["Morning","Palma","Breakfast (Fika Farina opens at 8:00) and one last short walk through the old town / waterfront.","food","Keep plenty of airport buffer."],
-    ["Departure","Palma → PMI","Return rental car if applicable and head to Palma airport.","experiences","Flight is midday."]
+  {id:"sat",label:"Σαβ 17",title:"Σάββατο 17 · Νότος & ανατολική ακτή",sub:"Fika · Santanyí market · calas · Ses Salines · Cala Romàntica · Porto Cristo · Cuba Skybar",note:"Πρωινό στο Fika, market στο Santanyí (μόνο Σάββατο ως τις 14:00), calas, ανατολική ακτή και βράδυ στην Palma."},
+  {id:"sun",label:"Κυρ 18",title:"Κυριακή 18 · Δύση, Tramuntana & Βορράς",sub:"Gran Folies · Illeta · Valldemossa · Sóller · Fornalutx · Pollença · Formentor · Platja de Muro",note:"Beach club και φαγητό στα νοτιοδυτικά, μετά τα χωριά της Tramuntana, και καταλήγουμε στο Formentor και στην Platja de Muro."},
+  {id:"mon",label:"Δευ 19",title:"Δευτέρα 19 · Palma → αεροδρόμιο",sub:"Πρωινό · μια τελευταία βόλτα · αεροδρόμιο",nav:{n:"Palma Airport (PMI)",c:[39.5517,2.7388]},plan:[
+    ["Πρωί","Palma","Πρωινό (το Fika ανοίγει 8:00) και μια τελευταία βόλτα στην παλιά πόλη.","food","Άφησε άνετο περιθώριο για το αεροδρόμιο."],
+    ["Αναχώρηση","Palma → PMI","Επιστροφή αυτοκινήτου και αναχώρηση για το αεροδρόμιο.","experiences","Η πτήση είναι το μεσημέρι."]
   ]}
 ];
 let currentDay="fri";
@@ -128,7 +128,7 @@ const leafletReady=typeof window.L!=="undefined";
 const map=leafletReady?L.map("map",{zoomControl:true}).setView([39.570,2.648],14):null;
 if(leafletReady)L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"© OpenStreetMap contributors"}).addTo(map);
 const areaLayer=leafletReady?L.layerGroup().addTo(map):null;
-if(!leafletReady){const mapEl=document.querySelector("#map");if(mapEl){mapEl.innerHTML="<div class='map-fallback'><strong>Map unavailable</strong><span>The map service did not load. The trip planner is still available below.</span></div>";}}
+if(!leafletReady){const mapEl=document.querySelector("#map");if(mapEl){mapEl.innerHTML="<div class='map-fallback'><strong>Ο χάρτης δεν φόρτωσε</strong><span>Το πρόγραμμα του ταξιδιού είναι κανονικά πιο κάτω.</span></div>";}}
 if(leafletReady)areas.forEach(a=>{const poly=L.polygon(a.p,{color:"#18211d",weight:1,fillOpacity:.12});poly.bindPopup("<strong>"+a.icon+" "+a.n+"</strong><br><small>"+a.type+"</small><br>"+a.d);poly.on("click",()=>focusArea(a.id));poly.addTo(areaLayer);});
 // Day-trip routes. Each stop's name matches a spot or village above, which supplies stars, tips and the Google Maps link.
 const routes={
@@ -201,7 +201,7 @@ async function drawRoute(id){
     marker.bindTooltip(x.n,{permanent:true,direction:"top",offset:[0,x.size==="long"?-22:-16],className:"route-label"});
   });
 }
-function toggleRoute(){if(!routes[currentDay]||!map)return;routeVisible=!routeVisible;if(routeVisible){drawRoute(currentDay);routeLayer.addTo(map);}else{map.removeLayer(routeLayer);}const b=document.querySelector("#route-toggle");if(b){b.textContent=routeVisible?"Hide route":"Show route";b.classList.toggle("active",routeVisible);}}
+function toggleRoute(){if(!routes[currentDay]||!map)return;routeVisible=!routeVisible;if(routeVisible){drawRoute(currentDay);routeLayer.addTo(map);}else{map.removeLayer(routeLayer);}const b=document.querySelector("#route-toggle");if(b){b.textContent=routeVisible?"Κρύψε τη διαδρομή":"Δείξε τη διαδρομή";b.classList.toggle("active",routeVisible);}}
 
 // Google Maps links. A place id (when known) makes Google open exactly that place.
 function gmapsUrl(o){return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(o.q||(o.n+", Mallorca, Spain"))+(o.id?"&query_place_id="+o.id:"");}
@@ -245,12 +245,12 @@ try{enrich=JSON.parse(localStorage.getItem(ENRICH_STORE)||"{}")||{};}catch(e){en
 function saveEnrich(){try{localStorage.setItem(ENRICH_STORE,JSON.stringify(enrich));}catch(e){}}
 // Hardcoded stars always win over anything cached from earlier runtime lookups.
 function spotData(s){const e=enrich[s.n]||{};return {photo:s.photo||e.photo||"",rating:s.rating||null,reviews:s.reviews||null,gmap:s.id?"":(e.gmap||"")};}
-function ratingHtml(r,n){return "<span class='stars'>★ "+r.toFixed(1)+"</span> · "+(n||0).toLocaleString()+" reviews";}
+function ratingHtml(r,n){return "<span class='stars'>★ "+r.toFixed(1)+"</span> · "+(n||0).toLocaleString()+" κριτικές";}
 function extraHtml(s){const x=[s.price,s.hours].filter(Boolean);return (x.length?"<p class='spot-extra'>"+x.join(" · ")+"</p>":"")+(s.tag?"<p class='spot-extra spot-flag'>"+s.tag+"</p>":"");}
 function spotCardHtml(s){
   const i=spots.indexOf(s);const cat=categories[s.cat];const x=spotData(s);
   const media=x.photo?"<img loading='lazy' src='"+escAttr(x.photo)+"' alt='"+escAttr(s.n)+"'>":"<div class='spot-photo-empty spot-photo-"+s.cat+"'><span>"+cat.icon+"</span></div>";
-  const rating=x.rating?ratingHtml(x.rating,x.reviews):"Google Maps";
+  const rating=x.rating?ratingHtml(x.rating,x.reviews):"Δες το στο Google Maps";
   return "<article class='spot-card' data-spot-index='"+i+"' tabindex='0' role='button'><div class='spot-photo'>"+media+"</div><div class='spot-info'><div class='spot-meta'><div class='spot-cat'>"+cat.icon+" "+cat.label+"</div>"+(s.by?"<span class='finder-tag'>"+s.by+"</span>":"")+"</div><h3>"+s.n+"</h3>"+(s.type?"<p class='spot-type'>"+s.type+"</p>":"")+extraHtml(s)+"<p>"+s.d+"</p><div class='spot-rating'>"+rating+" →</div></div></article>";
 }
 function planCardHtml(x,i){return "<article class='day-card'><div class='day-number'>"+String(i+1).padStart(2,"0")+"</div><div class='day-content'><div class='time'>"+x[0]+"</div><h3>"+x[1]+"</h3><p>"+x[2]+"</p><span class='tag'>"+categories[x[3]].icon+" "+categories[x[3]].label+"</span><div class='route'>"+x[4]+"</div></div></article>";}
@@ -310,14 +310,14 @@ document.querySelector("h1").textContent=day.title;document.querySelector(".sub"
 routeVisible=false;routeToken++;if(map)map.removeLayer(routeLayer);
 const planItems=route?route.stops.map(stopCardHtml):day.plan.map(planCardHtml);
 const cards=daySpots.map(spotCardHtml).join("");
-const villagesHtml=dayVillages.map(v=>"<article class='spot-card village-card' data-village='"+v.id+"'><div class='spot-info'><div class='spot-cat'>🏘️ Villages</div><h3>"+v.name+"</h3>"+(v.data.rating?"<div class='spot-rating'>"+ratingHtml(v.data.rating,v.data.reviews)+"</div>":"")+"<p>"+(v.data.description||"Open this village to see its own saved data.")+"</p></div></article>").join("");
-document.querySelector("#plan").innerHTML="<section class='day-panel'><div class='findings-head'><div><h2>"+day.label+" · Plan</h2><p class='day-description'>"+day.sub+"</p>"+(day.note?"<p class='day-note'>"+day.note+"</p>":"")+"</div><div class='day-tools'>"+(route?"<button type='button' id='route-toggle' class='route-toggle' onclick='toggleRoute()'>Show route</button>":"")+navLinksHtml(day)+"<span>"+planItems.length+" stops</span></div></div><div class='day-grid'>"+planItems.join("")+"</div></section><section class='findings'><div class='findings-head'><h2>"+(route?"Day addons":"Palma addons")+"</h2><span>"+(daySpots.length+dayVillages.length)+" places</span></div><div class='photo-grid'>"+cards+villagesHtml+"</div><p class='stars-note'>★ Αστέρια και reviews από το Google Maps ("+RATINGS_AS_OF+"). Χάρτης, βενζινάδικα, μάρκετ και τουαλέτες: © OpenStreetMap contributors.</p></section>";
-if(route&&map){drawRoute(currentDay);routeLayer.addTo(map);routeVisible=true;const b=document.querySelector("#route-toggle");if(b){b.textContent="Hide route";b.classList.add("active");}}
+const villagesHtml=dayVillages.map(v=>"<article class='spot-card village-card' data-village='"+v.id+"'><div class='spot-info'><div class='spot-cat'>🏘️ Χωριά</div><h3>"+v.name+"</h3>"+(v.data.rating?"<div class='spot-rating'>"+ratingHtml(v.data.rating,v.data.reviews)+"</div>":"")+"<p>"+(v.data.description||"Άνοιξέ το για να δεις τα αποθηκευμένα δεδομένα.")+"</p></div></article>").join("");
+document.querySelector("#plan").innerHTML="<section class='day-panel'><div class='findings-head'><div><h2>"+day.label+" · Πρόγραμμα</h2><p class='day-description'>"+day.sub+"</p>"+(day.note?"<p class='day-note'>"+day.note+"</p>":"")+"</div><div class='day-tools'>"+(route?"<button type='button' id='route-toggle' class='route-toggle' onclick='toggleRoute()'>Δείξε τη διαδρομή</button>":"")+navLinksHtml(day)+"<span>"+planItems.length+" στάσεις</span></div></div><div class='day-grid'>"+planItems.join("")+"</div></section><section class='findings'><div class='findings-head'><h2>"+(route?"Αποθηκευμένα μέρη":"Αποθηκευμένα μέρη · Palma")+"</h2><span>"+(daySpots.length+dayVillages.length)+" μέρη</span></div><div class='photo-grid'>"+cards+villagesHtml+"</div><p class='stars-note'>★ Αστέρια και κριτικές από το Google Maps ("+RATINGS_AS_OF+"). Χάρτης, βενζινάδικα, μάρκετ και τουαλέτες: © OpenStreetMap contributors.</p></section>";
+if(route&&map){drawRoute(currentDay);routeLayer.addTo(map);routeVisible=true;const b=document.querySelector("#route-toggle");if(b){b.textContent="Κρύψε τη διαδρομή";b.classList.add("active");}}
 const pts=daySpots.map(s=>s.c).concat(dayVillages.map(v=>v.c)).concat(route?route.stops.map(x=>x.c):[]);if(map&&pts.length)map.fitBounds(L.latLngBounds(pts),{padding:[40,40]});
 enrichSpots(daySpots);
 }
 function openSpot(i){const s=spots[i];if(!s)return;window.open(spotData(s).gmap||gmapsUrl(s),"_blank","noopener,noreferrer");}
-function openVillage(id){const v=villages.find(x=>x.id===id);if(!v)return;const d=v.data||{};let html="<section class='day-panel'><div class='findings-head'><div><h2>🏘️ "+v.name+"</h2><p class='day-description'>"+(d.description||"Village data")+"</p></div><div class='day-tools'><a class='route-toggle nav-btn' target='_blank' rel='noopener' href='"+escAttr(villageUrl(v))+"'>Google Maps</a><a class='route-toggle nav-btn' target='_blank' rel='noopener' href='"+escAttr(dirUrl([{c:v.c}]))+"'>🧭 Πλοήγηση</a><button type='button' class='route-toggle' onclick='render()'>Back</button></div></div>";if(d.photos&&d.photos.length)html+="<div class='photo-grid'>"+d.photos.map(p=>"<img loading='lazy' src='"+escAttr(p)+"' alt='"+escAttr(v.name)+"'>").join("")+"</div>";if(d.rating)html+="<div class='spot-rating'>"+ratingHtml(d.rating,d.reviews)+"</div>";[["Food",d.food],["Sights",d.sights],["Experiences",d.experiences],["Instagrammable",d.instagram],["Hotels",d.hotels],["Notes",d.notes]].forEach(x=>{if(x[1]&&x[1].length)html+="<div class='day-card'><div class='day-content'><div class='time'>"+x[0]+"</div>"+x[1].map(t=>"<p>"+t+"</p>").join("")+"</div></div>";});if(d.parking)html+="<div class='day-card'><div class='day-content'><div class='time'>Parking</div><p>"+d.parking+"</p></div></div>";if(d.route)html+="<div class='day-card'><div class='day-content'><div class='time'>Route</div><p>"+d.route+"</p></div></div>";html+="</section>";document.querySelector("#plan").innerHTML=html;document.querySelector("#plan").scrollIntoView({behavior:"smooth",block:"start"});if(map)map.setView(v.c,14);}
+function openVillage(id){const v=villages.find(x=>x.id===id);if(!v)return;const d=v.data||{};let html="<section class='day-panel'><div class='findings-head'><div><h2>🏘️ "+v.name+"</h2><p class='day-description'>"+(d.description||"Χωριό")+"</p></div><div class='day-tools'><a class='route-toggle nav-btn' target='_blank' rel='noopener' href='"+escAttr(villageUrl(v))+"'>Google Maps</a><a class='route-toggle nav-btn' target='_blank' rel='noopener' href='"+escAttr(dirUrl([{c:v.c}]))+"'>🧭 Πλοήγηση</a><button type='button' class='route-toggle' onclick='render()'>Back</button></div></div>";if(d.photos&&d.photos.length)html+="<div class='photo-grid'>"+d.photos.map(p=>"<img loading='lazy' src='"+escAttr(p)+"' alt='"+escAttr(v.name)+"'>").join("")+"</div>";if(d.rating)html+="<div class='spot-rating'>"+ratingHtml(d.rating,d.reviews)+"</div>";[["Φαγητό",d.food],["Αξιοθέατα",d.sights],["Εμπειρίες",d.experiences],["Φωτογραφίες",d.instagram],["Ξενοδοχεία",d.hotels],["Σημειώσεις",d.notes]].forEach(x=>{if(x[1]&&x[1].length)html+="<div class='day-card'><div class='day-content'><div class='time'>"+x[0]+"</div>"+x[1].map(t=>"<p>"+t+"</p>").join("")+"</div></div>";});if(d.parking)html+="<div class='day-card'><div class='day-content'><div class='time'>Parking</div><p>"+d.parking+"</p></div></div>";if(d.route)html+="<div class='day-card'><div class='day-content'><div class='time'>Route</div><p>"+d.route+"</p></div></div>";html+="</section>";document.querySelector("#plan").innerHTML=html;document.querySelector("#plan").scrollIntoView({behavior:"smooth",block:"start"});if(map)map.setView(v.c,14);}
 document.addEventListener("click",e=>{const day=e.target.closest("#days [data-day]");if(day){currentDay=day.dataset.day;render();return;}const village=e.target.closest("[data-village]");if(village){openVillage(village.dataset.village);return;}const spot=e.target.closest("[data-spot-index]");if(spot){openSpot(Number(spot.dataset.spotIndex));return;}const cat=e.target.closest("#filters [data-cat]");if(cat){toggleCat(cat.dataset.cat,cat);return;}});
 document.addEventListener("keydown",e=>{if(e.key!=="Enter"&&e.key!==" ")return;const spot=e.target.closest("[data-spot-index]");if(spot){e.preventDefault();openSpot(Number(spot.dataset.spotIndex));}});
 function focusArea(id){const a=areas.find(x=>x.id===id);if(!a||!map||!leafletReady)return;map.fitBounds(L.latLngBounds(a.p),{padding:[80,80]});L.popup().setLatLng(a.c).setContent("<strong>"+a.icon+" "+a.n+"</strong><br><small>"+a.type+"</small><br>"+a.d).openOn(map);}
@@ -441,7 +441,7 @@ function mapToast(msg){const el=document.querySelector("#map");if(!el)return;let
 function locateBtn(){return document.querySelector(".locate-btn");}
 function startLocate(){
   if(!map)return;
-  if(!navigator.geolocation){mapToast("GPS is not available on this device.");return;}
+  if(!navigator.geolocation){mapToast("Το GPS δεν είναι διαθέσιμο σε αυτή τη συσκευή.");return;}
   followMe=true;
   if(meMarker){map.setView(meMarker.getLatLng(),Math.max(map.getZoom(),15));}
   if(locating)return;
@@ -449,19 +449,19 @@ function startLocate(){
   map.locate({watch:true,enableHighAccuracy:true,setView:false,maximumAge:10000,timeout:20000});
 }
 if(map){
-  const Locate=L.Control.extend({options:{position:"topleft"},onAdd:function(){const b=L.DomUtil.create("button","locate-btn");b.type="button";b.title="Show my location";b.setAttribute("aria-label","Show my location");b.innerHTML="📍";L.DomEvent.disableClickPropagation(b);L.DomEvent.on(b,"click",startLocate);return b;}});
+  const Locate=L.Control.extend({options:{position:"topleft"},onAdd:function(){const b=L.DomUtil.create("button","locate-btn");b.type="button";b.title="Η θέση μου";b.setAttribute("aria-label","Η θέση μου");b.innerHTML="📍";L.DomEvent.disableClickPropagation(b);L.DomEvent.on(b,"click",startLocate);return b;}});
   map.addControl(new Locate());
   map.on("locationfound",e=>{
     const b=locateBtn();if(b){b.classList.remove("searching");b.classList.add("active");}
     if(!meMarker){
       meCircle=L.circle(e.latlng,{radius:e.accuracy,color:"#146BFF",weight:1,fillOpacity:.12,interactive:false}).addTo(map);
-      meMarker=L.marker(e.latlng,{icon:L.divIcon({className:"me-dot",html:"<span></span>",iconSize:[24,24],iconAnchor:[12,12]}),zIndexOffset:1000}).addTo(map).bindPopup("You are here");
+      meMarker=L.marker(e.latlng,{icon:L.divIcon({className:"me-dot",html:"<span></span>",iconSize:[24,24],iconAnchor:[12,12]}),zIndexOffset:1000}).addTo(map).bindPopup("Είσαι εδώ");
     }else{meMarker.setLatLng(e.latlng);meCircle.setLatLng(e.latlng).setRadius(e.accuracy);}
     if(followMe){map.setView(e.latlng,Math.max(map.getZoom(),15));followMe=false;}
   });
   map.on("locationerror",e=>{
     locating=false;const b=locateBtn();if(b)b.classList.remove("searching","active");
-    mapToast(e.code===1?"Location permission denied — allow it in your browser settings.":"Could not get your location.");
+    mapToast(e.code===1?"Δεν δόθηκε άδεια τοποθεσίας — ενεργοποίησέ την στις ρυθμίσεις.":"Δεν βρέθηκε η θέση σου.");
   });
 }
 
