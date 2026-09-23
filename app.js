@@ -59,7 +59,57 @@ const spots=[
   {n:"La Lonja alleys",c:[39.5681,2.6453],cat:"instagram",d:"Stone lanes, Gothic architecture and evening light."},
   {n:"Baluard de Sant Pere viewpoint",c:[39.5700,2.6400],cat:"instagram",d:"Elevated view over the old walls and bay."},
   {n:"Bellver panorama",c:[39.5630,2.6190],cat:"instagram",d:"Best broad city panorama if you have time for the uphill detour."},
-  {n:"Santa Catalina streets",c:[39.5694,2.6388],cat:"instagram",d:"Low colourful façades and lively street scene."}
+  {n:"Santa Catalina streets",c:[39.5694,2.6388],cat:"instagram",d:"Low colourful façades and lively street scene."},
+
+  // HOTELS · PALMA
+  {n:"Hotel Can Cera",c:[39.5718,2.6505],cat:"hotels",d:"Boutique hotel in a 17th-century palace with a quiet courtyard."},
+  {n:"Sant Francesc Hotel Singular",c:[39.5695,2.6522],cat:"hotels",d:"Old-town mansion with a rooftop pool and cathedral views."},
+  {n:"Hotel Cort",c:[39.5709,2.6509],cat:"hotels",d:"Design hotel right on Plaça de Cort, next to the olive tree."},
+  {n:"Palacio Ca Sa Galesa",c:[39.5683,2.6500],cat:"hotels",d:"Small palace hotel steps from La Seu and the Arab baths."},
+
+  // SATURDAY · CAIMARI · LLUC · POLLENÇA
+  {n:"Ca Na Toneta",c:[39.7738,2.8787],cat:"food",day:"sat",d:"Caimari restaurant cooking seasonal Mallorcan produce."},
+  {n:"Sa Fonda · Lluc",c:[39.8230,2.8835],cat:"food",day:"sat",d:"Traditional dining hall in the old monastery building."},
+  {n:"Cantonet",c:[39.8771,3.0158],cat:"food",day:"sat",d:"Pollença terrace restaurant near the foot of the Calvari steps."},
+  {n:"Clivia",c:[39.8762,3.0180],cat:"food",day:"sat",d:"Classic Pollença restaurant for fish and Mallorcan dishes."},
+  {n:"Santuari de Lluc",c:[39.8231,2.8830],cat:"sights",day:"sat",d:"Mallorca's spiritual heart: basilica and monastery in the mountains."},
+  {n:"Jardí Botànic de Lluc",c:[39.8226,2.8818],cat:"sights",day:"sat",d:"Small botanical garden with Tramuntana plants beside the sanctuary."},
+  {n:"Calvari Steps",c:[39.8769,3.0160],cat:"sights",day:"sat",d:"365 cypress-lined steps up to the Calvari chapel."},
+  {n:"Pont Romà",c:[39.8812,3.0130],cat:"sights",day:"sat",d:"Old stone bridge on the northern edge of Pollença."},
+  {n:"Olive oil tasting · Caimari",c:[39.7755,2.8805],cat:"experiences",day:"sat",d:"Caimari is an olive-oil village — taste the local DO Oli de Mallorca."},
+  {n:"Escolania de Lluc choir",c:[39.8232,2.8832],cat:"experiences",day:"sat",d:"The Blauets boys' choir sings in the basilica on many days — check times."},
+  {n:"Ma-10 mountain drive",c:[39.8150,2.8200],cat:"experiences",day:"sat",d:"Scenic Tramuntana road past reservoirs and limestone peaks."},
+  {n:"Puig de Maria hike",c:[39.8640,3.0275],cat:"experiences",day:"sat",d:"Steep walk from Pollença to a hilltop hermitage with bay views."},
+  {n:"Calvari viewpoint",c:[39.8783,3.0140],cat:"instagram",day:"sat",d:"Rooftops of Pollença and the bay from the top of the steps."},
+  {n:"Gorg Blau reservoir",c:[39.8095,2.7950],cat:"instagram",day:"sat",d:"Turquoise reservoir framed by mountains on the Ma-10."},
+  {n:"Pont Romà arches",c:[39.8812,3.0131],cat:"instagram",day:"sat",d:"Stone arches over the torrent, best in soft afternoon light."},
+  {n:"Lluc basilica façade",c:[39.8231,2.8829],cat:"instagram",day:"sat",d:"Monastery courtyard with the mountains behind."},
+  {n:"Hotel Juma",c:[39.8768,3.0163],cat:"hotels",day:"sat",d:"Small historic hotel on Pollença's Plaça Major."},
+  {n:"Hotel Desbrull",c:[39.8773,3.0150],cat:"hotels",day:"sat",d:"Simple boutique rooms in a Pollença townhouse."},
+  {n:"Son Brull Hotel & Spa",c:[39.8585,3.0105],cat:"hotels",day:"sat",d:"Former monastery estate just outside Pollença."},
+  {n:"Hostatgeria Santuari de Lluc",c:[39.8233,2.8826],cat:"hotels",day:"sat",d:"Stay inside the monastery — simple rooms, silent mountain nights."},
+
+  // SUNDAY · PORT DE POLLENÇA · FORMENTOR
+  {n:"Stay",c:[39.9070,3.0848],cat:"food",day:"sun",d:"Seafood restaurant on the Port de Pollença pier."},
+  {n:"Corb Marí",c:[39.9095,3.0815],cat:"food",day:"sun",d:"Waterfront grill and fish on the Pine Walk."},
+  {n:"Can Cuarassa",c:[39.8925,3.0870],cat:"food",day:"sun",d:"Sea-view terrace on the bay road towards Alcúdia."},
+  {n:"El Pi de sa Posada",c:[39.9305,3.1345],cat:"food",day:"sun",d:"Beachside lunch under the pines at Platja de Formentor."},
+  {n:"Cap de Formentor Lighthouse",c:[39.9616,3.2127],cat:"sights",day:"sun",d:"The island's northern tip — check current road access."},
+  {n:"Mirador Es Colomer",c:[39.9235,3.1115],cat:"sights",day:"sun",d:"Famous clifftop viewpoint over the Formentor coast."},
+  {n:"Talaia d'Albercutx",c:[39.9215,3.1170],cat:"sights",day:"sun",d:"Old watchtower above Es Colomer with 360° views."},
+  {n:"Platja de Formentor",c:[39.9313,3.1333],cat:"sights",day:"sun",d:"Pine-fringed beach with calm, clear water."},
+  {n:"Boat to Formentor beach",c:[39.9065,3.0860],cat:"experiences",day:"sun",d:"Ferry from Port de Pollença harbour to Platja de Formentor."},
+  {n:"Pine Walk · Passeig Vora Mar",c:[39.9110,3.0800],cat:"experiences",day:"sun",d:"Seafront path under the pines in Port de Pollença."},
+  {n:"Kayak in the bay",c:[39.9080,3.0870],cat:"experiences",day:"sun",d:"Calm-water kayak or paddleboard from Port de Pollença."},
+  {n:"Swim at Cala Figuera",c:[39.9530,3.1780],cat:"experiences",day:"sun",d:"Small wild cove on the Formentor peninsula, short walk down."},
+  {n:"Es Colomer islet",c:[39.9236,3.1117],cat:"instagram",day:"sun",d:"The classic cliff-and-islet shot from the mirador."},
+  {n:"Formentor lighthouse sunset",c:[39.9617,3.2126],cat:"instagram",day:"sun",d:"Lighthouse and sheer cliffs in golden light."},
+  {n:"Pine Walk trees",c:[39.9112,3.0798],cat:"instagram",day:"sun",d:"Pines leaning over the water along the promenade."},
+  {n:"Formentor turquoise water",c:[39.9314,3.1335],cat:"instagram",day:"sun",d:"Clear water and pines from the beach jetty."},
+  {n:"Formentor, a Royal Hideaway Hotel",c:[39.9300,3.1360],cat:"hotels",day:"sun",d:"Legendary 1929 hotel on Formentor beach."},
+  {n:"Hotel Illa d'Or",c:[39.9120,3.0780],cat:"hotels",day:"sun",d:"Classic seafront hotel at the end of the Pine Walk."},
+  {n:"Hotel Miramar",c:[39.9085,3.0830],cat:"hotels",day:"sun",d:"Traditional hotel facing the bay in Port de Pollença."},
+  {n:"Hotel Daina",c:[39.9090,3.0825],cat:"hotels",day:"sun",d:"Waterfront hotel near the Port de Pollença marina."}
 ];
 
 const villages=[
@@ -126,9 +176,9 @@ const routes={
   sun:{stops:[
     {n:"Pollença",c:[39.8767,3.0164],type:"start",size:"small"},
     {n:"Port de Pollença",c:[39.9084,3.0832],type:"village",size:"long",d:"Waterfront breakfast / walk."},
-    {n:"Mirador Es Colomer",c:[39.9328,3.1832],type:"sight",size:"small",d:"Clifftop viewpoint over the Formentor peninsula."},
-    {n:"Formentor Beach",c:[39.9357,3.2040],type:"sight",size:"long",d:"Beach and sea stop."},
-    {n:"Cap de Formentor",c:[39.9600,3.2095],type:"sight",size:"long",d:"Dramatic northern tip and lighthouse viewpoint."},
+    {n:"Mirador Es Colomer",c:[39.9235,3.1115],type:"sight",size:"small",d:"Clifftop viewpoint over the Formentor peninsula."},
+    {n:"Formentor Beach",c:[39.9313,3.1333],type:"sight",size:"long",d:"Beach and sea stop."},
+    {n:"Cap de Formentor",c:[39.9616,3.2127],type:"sight",size:"long",d:"Dramatic northern tip and lighthouse viewpoint."},
     {n:"Pollença",c:[39.8767,3.0164],type:"end",size:"small"}
   ]}
 };
@@ -182,7 +232,7 @@ Object.keys(categories).forEach(cat=>{markerLayers[cat]=leafletReady?L.layerGrou
 function spotOnDay(s,dayId){return s.day?(s.day==="both"||s.day===dayId):(dayId==="fri"||dayId==="mon");}
 function render(){
 const day=days.find(d=>d.id===currentDay)||days[0];
-const dayCats=[...new Set(day.plan.map(x=>x[3]))];
+const dayCats=Object.keys(categories).filter(k=>k!=="villages");
 if(currentDay==="sat"||currentDay==="sun")dayCats.push("villages");
 const daySpots=spots.filter(s=>dayCats.includes(s.cat)&&spotOnDay(s,currentDay));
 const dayVillages=villages.filter(v=>dayCats.includes("villages")&&(v.day==="both"||v.day===currentDay));
