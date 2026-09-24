@@ -134,7 +134,7 @@ test("the five villages show on every day, as places rather than stops", () => {
   for (const id of ["fri", "sat", "sun", "mon"]) {
     elements.clickDay(id);
     const html = elements.get("#plan").innerHTML;
-    for (const name of ["Fornalutx", "Valldemossa", "Deià", "Sóller", "Alcúdia Old Town"]) {
+    for (const name of ["Fornalutx", "Valldemossa", "Deià", "Sóller", "Alcúdia Old Town", "Santanyí"]) {
       assert.match(html, new RegExp(name), name + " missing on " + id);
     }
     assert.match(html, /Καμία στάση ακόμα/, id + " should still have no stops");
