@@ -14,32 +14,6 @@ test("app.js passes Node syntax validation", () => {
   assert.equal(result.status, 0, result.stderr);
 });
 
-test("planner contains the expected day and category model", () => {
-  for (const id of ["fri", "sat", "sun", "mon"]) {
-    assert.match(app, new RegExp('id:"' + id + '"'));
-  }
-  for (const cat of ["food", "sights", "experiences", "instagram", "hotels", "villages"]) {
-    assert.match(app, new RegExp(cat + ":\\{"));
-  }
-});
-
-test("route stops have valid coordinate pairs and use road routing", () => {
-  const routeBlocks = [...app.matchAll(/(?:sat|sun):\{stops:\[([\s\S]*?)\]\}/g)].map(m => m[1]);
-  assert.equal(routeBlocks.length, 2);
-  for (const block of routeBlocks) {
-    const coords = [...block.matchAll(/c:\[(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)\]/g)];
-    assert.ok(coords.length >= 2);
-    for (const [, lat, lon] of coords) {
-      assert.ok(Number(lat) >= 39 && Number(lat) <= 40);
-      assert.ok(Number(lon) >= 2 && Number(lon) <= 4);
-    }
-  }
-  assert.match(app, /router\.project-osrm\.org\/route\/v1\/driving/);
-  assert.match(app, /routing\.openstreetmap\.de\/routed-car\/route\/v1\/driving/);
-  assert.match(app, /#146BFF/);
-  assert.doesNotMatch(app, /L\.polyline\(r\.stops/);
-});
-
 test("spot cards do not use placeholder imagery", () => {
   assert.doesNotMatch(app, /images\.unsplash\.com/);
   assert.doesNotMatch(app, /\$\{s\.photo\|\|/);
@@ -113,7 +87,7 @@ test("render smoke test creates the main planner sections", () => {
   const elements = runApp({ withLeaflet: true });
   assert.match(elements.get("#plan").innerHTML, /Παρ 16 · Πρόγραμμα/);
   assert.ok(elements.get("#days").innerHTML.includes("Σαβ 17"));
-  assert.ok(elements.get("#filters").innerHTML.includes("Φαγητό"));
+  assert.equal(elements.get("#filters").innerHTML, "", "no categories until places are added");
 });
 
 test("planner still renders when Leaflet fails to load", () => {
@@ -129,22 +103,6 @@ test("index.html loads the planner shell and app.js", () => {
   assert.match(html, /leaflet\.markercluster/);
 });
 
-test("Saturday and Sunday routes contain the planned stops in order", () => {
-  const block = id => app.match(new RegExp(id + ":\\{stops:\\[([\\s\\S]*?)\\]\\}"))[1];
-  const names = id => [...block(id).matchAll(/n:"([^"]+)"/g)].map(m => m[1]);
-  assert.deepEqual(names("sat"), ["Fika Farina", "Santanyí Market", "Caló des Moro", "Cala Llombards", "Ses Salines", "Cala Romàntica", "Porto Cristo", "Palma", "Cuba Skybar"]);
-  assert.deepEqual(names("sun"), ["Gran Folies Beach Club", "Restaurant Illeta", "Valldemossa", "Sóller", "Port de Sóller", "Fornalutx", "Pollença", "Port de Pollença", "Mirador des Colomer", "Cap de Formentor", "Platja de Muro"]);
-});
-
-test("Google stars are hardcoded and sample places are gone", () => {
-  for (const [name, rating, reviews] of [["Fika Farina", 4.8, 1858], ["Cuba Skybar", 3.4, 198], ["Caló des Moro", 4.5, 9471], ["Mirador des Colomer", 4.8, 11497], ["Restaurant Illeta", 4.3, 8563]]) {
-    assert.match(app, new RegExp('n:"' + name + '"[^\\n]*rating:' + rating + ',reviews:' + reviews));
-  }
-  for (const fake of ["Ca Na Toneta", "Photo stop", "Kayak in the bay", "Hotel Can Cera", "Caimari"]) {
-    assert.ok(!app.includes(fake), fake + " should be removed");
-  }
-});
-
 test("map has on/off layers for fuel, supermarkets, toilets and food", () => {
   assert.match(app, /amenity"="fuel"/);
   assert.match(app, /shop"="supermarket"/);
@@ -153,33 +111,31 @@ test("map has on/off layers for fuel, supermarkets, toilets and food", () => {
   for (const k of ["fuel", "market", "wc", "food"]) assert.match(app, new RegExp("\\b" + k + ":\\{label:"));
 });
 
-test("Saturday renders numbered stops with stars and a Google Maps route link", () => {
-  const elements = runApp({ withLeaflet: true });
-  elements.clickDay("sat");
-  const html = elements.get("#plan").innerHTML;
-  assert.match(html, /Σαβ 17 · Πρόγραμμα/);
-  assert.match(html, /Caló des Moro/);
-  assert.match(html, /★ 4\.5/);
-  assert.match(html, /google\.com\/maps\/dir\//);
-  assert.match(html, /query_place_id=/);
+test("the planner starts empty: no places, villages, routes or areas", () => {
+  const empty = name => new RegExp("const " + name + "=\\[\\s*\\]");
+  for (const name of ["spots", "villages", "areas"]) assert.match(app, empty(name), name + " should be empty");
+  assert.match(app, /const routes=\{\s*\}/);
 });
 
-test("Sunday navigation is split into legs Google Maps can open", () => {
+test("the four days are present and empty", () => {
   const elements = runApp({ withLeaflet: true });
-  elements.clickDay("sun");
-  const html = elements.get("#plan").innerHTML;
-  assert.match(html, /Πλοήγηση 1\/2/);
-  assert.match(html, /Πλοήγηση 2\/2/);
-  for (const m of html.matchAll(/waypoints=([^'&]+)/g)) {
-    assert.ok(decodeURIComponent(m[1]).split("|").length <= 8);
+  assert.match(elements.get("#days").innerHTML, /Παρ 16/);
+  for (const id of ["fri", "sat", "sun", "mon"]) {
+    elements.clickDay(id);
+    const html = elements.get("#plan").innerHTML;
+    assert.match(html, /Καμία στάση ακόμα/, id + " should show the empty-day hint");
+    assert.match(html, /Δεν υπάρχουν αποθηκευμένα μέρη/, id + " should show the empty grid note");
   }
 });
 
-test("Monday keeps the Palma plan with an airport navigation link", () => {
-  const elements = runApp({ withLeaflet: true });
-  elements.clickDay("mon");
-  const html = elements.get("#plan").innerHTML;
-  assert.match(html, /Δευ 19 · Πρόγραμμα/);
-  assert.match(html, /Palma Airport/);
-  assert.match(html, /Αποθηκευμένα μέρη · Palma/);
+test("map layer buttons for fuel, supermarkets, toilets and food survive the cleanup", () => {
+  assert.match(app, /amenity"="fuel"/);
+  assert.match(app, /shop"="supermarket"/);
+  assert.match(app, /amenity"="toilets"/);
+  for (const k of ["fuel", "market", "wc", "food"]) assert.match(app, new RegExp("\\b" + k + ":\\{label:"));
+});
+
+test("index.html still loads the planner shell", () => {
+  const result = spawnSync(process.execPath, [path.join(root, "scripts", "validate-html.js")], { cwd: root, encoding: "utf8" });
+  assert.equal(result.status, 0, result.stderr);
 });

@@ -12,116 +12,28 @@ const categories={
 // Places without a checked Google rating show a plain "Google Maps" link instead of stars.
 const RATINGS_AS_OF="Σεπτ. 2026";
 
+// ΠΩΣ ΠΡΟΣΘΕΤΩ ΜΕΡΟΣ (αντίγραψε μια γραμμή και άλλαξέ την):
+// {by:"Pantelis", n:"Όνομα", id:"ChIJ... (Google place id, προαιρετικό)", c:[γεωγρ.πλάτος,γεωγρ.μήκος],
+//  cat:"food|sights|beaches|experiences|instagram|hotels", day:"fri|sat|sun|mon" ή ["fri","mon"],
+//  type:"Είδος · Περιοχή", rating:4.5, reviews:1234, price:"€€", hours:"9:00–17:00",
+//  tag:"προειδοποίηση", d:"Η περιγραφή σου."}
 const spots=[
-  // FOOD
-  {by:"Pantelis",n:"Mercat de l'Olivar",c:[39.5749,2.6537],cat:"food",d:"Working food market — jamón, seafood, cheese, olives, local products.",tip:"Go before lunch."},
-  {by:"Pantelis",n:"Mercat de Santa Catalina",c:[39.5692,2.6396],cat:"food",d:"Local market, tapas bars, seafood, vermouth and lively neighbourhood atmosphere."},
-  {by:"Pantelis",n:"La Rosa Vermutería",c:[39.5730,2.6480],cat:"food",d:"Vermouth, tortilla, croquettes and Mallorcan small plates."},
-  {by:"Pantelis",n:"El Camino",c:[39.5719,2.6460],cat:"food",d:"Popular tapas / small plates and natural wine."},
-  {by:"Pantelis",n:"Bar España",c:[39.5748,2.6515],cat:"food",d:"No-frills tapas and montaditos near Plaça d'Espanya."},
-  {by:"Pantelis",n:"Can Joan de s'Aigo",c:[39.5740,2.6500],cat:"food",d:"Historic stop for ensaïmada, ice cream and almond drinks."},
-  {by:"Pantelis",n:"Patrón Lunares",c:[39.5702,2.6388],cat:"food",d:"Santa Catalina seafood and rice dishes."},
-  {by:"Pantelis",n:"Casa Gallega",c:[39.5757,2.6540],cat:"food",d:"Traditional Galician seafood, pulpo and padrón peppers."},
-  {by:"Pantelis",n:"La Lonja tapas area",c:[39.5680,2.6460],cat:"food",d:"Dense evening tapas / wine-bar zone around the old maritime quarter."},
-  {by:"Pantelis",n:"Carrer de la Fàbrica",c:[39.5700,2.6380],cat:"food",d:"Pedestrianised Santa Catalina restaurant street."},
-
-  // SIGHTS
-  {by:"Pantelis",n:"La Seu Cathedral",c:[39.5676,2.6487],cat:"sights",d:"Palma's landmark Gothic cathedral beside the sea."},
-  {by:"Pantelis",n:"Palau de l'Almudaina",c:[39.5678,2.6470],cat:"sights",d:"Royal palace with Roman, Islamic and Gothic layers."},
-  {by:"Pantelis",n:"Banys Àrabs",c:[39.5722,2.6491],cat:"sights",d:"Atmospheric 10th–12th century Arab baths."},
-  {by:"Pantelis",n:"Es Baluard Museu",c:[39.5702,2.6420],cat:"sights",d:"Contemporary art inside the historic city walls."},
-  {by:"Pantelis",n:"Passeig del Born",c:[39.5700,2.6480],cat:"sights",d:"Tree-lined historic promenade, cafés and elegant façades."},
-  {by:"Pantelis",n:"Plaça de Cort",c:[39.5708,2.6508],cat:"sights",d:"City Hall square and the famous old olive tree."},
-  {by:"Pantelis",n:"Plaça Major",c:[39.5727,2.6515],cat:"sights",d:"Central Palma square and gateway to the upper old town."},
-  {by:"Pantelis",n:"Plaça de la Reina",c:[39.5700,2.6465],cat:"sights",d:"Historic square linking Born, La Lonja and the cathedral."},
-  {by:"Pantelis",n:"Santa Eulàlia",c:[39.5713,2.6505],cat:"sights",d:"Historic Gothic church in the old town."},
-  {by:"Pantelis",n:"Baluard de Sant Pere",c:[39.5700,2.6400],cat:"sights",d:"Historic bastion with city / harbour views."},
-  {by:"Pantelis",n:"Can Balaguer",c:[39.5708,2.6488],cat:"sights",d:"Beautiful preserved Palma courtyard house; free entry."},
-  {by:"Pantelis",n:"Casal Solleric",c:[39.5701,2.6478],cat:"sights",d:"Baroque palace on the Born, used for exhibitions."},
-  {by:"Pantelis",n:"Can Casasayas",c:[39.5720,2.6470],cat:"sights",d:"Modernist twin façades — one of Palma's best architectural details."},
-  {by:"Pantelis",n:"Jewish Quarter / Carrer de Can Serra",c:[39.5720,2.6500],cat:"sights",d:"Quiet medieval lanes and historic Jewish-quarter traces."},
-  {by:"Pantelis",n:"Bellver Castle",c:[39.5630,2.6190],cat:"sights",d:"Circular Gothic castle above Palma with panoramic views."},
-  {by:"Pantelis",n:"Sant Francesc Basilica",c:[39.5697,2.6518],cat:"sights",d:"Gothic church and atmospheric cloister."},
-  {by:"Pantelis",n:"Plaça d'Espanya",c:[39.5754,2.6535],cat:"sights",d:"Main transport square and northern gateway to central Palma."},
-
-  // EXPERIENCES
-  {by:"Pantelis",n:"Tablao Flamenco Alma",c:[39.5731,2.6398],cat:"experiences",d:"Intimate flamenco tablao; Friday 16 Oct listings include evening shows.",tip:"Book ahead."},
-  {by:"Pantelis",n:"Parc de la Mar",c:[39.5660,2.6502],cat:"experiences",d:"Waterfront park and classic cathedral reflection viewpoint."},
-  {by:"Pantelis",n:"Old Town courtyard walk",c:[39.5718,2.6490],cat:"experiences",d:"Wander the hidden patios and stone lanes between La Seu and Plaça Major."},
-  {by:"Pantelis",n:"La Lonja evening walk",c:[39.5682,2.6458],cat:"experiences",d:"Historic maritime quarter that comes alive around sunset."},
-  {by:"Pantelis",n:"Santa Catalina evening",c:[39.5695,2.6390],cat:"experiences",d:"Market → vermouth → tapas → bars; one of Palma's liveliest local areas."},
-  {by:"Pantelis",n:"Portixol waterfront",c:[39.5633,2.6768],cat:"experiences",d:"Seafront walk east of the centre, useful if you want sea rather than old town."},
-  {by:"Pantelis",n:"Baluard des Príncep",c:[39.5670,2.6517],cat:"experiences",d:"Medieval defensive wall area and quieter waterfront views."},
-  {by:"Pantelis",n:"Palma sunset waterfront",c:[39.5664,2.6489],cat:"experiences",d:"Golden-hour walk between Parc de la Mar and the harbour."},
-
-  // INSTAGRAMMABLE
-  {by:"Pantelis",n:"Cathedral × Parc de la Mar reflection",c:[39.5663,2.6505],cat:"instagram",d:"The classic Palma reflection shot."},
-  {by:"Pantelis",n:"La Seu stone steps / sea",c:[39.5677,2.6481],cat:"instagram",d:"Cathedral façade with sea and palms."},
-  {by:"Pantelis",n:"Passeig del Born",c:[39.5700,2.6480],cat:"instagram",d:"Long symmetrical tree-lined composition."},
-  {by:"Pantelis",n:"Can Casasayas",c:[39.5720,2.6470],cat:"instagram",d:"Curved Modernista balconies and twin façades."},
-  {by:"Pantelis",n:"Can Corbella",c:[39.5722,2.6510],cat:"instagram",d:"Decorative neo-Mudéjar façade near the old town centre."},
-  {by:"Pantelis",n:"Patio / old-town doorway",c:[39.5715,2.6497],cat:"instagram",d:"Look for open historic courtyards and oversized wooden doors."},
-  {by:"Pantelis",n:"La Lonja alleys",c:[39.5681,2.6453],cat:"instagram",d:"Stone lanes, Gothic architecture and evening light."},
-  {by:"Pantelis",n:"Baluard de Sant Pere viewpoint",c:[39.5700,2.6400],cat:"instagram",d:"Elevated view over the old walls and bay."},
-  {by:"Pantelis",n:"Bellver panorama",c:[39.5630,2.6190],cat:"instagram",d:"Best broad city panorama if you have time for the uphill detour."},
-  {by:"Pantelis",n:"Santa Catalina streets",c:[39.5694,2.6388],cat:"instagram",d:"Low colourful façades and lively street scene."},
-
-  // FOOD · added for the trip
-  {by:"Pantelis",n:"Fika Farina",id:"ChIJEUGWH06TlxIRWMOerVXhUb4",c:[39.5708,2.6522],cat:"food",day:["fri","sat","mon"],type:"Bakery · Palma",rating:4.8,reviews:1858,price:"€",hours:"8:00–20:00",d:"Σουηδικός φούρνος δίπλα στην Plaça Major. Cinnamon και cardamom buns. Μόνο take-away, έχει ουρά και ξεπουλάει, οπότε νωρίς."},
-  {by:"Pantelis",n:"Cuba Skybar",id:"ChIJqYJwzUeTlxIRJB_vuDoI9sg",c:[39.5702,2.6392],cat:"food",day:["fri","sat","mon"],type:"Rooftop bar · Hostal Cuba, Santa Catalina",rating:3.4,reviews:198,price:"€€",hours:"16:30–22:30",d:"Rooftop με θέα σε καθεδρικό και λιμάνι. Γεμίζει γρήγορα, ανεβείτε λίγο πριν το ηλιοβασίλεμα."},
-
-  // SATURDAY 17 · SOUTH & EAST COAST
-  {by:"Pantelis",n:"Santanyí Market",id:"ChIJkYyBKABVlhIRDGwY7VJ7V8Q",c:[39.3545,3.1290],cat:"experiences",day:"sat",type:"Weekly market · Santanyí",rating:4.2,reviews:964,hours:"Τετ & Σαβ 9:00–14:00",tag:"Μόνο Τετάρτη & Σάββατο",d:"Πάνω από 150 πάγκοι με τοπικά προϊόντα και χειροτεχνία. Το Σάββατο 17/10 πέφτει μέρα market. Πηγαίνετε νωρίς για πάρκινγκ."},
-  {by:"Pantelis",n:"Caló des Moro",id:"ChIJI1J5hBhVlhIRp9hdEN6Mb70",c:[39.3136,3.1214],cat:"beaches",day:"sat",rating:4.5,reviews:9471,d:"Περίπου 20–30 λεπτά περπάτημα από το πάρκινγκ, με σκαλιά και βράχια στο τέλος. Κλειστά παπούτσια, νερό, πηγαίνετε νωρίς."},
-  {by:"Pantelis",n:"Cala Llombards",id:"ChIJVeh_8XBVlhIRwdKT2E34tF0",c:[39.3236,3.1384],cat:"beaches",day:"sat",rating:4.4,reviews:3500,d:"Λίγα λεπτά από το Caló des Moro. Αμμουδιά με βράχια δεξιά κι αριστερά και beach bar."},
-  {by:"Pantelis",n:"Cala Romàntica",q:"Cala Romàntica, S'Estany d'en Mas, Mallorca",c:[39.5197,3.3037],cat:"beaches",day:"sat",type:"S'Estany d'en Mas",d:"Μικρός αμμουδερός κόλπος με καθαρά νερά, πιο ήσυχος από τις διάσημες calas."},
-
-  // SUNDAY 18 · WEST, TRAMUNTANA & NORTH
-  {by:"Pantelis",n:"Gran Folies Beach Club",id:"ChIJNZ_PjqUmmBIRUcbKeHIy20c",c:[39.5345,2.3881],cat:"food",day:"sun",type:"Beach club · Cala Llamp, Port d'Andratx",rating:4.2,reviews:2719,price:"€€€€",hours:"10:30–00:00",d:"Ξαπλώστρες, πισίνα και βράχια πάνω από τη θάλασσα. Ακριβό, αλλά είναι ο πιο εύκολος τρόπος να χαρείτε το Cala Llamp."},
-  {by:"Pantelis",n:"Restaurant Illeta",id:"ChIJ3UzHtyknmBIRrrMQWJLDMz4",c:[39.5369,2.4223],cat:"food",day:"sun",type:"Restaurant · Camp de Mar",rating:4.3,reviews:8563,price:"€€€",d:"Το εστιατόριο πάνω στο νησάκι με την ξύλινη γέφυρα. Κάντε κράτηση και στοχεύστε στο ηλιοβασίλεμα."},
-  {by:"Pantelis",n:"Mirador des Colomer",id:"ChIJJ52E3ccrlhIRLy7Wu8FMFJE",c:[39.9290,3.1104],cat:"instagram",day:"sun",type:"Viewpoint · road to Formentor",rating:4.8,reviews:11497,d:"Η πιο διάσημη θέα της χερσονήσου. Λίγες θέσεις πάρκινγκ, οπότε πρωί."},
-  {by:"Pantelis",n:"Cap de Formentor",id:"ChIJ7cvfEgyHvRIRWPnEwKaGszQ",c:[39.9615,3.2123],cat:"sights",day:"sun",type:"Lighthouse",d:"Φιδωτός δρόμος ως τον φάρο. Σε ορισμένες περιόδους κόβεται για ΙΧ μετά την παραλία Formentor, οπότε τσεκάρετε πριν ξεκινήσετε."},
-  {by:"Pantelis",n:"Platja de Muro",id:"ChIJubjzdB8tlhIRSDf8v7sB_tQ",c:[39.8089,3.1182],cat:"beaches",day:"sun",rating:4.7,reviews:5124,d:"Μεγάλη αμμουδιά με ρηχά τιρκουάζ νερά. Εύκολη μέρα παραλίας με ό,τι χρειάζεστε δίπλα."}
 ];
 
 // Villages on the day trips. gid = Google place id (used to open the right place in Google Maps).
 function village(id,name,gid,c,day,description){return {id:id,name:name,gid:gid,c:c,day:day,data:{description:description,photos:[],rating:null,reviews:null,food:[],sights:[],experiences:[],instagram:[],hotels:[],notes:[],by:"Pantelis",parking:"",route:""}};}
+// village("id","Όνομα","Google place id",[lat,lng],"sat","Περιγραφή")
 const villages=[
-  village("ses-salines","Ses Salines","ChIJQySexaCrlxIRHTOd-3ErxFE",[39.3385,3.0530],"sat","Ήσυχο χωριό κοντά στις αλυκές και στην παραλία Es Trenc. Καλό για βραδινό φαγητό μετά τις παραλίες."),
-  village("porto-cristo","Porto Cristo","ChIJJej1xztBlhIRJkZuo0aGlHs",[39.5441,3.3368],"sat","Λιμανάκι με εστιατόρια. Δίπλα οι σπηλιές Coves del Drac, αν θέλετε κάτι διαφορετικό."),
-  village("valldemossa","Valldemossa","ChIJ_8aKugPulxIRPhKWi-dSSJI",[39.7115,2.6226],"sun","Πέτρινο χωριό στην Tramuntana με το μοναστήρι (Cartoixa). Δοκιμάστε coca de patata."),
-  village("soller","Sóller","ChIJM-1gD7_olxIRLkJeJ-gfAbA",[39.7671,2.7158],"sun","Κεντρική πλατεία με καφέ και πορτοκαλεώνες. Το ιστορικό τραμ κατεβαίνει στο λιμάνι."),
-  village("port-de-soller","Port de Sóller","ChIJl4UEL_vllxIRYD5Xf3GvAgo",[39.7952,2.6975],"sun","Κλειστός κόλπος, παραλιακός πεζόδρομος. Ωραίο για ηλιοβασίλεμα και φαγητό δίπλα στο νερό."),
-  village("fornalutx","Fornalutx","ChIJnVSoEX_olxIRWKzSqbgNHFM",[39.7822,2.7410],"sun","Από τα πιο όμορφα χωριά του νησιού, 10 λεπτά από το Sóller. Σκαλιστά πέτρινα σοκάκια, λίγο περπάτημα."),
-  village("pollenca","Pollença","ChIJA1Fe26DWlxIRN0Vzy9Fe7Co",[39.8772,3.0162],"sun","Ανεβείτε τα σκαλιά του Calvari για θέα, και μετά καφές στην Plaça Major."),
-  village("port-de-pollenca","Port de Pollença","ChIJi5g3vtnUlxIRkD9Xf3GvAgo",[39.9064,3.0827],"sun","Ήρεμος κόλπος με πεζόδρομο κάτω από τα πεύκα (Pine Walk). Καλή βάση για το Formentor.")
 ];
 
 const areas=[
-  {id:"oldtown",n:"Old Town · Casc Antic",type:"History & architecture",icon:"🏛️",c:[39.5715,2.6490],d:"The historic core: La Seu, Almudaina, Banys Àrabs, courtyards, churches and medieval lanes.",p:[[39.5752,2.6460],[39.5748,2.6545],[39.5680,2.6540],[39.5674,2.6440],[39.5710,2.6415]]},
-  {id:"lonja",n:"La Lonja · Apuntadors",type:"Tapas, wine & evening bars",icon:"🍷",c:[39.5685,2.6460],d:"Dense evening food-and-drink quarter around La Lonja and Carrer dels Apuntadors.",p:[[39.5708,2.6418],[39.5718,2.6480],[39.5680,2.6500],[39.5663,2.6450]]},
-  {id:"santacatalina",n:"Santa Catalina · Fàbrica",type:"Restaurants & pedestrian streets",icon:"🍽️",c:[39.5698,2.6388],d:"Palma's food neighbourhood: Mercat, Carrer de la Fàbrica, Sant Magí, vermouth, tapas and bars.",p:[[39.5727,2.6353],[39.5720,2.6417],[39.5679,2.6420],[39.5673,2.6358]]},
-  {id:"born",n:"Born · Jaime III",type:"Shopping & grand boulevards",icon:"🛍️",c:[39.5703,2.6482],d:"Elegant central promenade, designer shops, cafés, Modernista façades and the main city-centre shopping streets.",p:[[39.5722,2.6452],[39.5721,2.6502],[39.5687,2.6501],[39.5684,2.6460]]},
-  {id:"marina",n:"Paseo Marítimo · Marina",type:"Clubs, marina & nightlife",icon:"🪩",c:[39.5660,2.6380],d:"The main waterfront nightlife strip: marina, late bars and clubs, especially later at night.",p:[[39.5690,2.6320],[39.5690,2.6450],[39.5630,2.6490],[39.5605,2.6380]]},
-  {id:"portixol",n:"Portixol · Es Molinar",type:"Sea, promenade & waterfront food",icon:"🌊",c:[39.5618,2.6760],d:"Former fishing-village waterfront with promenade, small beaches, restaurants and a calmer sea-facing atmosphere.",p:[[39.5650,2.6685],[39.5650,2.6815],[39.5585,2.6820],[39.5582,2.6705]]},
-  {id:"bellver",n:"Bellver · El Terreno",type:"Castle, views & west-side nightlife",icon:"🌲",c:[39.5628,2.6235],d:"Bellver forest and castle above the city, with El Terreno between the hill and waterfront.",p:[[39.5685,2.6185],[39.5685,2.6315],[39.5595,2.6325],[39.5590,2.6200]]},
-  {id:"peregarau",n:"Pere Garau · Mercat",type:"Local market & everyday Palma",icon:"🥬",c:[39.5738,2.6570],d:"A more everyday side of Palma: market, local shops, immigrant food culture and less polished streets.",p:[[39.5770,2.6530],[39.5770,2.6625],[39.5710,2.6625],[39.5705,2.6540]]}
 ];
 
 const days=[
-  {id:"fri",label:"Παρ 16",title:"Παρασκευή 16 · Palma",sub:"Άφιξη · παλιά πόλη · φαγητό · ηλιοβασίλεμα",nav:{n:"Palma Old Town",c:[39.5696,2.6502]},plan:[
-    ["Άφιξη","Παλιά πόλη","Parc de la Mar → La Seu → Almudaina → σοκάκια → La Lonja → Born.","experiences","Χαλαρή πρώτη βόλτα μετά την πτήση."],
-    ["Ηλιοβασίλεμα","Καθεδρικός / Parc de la Mar","Παραλιακή βόλτα και ο καθεδρικός καθρεφτισμένος στο νερό.","instagram","Το καλύτερο φως λίγο πριν τη δύση."],
-    ["Νωρίς το βράδυ","Παλιά πόλη","Banys Àrabs → Santa Eulàlia → Plaça de Cort → Plaça Major.","sights","Μικρή διαδρομή στο ιστορικό κέντρο."],
-    ["Δείπνο","La Lonja ή Santa Catalina","Tapas και κρασί στη La Lonja, ή τα εστιατόρια της Santa Catalina.","food","Τα μαγαζιά είναι στα αποθηκευμένα μέρη πιο κάτω."],
-    ["Προαιρετικά","Flamenco / ποτό","Ανάλογα με το πόσο κουρασμένοι είστε από το ταξίδι.","experiences","Διάλεξε από τα μέρη πιο κάτω."]
-  ]},
-  {id:"sat",label:"Σαβ 17",title:"Σάββατο 17 · Νότος & ανατολική ακτή",sub:"Fika · Santanyí market · calas · Ses Salines · Cala Romàntica · Porto Cristo · Cuba Skybar",note:"Πρωινό στο Fika, market στο Santanyí (μόνο Σάββατο ως τις 14:00), calas, ανατολική ακτή και βράδυ στην Palma."},
-  {id:"sun",label:"Κυρ 18",title:"Κυριακή 18 · Δύση, Tramuntana & Βορράς",sub:"Gran Folies · Illeta · Valldemossa · Sóller · Fornalutx · Pollença · Formentor · Platja de Muro",note:"Beach club και φαγητό στα νοτιοδυτικά, μετά τα χωριά της Tramuntana, και καταλήγουμε στο Formentor και στην Platja de Muro."},
-  {id:"mon",label:"Δευ 19",title:"Δευτέρα 19 · Palma → αεροδρόμιο",sub:"Πρωινό · μια τελευταία βόλτα · αεροδρόμιο",nav:{n:"Palma Airport (PMI)",c:[39.5517,2.7388]},plan:[
-    ["Πρωί","Palma","Πρωινό (το Fika ανοίγει 8:00) και μια τελευταία βόλτα στην παλιά πόλη.","food","Άφησε άνετο περιθώριο για το αεροδρόμιο."],
-    ["Αναχώρηση","Palma → PMI","Επιστροφή αυτοκινήτου και αναχώρηση για το αεροδρόμιο.","experiences","Η πτήση είναι το μεσημέρι."]
-  ]}
+  {id:"fri",label:"Παρ 16",title:"Παρασκευή 16 · Palma",sub:"Άφιξη",plan:[]},
+  {id:"sat",label:"Σαβ 17",title:"Σάββατο 17 · Εκδρομή",sub:"",plan:[]},
+  {id:"sun",label:"Κυρ 18",title:"Κυριακή 18 · Εκδρομή",sub:"",plan:[]},
+  {id:"mon",label:"Δευ 19",title:"Δευτέρα 19 · Palma → αεροδρόμιο",sub:"Αναχώρηση",plan:[]}
 ];
 let currentDay="fri";
 const leafletReady=typeof window.L!=="undefined";
@@ -131,31 +43,10 @@ const areaLayer=leafletReady?L.layerGroup().addTo(map):null;
 if(!leafletReady){const mapEl=document.querySelector("#map");if(mapEl){mapEl.innerHTML="<div class='map-fallback'><strong>Ο χάρτης δεν φόρτωσε</strong><span>Το πρόγραμμα του ταξιδιού είναι κανονικά πιο κάτω.</span></div>";}}
 if(leafletReady)areas.forEach(a=>{const poly=L.polygon(a.p,{color:"#18211d",weight:1,fillOpacity:.12});poly.bindPopup("<strong>"+a.icon+" "+a.n+"</strong><br><small>"+a.type+"</small><br>"+a.d);poly.on("click",()=>focusArea(a.id));poly.addTo(areaLayer);});
 // Day-trip routes. Each stop's name matches a spot or village above, which supplies stars, tips and the Google Maps link.
+// ΠΩΣ ΦΤΙΑΧΝΩ ΔΙΑΔΡΟΜΗ ΜΕΡΑΣ:
+// sat:{stops:[{n:"Όνομα στάσης",c:[lat,lng],type:"food|beach|village|sight",size:"long|small"}]}
+// Το "long" = μεγάλη στάση (μεγαλύτερη πινέζα). Το όνομα ταιριάζει με μέρος από τη λίστα spots.
 const routes={
-  sat:{stops:[
-    {n:"Fika Farina",c:[39.5708,2.6522],type:"food",size:"small"},
-    {n:"Santanyí Market",c:[39.3545,3.1290],type:"sight",size:"long"},
-    {n:"Caló des Moro",c:[39.3136,3.1214],type:"beach",size:"long"},
-    {n:"Cala Llombards",c:[39.3236,3.1384],type:"beach",size:"small"},
-    {n:"Ses Salines",c:[39.3385,3.0530],type:"village",size:"small"},
-    {n:"Cala Romàntica",c:[39.5197,3.3037],type:"beach",size:"long"},
-    {n:"Porto Cristo",c:[39.5441,3.3368],type:"village",size:"small"},
-    {n:"Palma",c:[39.5696,2.6502],type:"village",size:"small",d:"Παλιά πόλη, καθεδρικός La Seu και βόλτα στη Santa Catalina."},
-    {n:"Cuba Skybar",c:[39.5702,2.6392],type:"food",size:"small"}
-  ]},
-  sun:{stops:[
-    {n:"Gran Folies Beach Club",c:[39.5345,2.3881],type:"food",size:"long"},
-    {n:"Restaurant Illeta",c:[39.5369,2.4223],type:"food",size:"long"},
-    {n:"Valldemossa",c:[39.7115,2.6226],type:"village",size:"long"},
-    {n:"Sóller",c:[39.7671,2.7158],type:"village",size:"small"},
-    {n:"Port de Sóller",c:[39.7952,2.6975],type:"village",size:"small"},
-    {n:"Fornalutx",c:[39.7822,2.7410],type:"village",size:"small"},
-    {n:"Pollença",c:[39.8772,3.0162],type:"village",size:"long"},
-    {n:"Port de Pollença",c:[39.9064,3.0827],type:"village",size:"small"},
-    {n:"Mirador des Colomer",c:[39.9290,3.1104],type:"sight",size:"small"},
-    {n:"Cap de Formentor",c:[39.9615,3.2123],type:"sight",size:"long"},
-    {n:"Platja de Muro",c:[39.8089,3.1182],type:"beach",size:"long"}
-  ]}
 };
 let routeLayer=leafletReady?L.layerGroup():null,routeVisible=false,routeToken=0;
 function escAttr(v){return String(v).replace(/&/g,"&amp;").replace(/'/g,"&#39;").replace(/"/g,"&quot;").replace(/</g,"&lt;");}
@@ -309,9 +200,12 @@ document.querySelector("#filters").innerHTML=Object.entries(categories).filter((
 document.querySelector("h1").textContent=day.title;document.querySelector(".sub").textContent=day.sub;
 routeVisible=false;routeToken++;if(map)map.removeLayer(routeLayer);
 const planItems=route?route.stops.map(stopCardHtml):day.plan.map(planCardHtml);
+const stopCount=planItems.length;
+// Empty day: show a hint instead of a blank panel.
+if(!planItems.length)planItems.push("<article class='day-card empty-card'><div class='day-content'><h3>Καμία στάση ακόμα</h3><p>Στείλε μου τα μέρη που θέλεις για αυτή τη μέρα και θα μπουν εδώ, με αστέρια Google, περιγραφή και πλοήγηση.</p></div></article>");
 const cards=daySpots.map(spotCardHtml).join("");
 const villagesHtml=dayVillages.map(v=>"<article class='spot-card village-card' data-village='"+v.id+"'><div class='spot-info'><div class='spot-cat'>🏘️ Χωριά</div><h3>"+v.name+"</h3>"+(v.data.rating?"<div class='spot-rating'>"+ratingHtml(v.data.rating,v.data.reviews)+"</div>":"")+"<p>"+(v.data.description||"Άνοιξέ το για να δεις τα αποθηκευμένα δεδομένα.")+"</p></div></article>").join("");
-document.querySelector("#plan").innerHTML="<section class='day-panel'><div class='findings-head'><div><h2>"+day.label+" · Πρόγραμμα</h2><p class='day-description'>"+day.sub+"</p>"+(day.note?"<p class='day-note'>"+day.note+"</p>":"")+"</div><div class='day-tools'>"+(route?"<button type='button' id='route-toggle' class='route-toggle' onclick='toggleRoute()'>Δείξε τη διαδρομή</button>":"")+navLinksHtml(day)+"<span>"+planItems.length+" στάσεις</span></div></div><div class='day-grid'>"+planItems.join("")+"</div></section><section class='findings'><div class='findings-head'><h2>"+(route?"Αποθηκευμένα μέρη":"Αποθηκευμένα μέρη · Palma")+"</h2><span>"+(daySpots.length+dayVillages.length)+" μέρη</span></div><div class='photo-grid'>"+cards+villagesHtml+"</div><p class='stars-note'>★ Αστέρια και κριτικές από το Google Maps ("+RATINGS_AS_OF+"). Χάρτης, βενζινάδικα, μάρκετ και τουαλέτες: © OpenStreetMap contributors.</p></section>";
+document.querySelector("#plan").innerHTML="<section class='day-panel'><div class='findings-head'><div><h2>"+day.label+" · Πρόγραμμα</h2><p class='day-description'>"+day.sub+"</p>"+(day.note?"<p class='day-note'>"+day.note+"</p>":"")+"</div><div class='day-tools'>"+(route?"<button type='button' id='route-toggle' class='route-toggle' onclick='toggleRoute()'>Δείξε τη διαδρομή</button>":"")+navLinksHtml(day)+"<span>"+planItems.length+" στάσεις</span></div></div><div class='day-grid'>"+planItems.join("")+"</div></section><section class='findings'><div class='findings-head'><h2>"+"Αποθηκευμένα μέρη"+"</h2><span>"+(daySpots.length+dayVillages.length)+" μέρη</span></div><div class='photo-grid'>"+(cards+villagesHtml||"<p class='empty-note'>Δεν υπάρχουν αποθηκευμένα μέρη για αυτή τη μέρα.</p>")+"</div><p class='stars-note'>★ Αστέρια και κριτικές από το Google Maps ("+RATINGS_AS_OF+"). Χάρτης, βενζινάδικα, μάρκετ και τουαλέτες: © OpenStreetMap contributors.</p></section>";
 if(route&&map){drawRoute(currentDay);routeLayer.addTo(map);routeVisible=true;const b=document.querySelector("#route-toggle");if(b){b.textContent="Κρύψε τη διαδρομή";b.classList.add("active");}}
 const pts=daySpots.map(s=>s.c).concat(dayVillages.map(v=>v.c)).concat(route?route.stops.map(x=>x.c):[]);if(map&&pts.length)map.fitBounds(L.latLngBounds(pts),{padding:[40,40]});
 enrichSpots(daySpots);
