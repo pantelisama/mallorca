@@ -20,8 +20,8 @@ const RATINGS_AS_OF="Σεπτ. 2026";
 //  tag:"προειδοποίηση", d:"Η περιγραφή σου."}
 const spots=[
   // ΟΙΝΟΠΟΙΕΙΑ · κεντρική Mallorca (DO Binissalem και Pla i Llevant)
-  {by:"Pantelis",n:"Bodega Ribas",c:[39.6672,2.8132],cat:"wineries",day:"all",type:"Consell · από το 1711",tag:"Μόνο με κράτηση",d:"Η παλαιότερη ενεργή bodega της Mallorca, ίδια οικογένεια πάνω από δέκα γενιές. Αρχοντικό του 18ου αιώνα με παλιό βαρελόκελλαρο και νέα πτέρυγα του Rafael Moneo. C/ Muntanya 2."},
-  {by:"Pantelis",n:"Bodegues José L. Ferrer",c:[39.6864,2.8347],cat:"wineries",day:"all",type:"Binissalem · από το 1931",tag:"Θέλει κράτηση",d:"Από τα πιο ιστορικά και γνωστά ονόματα του νησιού, τέσσερις γενιές στην ίδια δουλειά. Πολύ χαρακτηριστικό της οινικής παράδοσης της Mallorca. Conquistador 103."},
+  {by:"Pantelis",n:"Bodega Ribas",id:"ChIJI0_h7qjBlxIR0Vx327vBTV4",c:[39.6676,2.8144],cat:"wineries",day:"all",type:"Consell · από το 1711",rating:4.9,reviews:438,hours:"Δευ–Σαβ 10:00–18:00, Κυρ κλειστά",tag:"Μόνο με κράτηση",d:"Η παλαιότερη ενεργή bodega της Mallorca, ίδια οικογένεια πάνω από δέκα γενιές. Αρχοντικό του 18ου αιώνα με παλιό βαρελόκελλαρο και νέα πτέρυγα του Rafael Moneo. C/ Muntanya 2."},
+  {by:"Pantelis",n:"Bodegues José L. Ferrer",c:[39.6864,2.8347],cat:"wineries",day:"all",type:"Binissalem · από το 1931",rating:4.5,reviews:430,tag:"Θέλει κράτηση",d:"Από τα πιο ιστορικά και γνωστά ονόματα του νησιού, τέσσερις γενιές στην ίδια δουλειά. Πολύ χαρακτηριστικό της οινικής παράδοσης της Mallorca. Conquistador 103."},
   {by:"Pantelis",n:"Macià Batle",c:[39.6553,2.7672],cat:"wineries",day:"all",type:"Santa Maria del Camí · από το 1856",tag:"Κυριακή κλειστά",d:"Ιστορικό όνομα με σύγχρονο κτίριο του 1996. Ξενάγηση στην παραγωγή και δοκιμή κρασιών με τοπικά προϊόντα. Camí de Coanegra."},
   {by:"Pantelis",n:"Miquel Oliver Vinyes i Bodegues",c:[39.6137,3.1020],cat:"wineries",day:"all",type:"Petra · από το 1912",tag:"Θέλει κράτηση",d:"Γνωστό ιστορικό όνομα της οικογένειας Oliver, με έμφαση σε ντόπιες ποικιλίες. Στο Petra, ανατολικά, C/ Font 26."}
 ];
