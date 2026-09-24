@@ -87,7 +87,7 @@ test("render smoke test creates the main planner sections", () => {
   const elements = runApp({ withLeaflet: true });
   assert.match(elements.get("#plan").innerHTML, /Παρ 16 · Πρόγραμμα/);
   assert.ok(elements.get("#days").innerHTML.includes("Σαβ 17"));
-  assert.equal(elements.get("#filters").innerHTML, "", "no categories until places are added");
+  assert.match(elements.get("#filters").innerHTML, /Χωριά/);
 });
 
 test("planner still renders when Leaflet fails to load", () => {
@@ -113,18 +113,30 @@ test("map has on/off layers for fuel, supermarkets, toilets and food", () => {
 
 test("the planner starts empty: no places, villages, routes or areas", () => {
   const empty = name => new RegExp("const " + name + "=\\[\\s*\\]");
-  for (const name of ["spots", "villages", "areas"]) assert.match(app, empty(name), name + " should be empty");
+  for (const name of ["spots", "areas"]) assert.match(app, empty(name), name + " should be empty");
   assert.match(app, /const routes=\{\s*\}/);
 });
 
-test("the four days are present and empty", () => {
+test("the five villages show on every day, as places rather than stops", () => {
+  const elements = runApp({ withLeaflet: true });
+  for (const id of ["fri", "sat", "sun", "mon"]) {
+    elements.clickDay(id);
+    const html = elements.get("#plan").innerHTML;
+    for (const name of ["Fornalutx", "Valldemossa", "Deià", "Sóller", "Alcúdia Old Town"]) {
+      assert.match(html, new RegExp(name), name + " missing on " + id);
+    }
+    assert.match(html, /Καμία στάση ακόμα/, id + " should still have no stops");
+  }
+});
+
+test("the four days have no stops yet", () => {
   const elements = runApp({ withLeaflet: true });
   assert.match(elements.get("#days").innerHTML, /Παρ 16/);
   for (const id of ["fri", "sat", "sun", "mon"]) {
     elements.clickDay(id);
     const html = elements.get("#plan").innerHTML;
     assert.match(html, /Καμία στάση ακόμα/, id + " should show the empty-day hint");
-    assert.match(html, /Δεν υπάρχουν αποθηκευμένα μέρη/, id + " should show the empty grid note");
+    assert.match(html, /0 στάσεις/, id + " should report zero stops");
   }
 });
 

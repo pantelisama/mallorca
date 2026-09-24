@@ -22,8 +22,14 @@ const spots=[
 
 // Villages on the day trips. gid = Google place id (used to open the right place in Google Maps).
 function village(id,name,gid,c,day,description){return {id:id,name:name,gid:gid,c:c,day:day,data:{description:description,photos:[],rating:null,reviews:null,food:[],sights:[],experiences:[],instagram:[],hotels:[],notes:[],by:"Pantelis",parking:"",route:""}};}
-// village("id","Όνομα","Google place id",[lat,lng],"sat","Περιγραφή")
+// village("id","Όνομα","Google place id",[lat,lng],"sat|all","Περιγραφή")
+// day:"all" = φαίνεται σε όλες τις μέρες, χωρίς να είναι στάση.
 const villages=[
+  village("fornalutx","Fornalutx","",[39.7822,2.7410],"all","Ίσως το πιο παραμυθένιο μικρό χωριό του νησιού. Σκαλιστά πέτρινα σοκάκια, 10 λεπτά από το Sóller."),
+  village("valldemossa","Valldemossa","",[39.7115,2.6226],"all","Πέτρινα σοκάκια, λουλούδια και βουνό γύρω γύρω."),
+  village("deia","Deià","",[39.7486,2.6486],"all","Πέτρινο χωριό σκαρφαλωμένο στην πλαγιά, με θέα στη θάλασσα."),
+  village("soller","Sóller","",[39.7671,2.7158],"all","Μεγαλύτερο και με περισσότερη ζωή. Συνδυάζει βουνό, χωριό και το Port de Sóller."),
+  village("alcudia","Alcúdia Old Town","",[39.8525,3.1192],"all","Πολύ όμορφο αλλά σε άλλο στιλ: μεσαιωνικό, μέσα στα παλιά τείχη.")
 ];
 
 const areas=[
@@ -96,7 +102,7 @@ function toggleRoute(){if(!routes[currentDay]||!map)return;routeVisible=!routeVi
 
 // Google Maps links. A place id (when known) makes Google open exactly that place.
 function gmapsUrl(o){return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(o.q||(o.n+", Mallorca, Spain"))+(o.id?"&query_place_id="+o.id:"");}
-function villageUrl(v){return gmapsUrl({n:v.name,id:v.gid});}
+function villageUrl(v){return gmapsUrl({n:v.name,id:v.gid||""});}
 function stopPlace(x){return spots.find(s=>s.n===x.n)||villages.find(v=>v.name===x.n)||null;}
 function stopUrl(x){const p=stopPlace(x);return p?(p.cat?gmapsUrl(p):villageUrl(p)):gmapsUrl({n:x.n});}
 function dirUrl(stops){
@@ -190,10 +196,9 @@ function enrichSpots(list){
 function render(){
 const day=days.find(d=>d.id===currentDay)||days[0];
 const route=routes[currentDay];
-const dayCats=Object.keys(categories).filter(k=>k!=="villages");
-if(route)dayCats.push("villages");
+const dayCats=Object.keys(categories);
 const daySpots=spots.filter(s=>dayCats.includes(s.cat)&&spotOnDay(s,currentDay));
-const dayVillages=villages.filter(v=>dayCats.includes("villages")&&(v.day==="both"||v.day===currentDay));
+const dayVillages=villages.filter(v=>dayCats.includes("villages")&&(v.day==="all"||v.day==="both"||v.day===currentDay));
 const catCount=k=>k==="villages"?dayVillages.length:daySpots.filter(s=>s.cat===k).length;
 document.querySelector("#days").innerHTML=days.map(d=>"<button type='button' class='"+(d.id===currentDay?"active":"")+"' data-day='"+d.id+"'>"+d.label+"</button>").join("");
 document.querySelector("#filters").innerHTML=Object.entries(categories).filter(([k])=>catCount(k)>0).map(([k,v])=>"<button type='button' class='filter"+(map&&markerLayers[k]&&map.hasLayer(markerLayers[k])?" active":"")+"' data-cat='"+k+"'>"+v.icon+" "+v.label+" <span>"+catCount(k)+"</span></button>").join("");
@@ -205,7 +210,7 @@ const stopCount=planItems.length;
 if(!planItems.length)planItems.push("<article class='day-card empty-card'><div class='day-content'><h3>Καμία στάση ακόμα</h3><p>Στείλε μου τα μέρη που θέλεις για αυτή τη μέρα και θα μπουν εδώ, με αστέρια Google, περιγραφή και πλοήγηση.</p></div></article>");
 const cards=daySpots.map(spotCardHtml).join("");
 const villagesHtml=dayVillages.map(v=>"<article class='spot-card village-card' data-village='"+v.id+"'><div class='spot-info'><div class='spot-cat'>🏘️ Χωριά</div><h3>"+v.name+"</h3>"+(v.data.rating?"<div class='spot-rating'>"+ratingHtml(v.data.rating,v.data.reviews)+"</div>":"")+"<p>"+(v.data.description||"Άνοιξέ το για να δεις τα αποθηκευμένα δεδομένα.")+"</p></div></article>").join("");
-document.querySelector("#plan").innerHTML="<section class='day-panel'><div class='findings-head'><div><h2>"+day.label+" · Πρόγραμμα</h2><p class='day-description'>"+day.sub+"</p>"+(day.note?"<p class='day-note'>"+day.note+"</p>":"")+"</div><div class='day-tools'>"+(route?"<button type='button' id='route-toggle' class='route-toggle' onclick='toggleRoute()'>Δείξε τη διαδρομή</button>":"")+navLinksHtml(day)+"<span>"+planItems.length+" στάσεις</span></div></div><div class='day-grid'>"+planItems.join("")+"</div></section><section class='findings'><div class='findings-head'><h2>"+"Αποθηκευμένα μέρη"+"</h2><span>"+(daySpots.length+dayVillages.length)+" μέρη</span></div><div class='photo-grid'>"+(cards+villagesHtml||"<p class='empty-note'>Δεν υπάρχουν αποθηκευμένα μέρη για αυτή τη μέρα.</p>")+"</div><p class='stars-note'>★ Αστέρια και κριτικές από το Google Maps ("+RATINGS_AS_OF+"). Χάρτης, βενζινάδικα, μάρκετ και τουαλέτες: © OpenStreetMap contributors.</p></section>";
+document.querySelector("#plan").innerHTML="<section class='day-panel'><div class='findings-head'><div><h2>"+day.label+" · Πρόγραμμα</h2><p class='day-description'>"+day.sub+"</p>"+(day.note?"<p class='day-note'>"+day.note+"</p>":"")+"</div><div class='day-tools'>"+(route?"<button type='button' id='route-toggle' class='route-toggle' onclick='toggleRoute()'>Δείξε τη διαδρομή</button>":"")+navLinksHtml(day)+"<span>"+stopCount+" στάσεις</span></div></div><div class='day-grid'>"+planItems.join("")+"</div></section><section class='findings'><div class='findings-head'><h2>"+"Αποθηκευμένα μέρη"+"</h2><span>"+(daySpots.length+dayVillages.length)+" μέρη</span></div><div class='photo-grid'>"+(cards+villagesHtml||"<p class='empty-note'>Δεν υπάρχουν αποθηκευμένα μέρη για αυτή τη μέρα.</p>")+"</div><p class='stars-note'>★ Αστέρια και κριτικές από το Google Maps ("+RATINGS_AS_OF+"). Χάρτης, βενζινάδικα, μάρκετ και τουαλέτες: © OpenStreetMap contributors.</p></section>";
 if(route&&map){drawRoute(currentDay);routeLayer.addTo(map);routeVisible=true;const b=document.querySelector("#route-toggle");if(b){b.textContent="Κρύψε τη διαδρομή";b.classList.add("active");}}
 const pts=daySpots.map(s=>s.c).concat(dayVillages.map(v=>v.c)).concat(route?route.stops.map(x=>x.c):[]);if(map&&pts.length)map.fitBounds(L.latLngBounds(pts),{padding:[40,40]});
 enrichSpots(daySpots);
