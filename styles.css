@@ -167,3 +167,4 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--mares);outline-offs
 .empty-card{border-style:dashed;background:transparent}
 .empty-card h3{color:var(--muted)}
 .empty-note{grid-column:1/-1;color:var(--muted);font-size:14px;margin:0;padding:14px 16px;border:1px dashed var(--line);border-radius:var(--r-lg)}
+.spot-photo-wineries{background:linear-gradient(135deg,#efdfe4,#c9a0ae)}

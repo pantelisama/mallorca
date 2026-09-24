@@ -1,5 +1,6 @@
 const categories={
-  food:{label:"Φαγητό",icon:"🍷"},
+  food:{label:"Φαγητό",icon:"🍽️"},
+  wineries:{label:"Οινοποιεία",icon:"🍷"},
   sights:{label:"Αξιοθέατα",icon:"🏛️"},
   beaches:{label:"Παραλίες",icon:"🏖️"},
   experiences:{label:"Εμπειρίες",icon:"✨"},
@@ -18,6 +19,11 @@ const RATINGS_AS_OF="Σεπτ. 2026";
 //  type:"Είδος · Περιοχή", rating:4.5, reviews:1234, price:"€€", hours:"9:00–17:00",
 //  tag:"προειδοποίηση", d:"Η περιγραφή σου."}
 const spots=[
+  // ΟΙΝΟΠΟΙΕΙΑ · κεντρική Mallorca (DO Binissalem και Pla i Llevant)
+  {by:"Pantelis",n:"Bodega Ribas",c:[39.6672,2.8132],cat:"wineries",day:"all",type:"Consell · από το 1711",tag:"Μόνο με κράτηση",d:"Η παλαιότερη ενεργή bodega της Mallorca, ίδια οικογένεια πάνω από δέκα γενιές. Αρχοντικό του 18ου αιώνα με παλιό βαρελόκελλαρο και νέα πτέρυγα του Rafael Moneo. C/ Muntanya 2."},
+  {by:"Pantelis",n:"Bodegues José L. Ferrer",c:[39.6864,2.8347],cat:"wineries",day:"all",type:"Binissalem · από το 1931",tag:"Θέλει κράτηση",d:"Από τα πιο ιστορικά και γνωστά ονόματα του νησιού, τέσσερις γενιές στην ίδια δουλειά. Πολύ χαρακτηριστικό της οινικής παράδοσης της Mallorca. Conquistador 103."},
+  {by:"Pantelis",n:"Macià Batle",c:[39.6553,2.7672],cat:"wineries",day:"all",type:"Santa Maria del Camí · από το 1856",tag:"Κυριακή κλειστά",d:"Ιστορικό όνομα με σύγχρονο κτίριο του 1996. Ξενάγηση στην παραγωγή και δοκιμή κρασιών με τοπικά προϊόντα. Camí de Coanegra."},
+  {by:"Pantelis",n:"Miquel Oliver Vinyes i Bodegues",c:[39.6137,3.1020],cat:"wineries",day:"all",type:"Petra · από το 1912",tag:"Θέλει κράτηση",d:"Γνωστό ιστορικό όνομα της οικογένειας Oliver, με έμφαση σε ντόπιες ποικιλίες. Στο Petra, ανατολικά, C/ Font 26."}
 ];
 
 // Villages on the day trips. gid = Google place id (used to open the right place in Google Maps).
@@ -131,7 +137,7 @@ const markerLayers={};
 Object.keys(categories).forEach(cat=>{markerLayers[cat]=leafletReady?L.layerGroup().addTo(map):null;if(!leafletReady)return;spots.filter(s=>s.cat===cat).forEach(s=>{const icon=L.divIcon({className:"spot-icon",html:"<span>"+categories[cat].icon+"</span>",iconSize:[34,34],iconAnchor:[17,17]});L.marker(s.c,{icon:icon}).addTo(markerLayers[cat]).on("click",()=>window.open(spotData(s).gmap||gmapsUrl(s),"_blank","noopener,noreferrer"));});});
 if(leafletReady)villages.forEach(v=>{const icon=L.divIcon({className:"spot-icon",html:"<span>"+categories.villages.icon+"</span>",iconSize:[34,34],iconAnchor:[17,17]});L.marker(v.c,{icon:icon}).addTo(markerLayers.villages).on("click",()=>openVillage(v.id));});
 // Spots without an explicit day are Palma places, so only show them on the Palma days.
-function spotOnDay(s,dayId){if(Array.isArray(s.day))return s.day.includes(dayId);return s.day?(s.day==="both"||s.day===dayId):(dayId==="fri"||dayId==="mon");}
+function spotOnDay(s,dayId){if(s.day==="all")return true;if(Array.isArray(s.day))return s.day.includes(dayId);return s.day?(s.day==="both"||s.day===dayId):(dayId==="fri"||dayId==="mon");}
 // Optional Google Maps Platform key (Places API "New"). Restrict it to pantelisama.github.io in Google Cloud.
 // Stars and review counts are hardcoded in the data above; the key would only add Google photos.
 // Without one, photos come from Wikimedia Commons.

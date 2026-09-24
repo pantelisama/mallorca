@@ -111,10 +111,22 @@ test("map has on/off layers for fuel, supermarkets, toilets and food", () => {
   for (const k of ["fuel", "market", "wc", "food"]) assert.match(app, new RegExp("\\b" + k + ":\\{label:"));
 });
 
-test("the planner starts empty: no places, villages, routes or areas", () => {
-  const empty = name => new RegExp("const " + name + "=\\[\\s*\\]");
-  for (const name of ["spots", "areas"]) assert.match(app, empty(name), name + " should be empty");
+test("no routes or Palma areas yet, and no demo content", () => {
+  assert.match(app, /const areas=\[\s*\]/);
   assert.match(app, /const routes=\{\s*\}/);
+  for (const fake of ["Caimari", "Lluc", "Photo stop", "Hotel Can Cera"]) assert.ok(!app.includes(fake), fake + " should be gone");
+});
+
+test("the four wineries show on every day in their own category", () => {
+  const elements = runApp({ withLeaflet: true });
+  for (const id of ["fri", "sat", "sun", "mon"]) {
+    elements.clickDay(id);
+    const html = elements.get("#plan").innerHTML;
+    for (const name of ["Bodega Ribas", "Bodegues José L. Ferrer", "Macià Batle", "Miquel Oliver"]) {
+      assert.match(html, new RegExp(name), name + " missing on " + id);
+    }
+  }
+  assert.match(elements.get("#filters").innerHTML, /Οινοποιεία/);
 });
 
 test("the five villages show on every day, as places rather than stops", () => {
