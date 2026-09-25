@@ -336,7 +336,7 @@ function enrichSpots(list){
   })();
 }
 function ensureEdgeDrawers(route){
-  let cat=document.querySelector(".cat-drawer");
+  let cat=document.querySelector(".cat-drawer:not(.stop-edge)");
   if(!cat){
     cat=document.createElement("div");cat.className="cat-drawer";
     cat.innerHTML="<div class='cat-panel'><div class='cat-head'><strong>Μέρη στον χάρτη</strong><button class='cat-close' type='button'>×</button></div><div id='filters'></div><p class='cat-hint'>Σύρε από την αριστερή άκρη ή πάτησε το handle.</p></div><button class='cat-toggle' type='button' aria-label='Άνοιξε κατηγορίες'><span class='cat-toggle-icon'>🧭</span><span class='cat-toggle-label'>ΜΕΡΗ</span></button>";
@@ -347,8 +347,8 @@ function ensureEdgeDrawers(route){
   }
   const stops=document.querySelector("#stopDrawer");
   if(stops){
-    stops.querySelector(".stop-list").innerHTML=route
-      ?route.stops.map((x,i)=>"<article class='day-card stop-item' data-stop-index='"+i+"'><div class='day-number'>"+String(i+1).padStart(2,"0")+"</div><div class='day-content'><div class='time'>ΣΤΑΣΗ</div><h3>"+escAttr(x.n)+"</h3></div></article>").join("")
+    stops.querySelector("#stopFilters").innerHTML=route
+      ?route.stops.map((x,i)=>"<button type='button' class='filter stop-item' data-stop-index='"+i+"'><span class='cat-icon'>"+String(i+1).padStart(2,"0")+"</span><span class='cat-label'>"+escAttr(x.n)+"</span></button>").join("")
       :"<p class='empty-note'>Δεν υπάρχουν στάσεις.</p>";
     if(!stops.dataset.bound){
       stops.dataset.bound="1";
