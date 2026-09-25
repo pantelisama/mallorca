@@ -190,3 +190,57 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--mares);outline-offs
   .cat-drawer #filters{margin:0;padding:0;overflow:visible}
 }
 @media (prefers-reduced-motion:reduce){.cat-drawer{transition:none}}
+
+/* Edge drawers: category slider on the left, day stops slider on the right */
+.cat-drawer,.stop-drawer{position:fixed;top:50%;z-index:1200;display:flex;align-items:center;pointer-events:none;transform:translateY(-50%);transition:transform .28s cubic-bezier(.2,.8,.2,1);touch-action:none}
+.cat-drawer{left:0;transform:translate(-236px,-50%)}
+.cat-drawer.open{transform:translate(0,-50%)}
+.stop-drawer{right:0;transform:translate(236px,-50%)}
+.stop-drawer.open{transform:translate(0,-50%)}
+.cat-panel,.stop-panel{pointer-events:auto;width:236px;max-height:min(72vh,620px);overflow-y:auto;background:var(--paper);border:1px solid var(--line);box-shadow:0 8px 28px #0004;padding:12px}
+.cat-panel{border-left:0;border-radius:0 var(--r-lg) var(--r-lg) 0}
+.stop-panel{border-right:0;border-radius:var(--r-lg) 0 0 var(--r-lg)}
+.cat-toggle,.stop-toggle{pointer-events:auto;display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line);background:var(--sea);color:#fff;box-shadow:0 4px 14px #0003;cursor:pointer}
+.cat-toggle{width:48px;min-height:112px;border-left:0;border-radius:0 15px 15px 0;flex-direction:column}
+.stop-toggle{width:48px;min-height:112px;border-right:0;border-radius:15px 0 0 15px;flex-direction:column}
+.cat-toggle-icon,.stop-toggle span{font-size:19px;line-height:1}
+.cat-toggle-label,.stop-toggle b{font-size:9px;letter-spacing:1px;writing-mode:vertical-rl;transform:rotate(180deg)}
+.cat-head,.stop-head{display:flex;align-items:center;justify-content:space-between;margin:0 2px 9px;font-size:14px}
+.cat-close,.stop-close{border:0;background:transparent;color:var(--muted);font-size:22px;line-height:1;cursor:pointer}
+.cat-drawer #filters{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;overflow:visible}
+.cat-drawer .filter{display:grid;grid-template-columns:26px 1fr auto;align-items:center;width:100%;padding:10px 11px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--paper);color:var(--ink);font-weight:600;text-align:left;cursor:pointer}
+.cat-drawer .filter.active{background:var(--mares);border-color:var(--mares);color:#1b1206}
+.cat-icon{font-size:18px;text-align:center}
+.cat-label{font-size:13px}
+.cat-count{font-size:11px;opacity:.6}
+.cat-hint,.stop-hint{font-size:10px;color:var(--muted);line-height:1.35;margin:9px 2px 2px}
+.stop-list{display:grid;gap:7px}
+.stop-list .day-card{padding:10px 11px;border-radius:12px;gap:9px}
+.stop-list .day-number{min-width:25px;width:25px;height:25px;font-size:10px}
+.stop-list .day-content h3{font-size:14px;margin:2px 0}
+.stop-list .day-content p,.stop-list .route,.stop-list .gmaps-link,.stop-list .spot-rating,.stop-list .spot-extra{display:none}
+.stop-list .day-content .time{font-size:9px}
+.stop-list .day-card{cursor:pointer}
+.stop-list .day-card:hover{transform:translateX(-2px)}
+/* Map-only action buttons */
+.map-actions{display:flex;gap:7px;padding:0 0 10px 10px}
+.map-action{width:42px;height:42px;border:2px solid #fff;border-radius:12px;background:rgba(255,255,255,.96);box-shadow:0 2px 8px #0004;font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.map-action:hover{background:var(--sea);color:#fff}
+.map-action.route-action{border-color:#146BFF}
+.map-action.nav-action{border-color:var(--pine)}
+/* Keep the main page clean: filters/stops live on edge drawers */
+aside>#filters{display:none}
+@media(max-width:1000px){
+  .cat-drawer{transform:translate(-218px,-50%)}
+  .stop-drawer{transform:translate(218px,-50%)}
+  .cat-panel,.stop-panel{width:218px;max-height:70vh}
+  .cat-toggle,.stop-toggle{width:43px;min-height:96px}
+  .cat-toggle-label,.stop-toggle b{font-size:8px}
+  .stop-list .day-card{padding:9px}
+}
+@media(max-width:600px){
+  .cat-panel,.stop-panel{width:205px;max-height:68vh}
+  .cat-drawer{transform:translate(-205px,-50%)}
+  .stop-drawer{transform:translate(205px,-50%)}
+  .cat-toggle,.stop-toggle{width:40px;min-height:88px}
+}
