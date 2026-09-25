@@ -377,15 +377,7 @@ function ensureEdgeDrawers(){
     toggle.addEventListener("click",()=>cat.classList.toggle("open"));close.addEventListener("click",()=>cat.classList.remove("open"));
     installEdgeSwipe(cat,"left");
   }
-  let stops=document.querySelector(".stop-drawer");
-  if(!stops){
-    stops=document.createElement("div");stops.className="cat-drawer stop-drawer";
-    stops.innerHTML="<div class='cat-panel stop-panel'><div class='cat-head stop-head'><strong>Στάσεις ημέρας</strong><button class='cat-close stop-close' type='button'>×</button></div><div class='stop-list'></div><p class='cat-hint stop-hint'>Σύρε από τη δεξιά άκρη ή πάτησε το handle.</p></div><button class='cat-toggle stop-toggle' type='button' aria-label='Άνοιξε στάσεις'><span class='cat-toggle-icon stop-toggle-icon'>📍</span><span class='cat-toggle-label stop-toggle-label'>ΣΤΑΣΕΙΣ</span></button>";
-    document.body.appendChild(stops);
-    const toggle=stops.querySelector(".stop-toggle"),close=stops.querySelector(".stop-close");
-    toggle.addEventListener("click",()=>stops.classList.toggle("open"));close.addEventListener("click",()=>stops.classList.remove("open"));
-    installEdgeSwipe(stops,"right");
-  }
+  // Stops widget removed from UI; route stops remain available to route logic.
   const d=days.find(x=>x.id===currentDay)||days[0],r=routes[currentDay];
   const list=r?r.stops.map(stopCardHtml).join(""):d.plan.map(planCardHtml).join("");
   stops.querySelector(".stop-list").innerHTML=list;
