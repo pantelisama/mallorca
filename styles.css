@@ -272,3 +272,6 @@ aside>#filters{display:none}
 .stop-drawer .stop-toggle{border-left:1px solid var(--line)!important;border-right:0!important;border-radius:0 15px 15px 0!important;order:2}
 .stop-drawer .stop-panel{order:1;border-left:0!important;border-right:1px solid var(--line)!important;border-radius:15px 0 0 15px!important}
 .stop-drawer .stop-toggle-icon,.stop-drawer .stop-toggle-label{display:block}
+
+/* Stops widget removed from UI. */
+.stop-drawer{display:none!important}
