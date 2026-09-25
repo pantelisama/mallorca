@@ -318,7 +318,7 @@ aside>#filters{display:none}
   z-index:9999!important;
   align-items:center!important;
   width:auto!important;
-  transform:translateX(236px) translateY(-50%)!important;
+  transform:translateX(calc(100% - 48px)) translateY(-50%)!important;
 }
 .stop-drawer.open{transform:translateX(0) translateY(-50%)!important}
 .stop-drawer .stop-panel{
@@ -371,7 +371,7 @@ aside>#filters{display:none}
   .stop-drawer .stop-toggle{flex-basis:43px!important;width:43px!important;min-height:96px!important}
 }
 @media(max-width:600px){
-  .stop-drawer{transform:translateX(205px) translateY(-50%)!important}
+  .stop-drawer{transform:translateX(calc(100% - 40px)) translateY(-50%)!important}
   .stop-drawer.open{transform:translateX(0) translateY(-50%)!important}
   .stop-drawer .stop-panel{width:205px!important}
   .stop-drawer .stop-toggle{flex-basis:40px!important;width:40px!important;min-height:88px!important}
