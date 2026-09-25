@@ -88,13 +88,15 @@ const days=[
     ["Αργά","Deià","Πέτρινο χωριό + Cala Deià / seafood αν υπάρχει χρόνος.","villages","Deià → Valldemossa"],
     ["Βράδυ","Valldemossa","Βόλτα στα σοκάκια + coca de patata.","villages","Valldemossa → Alcúdia"]
   ]},
-  {id:"sun",label:"Κυρ 18",title:"Κυριακή 18 · Alcúdia → Palma",sub:"Πρωινή βόλτα και θάλασσα → Palma το απόγευμα",plan:[
-    ["Πρωί","Playa de Muro","Χαλαρό πρωινό δίπλα στα τιρκουάζ νερά.","beaches","Alcúdia → Playa de Muro"],
-    ["Πρωί","Artà","Old town + Sant Salvador sanctuary.","villages","Playa de Muro → Artà"],
-    ["Μεσημέρι","Capdepera","Castell de Capdepera και θέα προς την ανατολική ακτή.","sights","Artà → Capdepera"],
-    ["Μεσημέρι","Cala Ratjada","Λιμάνι + θάλασσα + lunch.","beaches","Capdepera → Cala Ratjada"],
-    ["Απόγευμα","Palma","Check-in και old town: La Seu → Almudaina → La Lonja → Born.","villages","Cala Ratjada → Palma"],
-    ["Βράδυ","Palma","Dinner / drinks στη Santa Catalina ή στο old town.","food","Μένουμε Palma"]
+  {id:"sun",label:"Κυρ 18",title:"Κυριακή 18 · Alcúdia → Southeast → Palma",sub:"Sunday Market → Coll Baix → Santanyí → Cala Figuera → Mondragó → Cala d’Or → Palma",plan:[
+    ["Πρωί","Alcúdia Sunday Market","Αγορά Κυριακής στην παλιά πόλη + medieval walls.","experiences","Alcúdia → Coll Baix"],
+    ["Πρωί","Coll Baix","Wild north-coast beach και σύντομη coastal walk.","beaches","Coll Baix → Santanyí"],
+    ["Μεσημέρι","Santanyí","Old town, Plaça Major και lunch / shops.","villages","Santanyí → Cala Figuera"],
+    ["Μεσημέρι","Cala Figuera","Χαρακτηριστικό fishing harbour για βόλτα και φωτογραφίες.","beaches","Cala Figuera → Cala Mondragó"],
+    ["Απόγευμα","Cala Mondragó / S’Amarador","Turquoise beach + σύντομη φύση στο Mondragó.","beaches","Mondragó → Portopetro"],
+    ["Αργά απόγευμα","Portopetro","Μικρό φυσικό λιμάνι για drink / ice cream.","villages","Portopetro → Cala d’Or"],
+    ["Αργά απόγευμα","Cala d’Or","Marina + μικρές calas πριν την τελευταία διαδρομή.","beaches","Cala d’Or → Palma"],
+    ["Βράδυ","Palma","Check-in, dinner και drinks.","food","Μένουμε Palma"]
   ]},
   {id:"mon",label:"Δευ 19",title:"Δευτέρα 19 · Palma → Airport",sub:"Τελευταία Palma → αεροδρόμιο",plan:[
     ["Πρωί","Palma Old Town","Τελευταία βόλτα, Cathedral/Arab Baths και καφές.","villages","Palma"],
@@ -114,8 +116,18 @@ if(leafletReady)areas.forEach(a=>{const poly=L.polygon(a.p,{color:"#18211d",weig
 // sat:{stops:[{n:"Όνομα στάσης",c:[lat,lng],type:"food|beach|village|sight",size:"long|small"}]}
 // Το "long" = μεγάλη στάση (μεγαλύτερη πινέζα). Το όνομα ταιριάζει με μέρος από τη λίστα spots.
 const routes={
+  fri:{stops:[
+    {n:"Airport",c:[39.5517,2.7388],type:"sight",size:"long"},
+    {n:"Playa de Muro",c:[39.7942,3.1174],type:"beach",size:"long"},
+    {n:"s'Albufera",c:[39.7881,3.1068],type:"sight",size:"long"},
+    {n:"Port d’Alcúdia",c:[39.8412,3.1315],type:"beach",size:"long"},
+    {n:"Alcúdia Old Town",c:[39.8525,3.1192],type:"village",size:"long"}
+  ]},
   sat:{stops:[
     {n:"Alcúdia Old Town",c:[39.8525,3.1192],type:"village",size:"long"},
+    {n:"Pollença",c:[39.8760,3.0176],type:"village",size:"long"},
+    {n:"Formentor",c:[39.9596,3.2099],type:"sight",size:"long"},
+    {n:"Formentor Beach",c:[39.9290,3.1965],type:"beach",size:"long"},
     {n:"Sóller",c:[39.7671,2.7158],type:"village",size:"long"},
     {n:"Port de Sóller",c:[39.7968,2.6960],type:"beach",size:"long"},
     {n:"Deià",c:[39.7486,2.6486],type:"village",size:"long"},
@@ -124,9 +136,18 @@ const routes={
   ]},
   sun:{stops:[
     {n:"Alcúdia Old Town",c:[39.8525,3.1192],type:"village",size:"long"},
-    {n:"Formentor",c:[39.9596,3.2099],type:"sight",size:"long"},
-    {n:"Alcúdia Beach",c:[39.8425,3.1215],type:"beach",size:"long"},
+    {n:"Coll Baix",c:[39.8730,3.1410],type:"beach",size:"long"},
+    {n:"Santanyí",c:[39.3545,3.1290],type:"village",size:"long"},
+    {n:"Cala Figuera",c:[39.3300,3.1710],type:"beach",size:"long"},
+    {n:"Cala Mondragó",c:[39.3655,3.1860],type:"beach",size:"long"},
+    {n:"Portopetro",c:[39.3630,3.2090],type:"village",size:"long"},
+    {n:"Cala d’Or",c:[39.3780,3.2340],type:"beach",size:"long"},
     {n:"Palma",c:[39.5696,2.6502],type:"village",size:"long"}
+  ]},
+  mon:{stops:[
+    {n:"Palma Old Town",c:[39.5700,2.6500],type:"village",size:"long"},
+    {n:"Mercat de l’Olivar",c:[39.5750,2.6515],type:"sight",size:"long"},
+    {n:"Airport",c:[39.5517,2.7388],type:"sight",size:"long"}
   ]}
 };
 let routeLayer=leafletReady?L.layerGroup():null,routeVisible=false,routeToken=0;
