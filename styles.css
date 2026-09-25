@@ -203,8 +203,8 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--mares);outline-offs
 .cat-toggle,.stop-toggle{pointer-events:auto;display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line);background:var(--sea);color:#fff;box-shadow:0 4px 14px #0003;cursor:pointer}
 .cat-toggle{width:48px;min-height:112px;border-left:0;border-radius:0 15px 15px 0;flex-direction:column}
 .stop-toggle{width:48px;min-height:112px;border-right:0;border-radius:15px 0 0 15px;flex-direction:column}
-.cat-toggle-icon,.stop-toggle span{font-size:19px;line-height:1}
-.cat-toggle-label,.stop-toggle b{font-size:9px;letter-spacing:1px;writing-mode:vertical-rl;transform:rotate(180deg)}
+.cat-toggle-icon,.stop-toggle-icon{font-size:19px;line-height:1}
+.cat-toggle-label,.stop-toggle-label{font-size:9px;letter-spacing:1px;writing-mode:vertical-rl;transform:rotate(180deg)}
 .cat-head,.stop-head{display:flex;align-items:center;justify-content:space-between;margin:0 2px 9px;font-size:14px}
 .cat-close,.stop-close{border:0;background:transparent;color:var(--muted);font-size:22px;line-height:1;cursor:pointer}
 .cat-drawer #filters{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;overflow:visible}
