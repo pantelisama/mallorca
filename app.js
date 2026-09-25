@@ -335,6 +335,19 @@ function enrichSpots(list){
     enrichRunning=false;
   })();
 }
+function ensureEdgeDrawers(){
+  let cat=document.querySelector(".cat-drawer");
+  if(!cat){
+    cat=document.createElement("div");
+    cat.className="cat-drawer";
+    cat.innerHTML="<div class='cat-panel'><div class='cat-head'><strong>Μέρη στον χάρτη</strong><button class='cat-close' type='button'>×</button></div><div id='filters'></div><p class='cat-hint'>Σύρε από την αριστερή άκρη ή πάτησε το handle.</p></div><button class='cat-toggle' type='button' aria-label='Άνοιξε κατηγορίες'><span class='cat-toggle-icon'>🧭</span><span class='cat-toggle-label'>ΜΕΡΗ</span></button>";
+    document.body.appendChild(cat);
+    const toggle=cat.querySelector(".cat-toggle"),close=cat.querySelector(".cat-close");
+    toggle.addEventListener("click",()=>cat.classList.toggle("open"));
+    close.addEventListener("click",()=>cat.classList.remove("open"));
+    if(typeof installEdgeSwipe==="function")installEdgeSwipe(cat,"left");
+  }
+}
 function render(){
 const day=days.find(d=>d.id===currentDay)||days[0];
 const route=routes[currentDay];
