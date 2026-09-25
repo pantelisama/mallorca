@@ -344,8 +344,8 @@ const dayVillages=villages.filter(v=>dayCats.includes("villages")&&(v.day==="all
 const catCount=k=>k==="villages"?dayVillages.length:daySpots.filter(s=>s.cat===k).length;
 document.querySelector("#days").innerHTML=days.map(d=>"<button type='button' class='"+(d.id===currentDay?"active":"")+"' data-day='"+d.id+"'>"+d.label+"</button>").join("");
 const filtersHtml=Object.entries(categories).filter(([k])=>catCount(k)>0).map(([k,v])=>"<button type='button' class='filter"+(map&&markerLayers[k]&&map.hasLayer(markerLayers[k])?" active":"")+"' data-cat='"+k+"'><span class='cat-icon'>"+v.icon+"</span><span class='cat-label'>"+v.label+"</span><span class='cat-count'>"+catCount(k)+"</span></button>").join("");
-document.querySelector("#filters").innerHTML=filtersHtml;
 ensureEdgeDrawers();
+document.querySelector("#filters").innerHTML=filtersHtml;
 document.querySelector("h1").textContent=day.title;document.querySelector(".sub").textContent=day.sub;
 routeVisible=false;routeToken++;if(map)map.removeLayer(routeLayer);
 const planItems=route?route.stops.map(stopCardHtml):day.plan.map(planCardHtml);
