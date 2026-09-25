@@ -335,18 +335,27 @@ function enrichSpots(list){
     enrichRunning=false;
   })();
 }
-function ensureEdgeDrawers(){
+function ensureEdgeDrawers(route){
   let cat=document.querySelector(".cat-drawer");
   if(!cat){
-    cat=document.createElement("div");
-    cat.className="cat-drawer";
+    cat=document.createElement("div");cat.className="cat-drawer";
     cat.innerHTML="<div class='cat-panel'><div class='cat-head'><strong>Μέρη στον χάρτη</strong><button class='cat-close' type='button'>×</button></div><div id='filters'></div><p class='cat-hint'>Σύρε από την αριστερή άκρη ή πάτησε το handle.</p></div><button class='cat-toggle' type='button' aria-label='Άνοιξε κατηγορίες'><span class='cat-toggle-icon'>🧭</span><span class='cat-toggle-label'>ΜΕΡΗ</span></button>";
     document.body.appendChild(cat);
-    const toggle=cat.querySelector(".cat-toggle"),close=cat.querySelector(".cat-close");
-    toggle.addEventListener("click",()=>cat.classList.toggle("open"));
-    close.addEventListener("click",()=>cat.classList.remove("open"));
+    cat.querySelector(".cat-toggle").addEventListener("click",()=>cat.classList.toggle("open"));
+    cat.querySelector(".cat-close").addEventListener("click",()=>cat.classList.remove("open"));
     if(typeof installEdgeSwipe==="function")installEdgeSwipe(cat,"left");
   }
+  let stops=document.querySelector(".stop-drawer");
+  if(!stops){
+    stops=document.createElement("div");stops.className="stop-drawer";
+    stops.innerHTML="<div class='stop-panel'><div class='stop-head'><strong>Στάσεις</strong><button class='stop-close' type='button'>×</button></div><div class='stop-list'></div><p class='stop-hint'>Πάτησε στάση για εστίαση στον χάρτη.</p></div><button class='stop-toggle' type='button' aria-label='Άνοιξε στάσεις'><span class='stop-toggle-icon'>📍</span><span class='stop-toggle-label'>ΣΤΑΣΕΙΣ</span></button>";
+    document.body.appendChild(stops);
+    stops.querySelector(".stop-toggle").addEventListener("click",()=>stops.classList.toggle("open"));
+    stops.querySelector(".stop-close").addEventListener("click",()=>stops.classList.remove("open"));
+    if(typeof installEdgeSwipe==="function")installEdgeSwipe(stops,"right");
+  }
+  stops.querySelector(".stop-list").innerHTML=route?route.stops.map((x,i)=>"<article class='day-card stop-item' data-stop-index='"+i+"'><div class='day-number'>"+String(i+1).padStart(2,"0")+"</div><div class='day-content'><div class='time'>ΣΤΑΣΗ</div><h3>"+escAttr(x.n)+"</h3></div></article>").join(""):"<p class='empty-note'>Δεν υπάρχουν στάσεις.</p>";
+  stops.classList.remove("open");
 }
 function render(){
 const day=days.find(d=>d.id===currentDay)||days[0];
@@ -357,24 +366,23 @@ const dayVillages=villages.filter(v=>dayCats.includes("villages")&&(v.day==="all
 const catCount=k=>k==="villages"?dayVillages.length:daySpots.filter(s=>s.cat===k).length;
 document.querySelector("#days").innerHTML=days.map(d=>"<button type='button' class='"+(d.id===currentDay?"active":"")+"' data-day='"+d.id+"'>"+d.label+"</button>").join("");
 const filtersHtml=Object.entries(categories).filter(([k])=>catCount(k)>0).map(([k,v])=>"<button type='button' class='filter"+(map&&markerLayers[k]&&map.hasLayer(markerLayers[k])?" active":"")+"' data-cat='"+k+"'><span class='cat-icon'>"+v.icon+"</span><span class='cat-label'>"+v.label+"</span><span class='cat-count'>"+catCount(k)+"</span></button>").join("");
-ensureEdgeDrawers();
+ensureEdgeDrawers(route);
 document.querySelector("#filters").innerHTML=filtersHtml;
 document.querySelector("h1").textContent=day.title;document.querySelector(".sub").textContent=day.sub;
 routeVisible=false;routeToken++;if(map)map.removeLayer(routeLayer);
 const planItems=[];
-const stopWidget=route?`<div class="route-widget"><div class="route-widget-head"><strong>ΣΤΑΣΕΙΣ</strong><span>${route.stops.length}</span></div><div class="route-widget-list">${route.stops.map((x,i)=>`<div class="route-stop"><b>${String(i+1).padStart(2,"0")}</b><span>${escAttr(x.n)}</span></div>`).join("")}</div></div>`:"";
 const stopCount=route?route.stops.length:day.plan.length;
 const cards=daySpots.map(spotCardHtml).join("");
 const villagesHtml=dayVillages.map(v=>{const villagePhoto=v.data.photos&&v.data.photos[0]?v.data.photos[0]:photoFallback({cat:"villages"},0);const media="<img loading='lazy' src='"+escAttr(villagePhoto)+"' alt='"+escAttr(v.name)+"' onerror='this.onerror=null;this.src=photoFallback({cat:'villages'},0)'>";return "<article class='spot-card village-card' data-cat='villages' data-village='"+v.id+"' tabindex='0' role='button'><div class='spot-photo'>"+media+"</div><div class='spot-info'><div class='spot-cat'>🏘️ Χωριά</div><h3>"+v.name+"</h3>"+(v.data.rating?"<div class='spot-rating'>"+ratingHtml(v.data.rating,v.data.reviews)+"</div>":"")+"<p>"+(v.data.description||"Άνοιξέ το για να δεις τα αποθηκευμένα δεδομένα.")+"</p></div></article>";}).join("");
 document.querySelector("#plan").innerHTML="<section class='day-panel'><div class='findings-head'><div><h2>"+day.label+" · Πρόγραμμα</h2><p class='day-description'>"+day.sub+"</p>"+(day.note?"<p class='day-note'>"+day.note+"</p>":"")+"</div><div class='day-tools'></div></div><div class='day-grid'></div></section><section class='findings'><div class='findings-head'><h2>"+"Αποθηκευμένα μέρη"+"</h2><span>"+(daySpots.length+dayVillages.length)+" μέρη</span></div><div class='photo-grid'>"+(cards+villagesHtml||"<p class='empty-note'>Δεν υπάρχουν αποθηκευμένα μέρη για αυτή τη μέρα.</p>")+"</div><p class='stars-note'>★ Αστέρια και κριτικές από το Google Maps ("+RATINGS_AS_OF+"). Χάρτης, βενζινάδικα, μάρκετ και τουαλέτες: © OpenStreetMap contributors.</p></section>";
 
-if(route&&map){drawRoute(currentDay);routeLayer.addTo(map);routeVisible=true;}const oldWidget=document.querySelector(".route-widget");if(oldWidget)oldWidget.remove();if(stopWidget&&map){document.querySelector("#map").insertAdjacentHTML("beforeend",stopWidget);}
+if(route&&map){drawRoute(currentDay);routeLayer.addTo(map);routeVisible=true;}
 const pts=daySpots.map(s=>s.c).concat(dayVillages.map(v=>v.c)).concat(route?route.stops.map(x=>x.c):[]);if(map&&pts.length)map.fitBounds(L.latLngBounds(pts),{padding:[40,40]});
 enrichSpots(daySpots.concat(dayVillages.map(v=>({n:v.name,c:v.c,village:v}))));
 }
 function openSpot(i){const s=spots[i];if(!s)return;window.open(spotData(s).gmap||gmapsUrl(s),"_blank","noopener,noreferrer");}
 function openVillage(id){const v=villages.find(x=>x.id===id);if(!v)return;const d=v.data||{};let html="<section class='day-panel'><div class='findings-head'><div><h2>🏘️ "+v.name+"</h2><p class='day-description'>"+(d.description||"Χωριό")+"</p></div><div class='day-tools'><a class='route-toggle nav-btn' target='_blank' rel='noopener' href='"+escAttr(villageUrl(v))+"'>Google Maps</a><a class='route-toggle nav-btn' target='_blank' rel='noopener' href='"+escAttr(dirUrl([{c:v.c}]))+"'>🧭 Πλοήγηση</a><button type='button' class='route-toggle' onclick='render()'>Back</button></div></div>";if(d.photos&&d.photos.length)html+="<div class='photo-grid'>"+d.photos.map(p=>"<img loading='lazy' src='"+escAttr(p)+"' alt='"+escAttr(v.name)+"'>").join("")+"</div>";if(d.rating)html+="<div class='spot-rating'>"+ratingHtml(d.rating,d.reviews)+"</div>";[["Φαγητό",d.food],["Αξιοθέατα",d.sights],["Εμπειρίες",d.experiences],["Φωτογραφίες",d.instagram],["Ξενοδοχεία",d.hotels],["Σημειώσεις",d.notes]].forEach(x=>{if(x[1]&&x[1].length)html+="<div class='day-card'><div class='day-content'><div class='time'>"+x[0]+"</div>"+x[1].map(t=>"<p>"+t+"</p>").join("")+"</div></div>";});if(d.parking)html+="<div class='day-card'><div class='day-content'><div class='time'>Parking</div><p>"+d.parking+"</p></div></div>";if(d.route)html+="<div class='day-card'><div class='day-content'><div class='time'>Route</div><p>"+d.route+"</p></div></div>";html+="</section>";document.querySelector("#plan").innerHTML=html;syncCategoryCards();document.querySelector("#plan").scrollIntoView({behavior:"smooth",block:"start"});if(map)map.setView(v.c,14);}
-document.addEventListener("click",e=>{const day=e.target.closest("#days [data-day]");if(day){currentDay=day.dataset.day;render();return;}const village=e.target.closest("[data-village]");if(village){openVillage(village.dataset.village);return;}const spot=e.target.closest("[data-spot-index]");if(spot){openSpot(Number(spot.dataset.spotIndex));return;}const cat=e.target.closest("#filters [data-cat]");if(cat){toggleCat(cat.dataset.cat,cat);return;}});
+document.addEventListener("click",e=>{const stop=e.target.closest(".stop-item");if(stop){const route=routes[currentDay],x=route&&route.stops[Number(stop.dataset.stopIndex)];if(x&&map)map.setView(x.c,14);const drawer=document.querySelector(".stop-drawer");if(drawer)drawer.classList.remove("open");return;}const day=e.target.closest("#days [data-day]");if(day){currentDay=day.dataset.day;render();return;}const village=e.target.closest("[data-village]");if(village){openVillage(village.dataset.village);return;}const spot=e.target.closest("[data-spot-index]");if(spot){openSpot(Number(spot.dataset.spotIndex));return;}const cat=e.target.closest("#filters [data-cat]");if(cat){toggleCat(cat.dataset.cat,cat);return;}});
 document.addEventListener("keydown",e=>{if(e.key!=="Enter"&&e.key!==" ")return;const spot=e.target.closest("[data-spot-index]");if(spot){e.preventDefault();openSpot(Number(spot.dataset.spotIndex));}});
 function focusArea(id){const a=areas.find(x=>x.id===id);if(!a||!map||!leafletReady)return;map.fitBounds(L.latLngBounds(a.p),{padding:[80,80]});L.popup().setLatLng(a.c).setContent("<strong>"+a.icon+" "+a.n+"</strong><br><small>"+a.type+"</small><br>"+a.d).openOn(map);}
 function setCatVisible(cat,on){if(!leafletReady||!map||!markerLayers[cat])return;if(on)markerLayers[cat].addTo(map);else map.removeLayer(markerLayers[cat]);const b=document.querySelector("#filters [data-cat='"+cat+"']");if(b)b.classList.toggle("active",on);syncPoiButtons();}
