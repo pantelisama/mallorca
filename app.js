@@ -342,7 +342,9 @@ const daySpots=spots.filter(s=>dayCats.includes(s.cat)&&spotOnDay(s,currentDay))
 const dayVillages=villages.filter(v=>dayCats.includes("villages")&&(v.day==="all"||v.day==="both"||v.day===currentDay));
 const catCount=k=>k==="villages"?dayVillages.length:daySpots.filter(s=>s.cat===k).length;
 document.querySelector("#days").innerHTML=days.map(d=>"<button type='button' class='"+(d.id===currentDay?"active":"")+"' data-day='"+d.id+"'>"+d.label+"</button>").join("");
-document.querySelector("#filters").innerHTML=Object.entries(categories).filter(([k])=>catCount(k)>0).map(([k,v])=>"<button type='button' class='filter"+(map&&markerLayers[k]&&map.hasLayer(markerLayers[k])?" active":"")+"' data-cat='"+k+"'>"+v.icon+" "+v.label+" <span>"+catCount(k)+"</span></button>").join("");
+const filtersHtml=Object.entries(categories).filter(([k])=>catCount(k)>0).map(([k,v])=>"<button type='button' class='filter"+(map&&markerLayers[k]&&map.hasLayer(markerLayers[k])?" active":"")+"' data-cat='"+k+"'><span class='cat-icon'>"+v.icon+"</span><span class='cat-label'>"+v.label+"</span><span class='cat-count'>"+catCount(k)+"</span></button>").join("");
+document.querySelector("#filters").innerHTML=filtersHtml;
+ensureEdgeDrawers();
 document.querySelector("h1").textContent=day.title;document.querySelector(".sub").textContent=day.sub;
 routeVisible=false;routeToken++;if(map)map.removeLayer(routeLayer);
 const planItems=route?route.stops.map(stopCardHtml):day.plan.map(planCardHtml);
@@ -351,8 +353,9 @@ const stopCount=planItems.length;
 if(!planItems.length)planItems.push("<article class='day-card empty-card'><div class='day-content'><h3>Καμία στάση ακόμα</h3><p>Στείλε μου τα μέρη που θέλεις για αυτή τη μέρα και θα μπουν εδώ, με αστέρια Google, περιγραφή και πλοήγηση.</p></div></article>");
 const cards=daySpots.map(spotCardHtml).join("");
 const villagesHtml=dayVillages.map(v=>{const villagePhoto=v.data.photos&&v.data.photos[0]?v.data.photos[0]:photoFallback({cat:"villages"},0);const media="<img loading='lazy' src='"+escAttr(villagePhoto)+"' alt='"+escAttr(v.name)+"' onerror='this.onerror=null;this.src=photoFallback({cat:'villages'},0)'>";return "<article class='spot-card village-card' data-cat='villages' data-village='"+v.id+"' tabindex='0' role='button'><div class='spot-photo'>"+media+"</div><div class='spot-info'><div class='spot-cat'>🏘️ Χωριά</div><h3>"+v.name+"</h3>"+(v.data.rating?"<div class='spot-rating'>"+ratingHtml(v.data.rating,v.data.reviews)+"</div>":"")+"<p>"+(v.data.description||"Άνοιξέ το για να δεις τα αποθηκευμένα δεδομένα.")+"</p></div></article>";}).join("");
-document.querySelector("#plan").innerHTML="<section class='day-panel'><div class='findings-head'><div><h2>"+day.label+" · Πρόγραμμα</h2><p class='day-description'>"+day.sub+"</p>"+(day.note?"<p class='day-note'>"+day.note+"</p>":"")+"</div><div class='day-tools'>"+(route?"<button type='button' id='route-toggle' class='route-toggle' onclick='toggleRoute()'>Δείξε τη διαδρομή</button>":"")+navLinksHtml(day)+"<span>"+stopCount+" στάσεις</span></div></div><div class='day-grid'>"+planItems.join("")+"</div></section><section class='findings'><div class='findings-head'><h2>"+"Αποθηκευμένα μέρη"+"</h2><span>"+(daySpots.length+dayVillages.length)+" μέρη</span></div><div class='photo-grid'>"+(cards+villagesHtml||"<p class='empty-note'>Δεν υπάρχουν αποθηκευμένα μέρη για αυτή τη μέρα.</p>")+"</div><p class='stars-note'>★ Αστέρια και κριτικές από το Google Maps ("+RATINGS_AS_OF+"). Χάρτης, βενζινάδικα, μάρκετ και τουαλέτες: © OpenStreetMap contributors.</p></section>";
-if(route&&map){drawRoute(currentDay);routeLayer.addTo(map);routeVisible=true;const b=document.querySelector("#route-toggle");if(b){b.textContent="Κρύψε τη διαδρομή";b.classList.add("active");}}
+document.querySelector("#plan").innerHTML="<section class='day-panel'><div class='findings-head'><div><h2>"+day.label+" · Πρόγραμμα</h2><p class='day-description'>"+day.sub+"</p>"+(day.note?"<p class='day-note'>"+day.note+"</p>":"")+"</div><div class='day-tools'><span>"+stopCount+" στάσεις</span></div></div><div class='day-grid'>"+planItems.join("")+"</div></section><section class='findings'><div class='findings-head'><h2>"+"Αποθηκευμένα μέρη"+"</h2><span>"+(daySpots.length+dayVillages.length)+" μέρη</span></div><div class='photo-grid'>"+(cards+villagesHtml||"<p class='empty-note'>Δεν υπάρχουν αποθηκευμένα μέρη για αυτή τη μέρα.</p>")+"</div><p class='stars-note'>★ Αστέρια και κριτικές από το Google Maps ("+RATINGS_AS_OF+"). Χάρτης, βενζινάδικα, μάρκετ και τουαλέτες: © OpenStreetMap contributors.</p></section>";
+document.querySelector("#plan").innerHTML="<section class='day-panel'><div class='findings-head'><div><h2>"+day.label+" · Πρόγραμμα</h2><p class='day-description'>"+day.sub+"</p>"+(day.note?"<p class='day-note'>"+day.note+"</p>":"")+"</div><div class='day-tools'><span>"+stopCount+" στάσεις</span></div></div><div class='day-grid'>"+planItems.join("")+"</div></section><section class='findings'><div class='findings-head'><h2>"+"Αποθηκευμένα μέρη"+"</h2><span>"+(daySpots.length+dayVillages.length)+" μέρη</span></div><div class='photo-grid'>"+(cards+villagesHtml||"<p class='empty-note'>Δεν υπάρχουν αποθηκευμένα μέρη για αυτή τη μέρα.</p>")+"</div><p class='stars-note'>★ Αστέρια και κριτικές από το Google Maps ("+RATINGS_AS_OF+"). Χάρτης, βενζινάδικα, μάρκετ και τουαλέτες: © OpenStreetMap contributors.</p></section>";
+if(route&&map){drawRoute(currentDay);routeLayer.addTo(map);routeVisible=true;}
 const pts=daySpots.map(s=>s.c).concat(dayVillages.map(v=>v.c)).concat(route?route.stops.map(x=>x.c):[]);if(map&&pts.length)map.fitBounds(L.latLngBounds(pts),{padding:[40,40]});
 enrichSpots(daySpots.concat(dayVillages.map(v=>({n:v.name,c:v.c,village:v}))));
 }
@@ -364,6 +367,61 @@ function focusArea(id){const a=areas.find(x=>x.id===id);if(!a||!map||!leafletRea
 function setCatVisible(cat,on){if(!leafletReady||!map||!markerLayers[cat])return;if(on)markerLayers[cat].addTo(map);else map.removeLayer(markerLayers[cat]);const b=document.querySelector("#filters [data-cat='"+cat+"']");if(b)b.classList.toggle("active",on);syncPoiButtons();}
 function syncCategoryCards(){document.querySelectorAll("#plan .spot-card[data-cat]").forEach(card=>{const layer=markerLayers[card.dataset.cat];card.style.display=(!map||!leafletReady||!layer||map.hasLayer(layer))?"":"none";});}
 function toggleCat(cat){if(!leafletReady||!map||!markerLayers[cat])return;setCatVisible(cat,!map.hasLayer(markerLayers[cat]));syncCategoryCards();}
+
+function ensureEdgeDrawers(){
+  let cat=document.querySelector(".cat-drawer");
+  if(!cat){
+    cat=document.createElement("div");cat.className="cat-drawer";
+    cat.innerHTML="<div class='cat-panel'><div class='cat-head'><strong>Μέρη στον χάρτη</strong><button class='cat-close' type='button'>×</button></div><div id='filters'></div><p class='cat-hint'>Σύρε από την αριστερή άκρη ή πάτησε το handle.</p></div><button class='cat-toggle' type='button' aria-label='Άνοιξε κατηγορίες'><span class='cat-toggle-icon'>🧭</span><span class='cat-toggle-label'>ΜΕΡΗ</span></button>";
+    document.body.appendChild(cat);
+    const toggle=cat.querySelector(".cat-toggle"),close=cat.querySelector(".cat-close");
+    toggle.addEventListener("click",()=>cat.classList.toggle("open"));close.addEventListener("click",()=>cat.classList.remove("open"));
+    installEdgeSwipe(cat,"left");
+  }
+  let stops=document.querySelector(".stop-drawer");
+  if(!stops){
+    stops=document.createElement("div");stops.className="stop-drawer";
+    stops.innerHTML="<div class='stop-panel'><div class='stop-head'><strong>Στάσεις ημέρας</strong><button class='stop-close' type='button'>×</button></div><div class='stop-list'></div><p class='stop-hint'>Σύρε από τη δεξιά άκρη για να ανοίξει.</p></div><button class='stop-toggle' type='button' aria-label='Άνοιξε στάσεις'><span>📍</span><b>ΣΤΑΣΕΙΣ</b></button>";
+    document.body.appendChild(stops);
+    const toggle=stops.querySelector(".stop-toggle"),close=stops.querySelector(".stop-close");
+    toggle.addEventListener("click",()=>stops.classList.toggle("open"));close.addEventListener("click",()=>stops.classList.remove("open"));
+    installEdgeSwipe(stops,"right");
+  }
+  const d=days.find(x=>x.id===currentDay)||days[0],r=routes[currentDay];
+  const list=r?r.stops.map(stopCardHtml).join(""):d.plan.map(planCardHtml).join("");
+  stops.querySelector(".stop-list").innerHTML=list;
+  syncCategoryCards();
+}
+function installEdgeSwipe(drawer,side){
+  let sx=0,sy=0,tracking=false;
+  drawer.addEventListener("pointerdown",e=>{tracking=true;sx=e.clientX;sy=e.clientY;drawer.setPointerCapture?.(e.pointerId);});
+  drawer.addEventListener("pointerup",e=>{
+    if(!tracking)return;tracking=false;const dx=e.clientX-sx,dy=e.clientY-sy;
+    if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.25){
+      if(side==="left"&&dx>0)drawer.classList.add("open");
+      if(side==="right"&&dx<0)drawer.classList.add("open");
+      if(side==="left"&&dx<0)drawer.classList.remove("open");
+      if(side==="right"&&dx>0)drawer.classList.remove("open");
+    }
+  });
+}
+
+function addMapActionControls(){
+  if(!map||map._mallorcaActionControl)return;
+  const C=L.Control.extend({options:{position:"bottomleft"},onAdd:function(){
+    const box=L.DomUtil.create("div","map-actions");
+    box.innerHTML="<button type='button' class='map-action route-action' title='Διαδρομή' aria-label='Εμφάνιση διαδρομής'>🛣️</button><button type='button' class='map-action nav-action' title='Πλοήγηση Google Maps' aria-label='Πλοήγηση'>🧭</button>";
+    L.DomEvent.disableClickPropagation(box);
+    L.DomEvent.on(box,"click",e=>{
+      const b=e.target.closest(".map-action");if(!b)return;
+      if(b.classList.contains("route-action"))toggleRoute();
+      else if(b.classList.contains("nav-action")){const r=routes[currentDay];if(r){const legs=splitLegs(r.stops);window.open(dirUrl(legs[0]),"_blank","noopener,noreferrer");}}
+    });
+    return box;
+  }});
+  map.addControl(new C());map._mallorcaActionControl=true;
+}
+addMapActionControls();
 
 
 /* ---------- Map layer buttons: fuel / supermarkets / toilets (OpenStreetMap, whole island) + food ---------- */
