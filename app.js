@@ -177,12 +177,13 @@ try{enrich=JSON.parse(localStorage.getItem(ENRICH_STORE)||"{}")||{};}catch(e){en
 function saveEnrich(){try{localStorage.setItem(ENRICH_STORE,JSON.stringify(enrich));}catch(e){}}
 // Hardcoded stars always win over anything cached from earlier runtime lookups.
 // Hardcoded stars win; anything not hardcoded is filled in from Google when a key is set.
-function spotData(s){const e=enrich[s.n]||{};const i=spots.indexOf(s);const fallback=s.cat==="sights"?"https://loremflickr.com/900/650/mountain,mallorca?lock="+(100+i):"https://loremflickr.com/900/650/restaurant,mallorca?lock="+(100+i);return {photo:s.photo||e.photo||fallback,rating:s.rating||e.rating||null,reviews:s.reviews||e.reviews||null,gmap:s.id?"":(e.gmap||"")};}
+function photoFallback(s,i){const q=s.cat==="wineries"?"winery,mallorca":s.cat==="beaches"?"beach,mallorca":s.cat==="villages"?"village,mallorca":s.cat==="hotels"?"hotel,mallorca":s.cat==="sights"?"mountain,mallorca":"restaurant,mallorca";return "https://loremflickr.com/900/650/"+q+"?lock="+(100+i);}
+function spotData(s){const e=enrich[s.n]||{};const i=spots.indexOf(s);return {photo:s.photo||e.photo||photoFallback(s,i),rating:s.rating||e.rating||null,reviews:s.reviews||e.reviews||null,gmap:s.id?"":(e.gmap||"")};}
 function ratingHtml(r,n){return "<span class='stars'>★ "+r.toFixed(1)+"</span> · "+(n||0).toLocaleString()+" κριτικές";}
 function extraHtml(s){const x=[s.price,s.hours].filter(Boolean);return (x.length?"<p class='spot-extra'>"+x.join(" · ")+"</p>":"")+(s.tag?"<p class='spot-extra spot-flag'>"+s.tag+"</p>":"");}
 function spotCardHtml(s){
   const i=spots.indexOf(s);const cat=categories[s.cat];const x=spotData(s);
-  const media=x.photo?"<img loading='lazy' src='"+escAttr(x.photo)+"' alt='"+escAttr(s.n)+"'>":"<div class='spot-photo-empty spot-photo-"+s.cat+"'><span>"+cat.icon+"</span></div>";
+    const media="<img loading='lazy' src='"+escAttr(x.photo)+"' alt='"+escAttr(s.n)+"' onerror='this.onerror=null;this.src=\""+photoFallback(s,i)+"\"'>";
   const rating=x.rating?ratingHtml(x.rating,x.reviews):"Δες το στο Google Maps";
   return "<article class='spot-card' data-cat='"+s.cat+"' data-spot-index='"+i+"' tabindex='0' role='button'><div class='spot-photo'>"+media+"</div><div class='spot-info'><div class='spot-meta'><div class='spot-cat'>"+cat.icon+" "+cat.label+"</div>"+(s.by?"<span class='finder-tag'>"+s.by+"</span>":"")+"</div><h3>"+s.n+"</h3>"+(s.type?"<p class='spot-type'>"+s.type+"</p>":"")+extraHtml(s)+"<p>"+s.d+"</p><div class='spot-rating'>"+rating+" →</div></div></article>";
 }
