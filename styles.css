@@ -376,3 +376,48 @@ aside>#filters{display:none}
   .stop-drawer .stop-panel{width:205px!important}
   .stop-drawer .stop-toggle{flex-basis:40px!important;width:40px!important;min-height:88px!important}
 }
+
+/* Two identical edge cards: ΜΕΡΗ left + ΣΤΑΣΕΙΣ right */
+.stop-edge{
+  left:auto!important;
+  right:0!important;
+  top:50%!important;
+  transform:translateX(236px) translateY(-50%)!important;
+}
+.stop-edge.open{transform:translateX(0) translateY(-50%)!important}
+.stop-edge .cat-panel{
+  order:1!important;
+  border-left:1px solid var(--line)!important;
+  border-right:0!important;
+  border-radius:var(--r-lg) 0 0 var(--r-lg)!important;
+}
+.stop-edge .cat-toggle{
+  order:2!important;
+  border-left:1px solid var(--line)!important;
+  border-right:0!important;
+  border-radius:15px 0 0 15px!important;
+}
+.stop-edge #stopFilters{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:6px!important;
+  margin:0!important;
+  padding:0!important;
+}
+.stop-edge #stopFilters .filter{
+  display:grid!important;
+  grid-template-columns:26px 1fr!important;
+  align-items:center!important;
+}
+.stop-drawer{display:none!important}
+.route-widget{display:none!important}
+@media(max-width:1000px){
+ .stop-edge{transform:translateX(218px) translateY(-50%)!important}
+ .stop-edge.open{transform:translateX(0) translateY(-50%)!important}
+ .stop-edge .cat-panel{width:218px!important}
+}
+@media(max-width:600px){
+ .stop-edge{transform:translateX(205px) translateY(-50%)!important}
+ .stop-edge.open{transform:translateX(0) translateY(-50%)!important}
+ .stop-edge .cat-panel{width:205px!important}
+}
