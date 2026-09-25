@@ -163,3 +163,12 @@ test("index.html still loads the planner shell", () => {
   const result = spawnSync(process.execPath, [path.join(root, "scripts", "validate-html.js")], { cwd: root, encoding: "utf8" });
   assert.equal(result.status, 0, result.stderr);
 });
+
+
+test("right stops bookmark remains visible at the right edge", () => {
+  const css = fs.readFileSync(path.join(root, "styles.css"), "utf8");
+  const finalBlock = css.slice(css.lastIndexOf("/* CLEAN RIGHT STOPS DRAWER */"));
+  assert.match(finalBlock, /\.cat-drawer\.stop-edge\{[^}]*transform:translateX\(calc\(100% - 48px\)\) translateY\(-50%\)!important/);
+  assert.doesNotMatch(finalBlock, /\.cat-drawer\.stop-edge\{[^}]*transform:translateX\(236px\)/);
+  assert.match(finalBlock, /@media\(max-width:600px\)[\s\S]*translateX\(calc\(100% - 40px\)\)/);
+});
