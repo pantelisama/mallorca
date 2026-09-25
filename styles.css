@@ -248,3 +248,6 @@ aside>#filters{display:none}
 /* Route stops live exclusively in the edge widget. Never render them in the main programme panel. */
 .day-panel .day-grid{display:none!important}
 .day-panel .day-tools{display:none!important}
+
+/* Mobile: stops are not a persistent floating handle. */
+.stop-drawer.hidden{display:none!important}
