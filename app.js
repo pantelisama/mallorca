@@ -185,7 +185,7 @@ const routes={
 };
 let routeLayer=leafletReady?L.layerGroup():null,routeVisible=false,routeToken=0;
 function escAttr(v){return String(v).replace(/&/g,"&amp;").replace(/'/g,"&#39;").replace(/"/g,"&quot;").replace(/</g,"&lt;");}
-async function drawRoute(id){
+async async function drawRoute(id){
   if(!leafletReady||!routeLayer)return;
   const token=++routeToken;
   routeLayer.clearLayers();
