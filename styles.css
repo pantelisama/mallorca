@@ -278,3 +278,30 @@ aside>#filters{display:none}
 
 /* Right route stops card */
 .route-widget{position:absolute;right:16px;top:16px;z-index:700;background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 28px #0003;width:220px;max-height:48vh;overflow:hidden}.route-widget-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line);font-size:12px;letter-spacing:.08em}.route-widget-head span{font-size:11px;color:var(--muted)}.route-widget-list{overflow:auto;max-height:calc(48vh - 45px);padding:6px 0}.route-stop{display:flex;gap:10px;align-items:center;padding:8px 14px;font-size:13px}.route-stop b{font-size:10px;color:var(--muted);min-width:20px}.route-stop span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}@media(max-width:760px){.route-widget{right:10px;top:10px;width:190px;max-height:38vh}.route-widget-list{max-height:calc(38vh - 45px)}}
+
+/* Final right edge stops drawer: same treatment as ΜΕΡΗ, mirrored on the right. */
+.stop-drawer{display:flex!important;left:auto!important;right:0!important;top:50%!important;width:auto!important;transform:translate(236px,-50%)!important;position:fixed!important;z-index:1200!important}
+.stop-drawer.open{transform:translate(0,-50%)!important}
+.stop-drawer .stop-panel{order:1;width:236px!important;max-height:min(72vh,620px);overflow-y:auto;background:var(--paper);border:1px solid var(--line);border-right:0;border-radius:var(--r-lg) 0 0 var(--r-lg)!important;padding:12px;box-shadow:0 8px 28px #0004;pointer-events:auto}
+.stop-drawer .stop-toggle{order:2;width:48px;min-height:112px;padding:12px 8px;border:1px solid var(--line);border-left:0!important;border-right:0!important;border-radius:15px 0 0 15px!important;background:var(--sea);color:#fff;box-shadow:0 4px 14px #0003}
+.stop-drawer .stop-list{display:grid;gap:7px}
+.stop-drawer .stop-list .day-card{padding:10px 11px;border-radius:12px;gap:9px;cursor:pointer}
+.stop-drawer .stop-list .day-card:hover{transform:translateX(-2px)}
+.stop-drawer .stop-list .day-number{min-width:25px;width:25px;height:25px;font-size:10px}
+.stop-drawer .stop-list .day-content h3{font-size:14px;margin:2px 0}
+.stop-drawer .stop-list .day-content .time{font-size:9px}
+.stop-drawer .stop-toggle-label{writing-mode:vertical-rl;transform:rotate(180deg);font-size:9px;letter-spacing:1px}
+.stop-drawer .stop-toggle-icon{font-size:19px;line-height:1}
+.route-widget{display:none!important}
+@media(max-width:1000px){
+  .stop-drawer{transform:translate(218px,-50%)!important}
+  .stop-drawer.open{transform:translate(0,-50%)!important}
+  .stop-drawer .stop-panel{width:218px!important;max-height:70vh}
+  .stop-drawer .stop-toggle{width:43px;min-height:96px}
+}
+@media(max-width:600px){
+  .stop-drawer{transform:translate(205px,-50%)!important}
+  .stop-drawer.open{transform:translate(0,-50%)!important}
+  .stop-drawer .stop-panel{width:205px!important;max-height:68vh}
+  .stop-drawer .stop-toggle{width:40px;min-height:88px}
+}
