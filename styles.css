@@ -421,3 +421,47 @@ aside>#filters{display:none}
  .stop-edge.open{transform:translateX(0) translateY(-50%)!important}
  .stop-edge .cat-panel{width:205px!important}
 }
+
+/* Standalone right bookmark: exact mirror of the ΜΕΡΗ bookmark */
+.stop-bookmark{
+  position:fixed!important;
+  right:0!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+  z-index:1300!important;
+  width:48px!important;
+  min-height:112px!important;
+  padding:12px 8px!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
+  border:1px solid var(--line)!important;
+  border-right:0!important;
+  border-radius:15px 0 0 15px!important;
+  background:var(--sea)!important;
+  color:#fff!important;
+  box-shadow:0 4px 14px #0003!important;
+  cursor:pointer!important;
+  font:700 12px/1 "Figtree",sans-serif!important;
+}
+.stop-bookmark .cat-toggle-icon{font-size:19px!important;line-height:1!important}
+.stop-bookmark .cat-toggle-label{
+  writing-mode:vertical-rl!important;
+  transform:rotate(180deg)!important;
+  font-size:9px!important;
+  letter-spacing:1px!important;
+}
+.stop-bookmark:hover{background:var(--mares)!important;color:#1b1206!important}
+
+/* the existing mirrored drawer is opened by the standalone bookmark */
+.stop-edge .cat-toggle{display:none!important}
+@media(max-width:1000px){
+  .stop-bookmark{width:43px!important;min-height:96px!important}
+}
+@media(max-width:600px){
+  .stop-bookmark{width:40px!important;min-height:88px!important}
+}
