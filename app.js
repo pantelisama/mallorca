@@ -227,7 +227,7 @@ async function fetchCommonsPhoto(s){
   const pages=Object.values(((await res.json()).query||{}).pages||{}).sort((a,b)=>(a.index||0)-(b.index||0));
   const words=s.n.toLowerCase().split(/[^a-zà-ÿ]+/).filter(w=>w.length>3);
   const imgs=pages.filter(p=>p.imageinfo&&p.imageinfo[0]&&/jpeg|png/.test(p.imageinfo[0].mime)&&p.imageinfo[0].thumburl);
-  const best=imgs.find(p=>words.some(w=>p.title.toLowerCase().includes(w)))||imgs[0];
+  const best=imgs.find(p=>words.filter(w=>w.length>4).some(w=>p.title.toLowerCase().includes(w)));
   return best?{photo:best.imageinfo[0].thumburl}:null;
 }
 let enrichQueue=[],enrichRunning=false;
