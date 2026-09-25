@@ -71,28 +71,35 @@ const areas=[
 ];
 
 const days=[
-  {id:"fri",label:"Παρ 16",title:"Παρασκευή 16 · Άφιξη → Alcúdia",sub:"Άφιξη → rental → Alcúdia Old Town → Pollença → βράδυ Alcúdia",plan:[
-    ["Άφιξη","✈️ Άφιξη & rental car","Παίρνετε το αυτοκίνητο και ξεκινάτε βόρεια.","experiences","Αεροδρόμιο → Alcúdia"],
-    ["Απόγευμα","Alcúdia Old Town","Πρώτη βόλτα στα τείχη και στα στενά της παλιάς πόλης.","villages","Alcúdia → Pollença"],
-    ["Sunset","Pollença","Βόλτα στην παλιά πόλη και Plaça Major.","villages","Pollença → Alcúdia"],
-    ["Βράδυ","Alcúdia","Dinner και βραδινή βόλτα στην Alcúdia.","food","Μένουμε Alcúdia"]
+  {id:"fri",label:"Παρ 16",title:"Παρασκευή 16 · Airport → Alcúdia",sub:"Νερά → φύση → φαγητό με θέα → Alcúdia",plan:[
+    ["Άφιξη","✈️ Airport → rental","Παίρνετε το αυτοκίνητο και ξεκινάτε βόρεια.","experiences","Airport → Playa de Muro"],
+    ["Πρώτη στάση","Playa de Muro","Τιρκουάζ νερά, μεγάλη αμμουδιά και πρώτη βουτιά/βόλτα στη θάλασσα.","beaches","Playa de Muro → s'Albufera"],
+    ["Φύση","s'Albufera","Μικρή βόλτα στο φυσικό πάρκο και birdwatching.","experiences","s'Albufera → Alcúdia"],
+    ["Φαγητό","Port d’Alcúdia","Lunch/seafood δίπλα στη θάλασσα και χαλαρή βόλτα στη μαρίνα.","food","Port d’Alcúdia → Alcúdia Old Town"],
+    ["Απόγευμα","Alcúdia Old Town","Μεσαιωνικά τείχη, παλιά σοκάκια και μικρά shops.","villages","Alcúdia"],
+    ["Βράδυ","Alcúdia","Sunset και dinner στην παλιά πόλη ή στο port.","food","Μένουμε Alcúdia"]
   ]},
-  {id:"sat",label:"Σαβ 17",title:"Σάββατο 17 · Sóller → Deià → Valldemossa",sub:"Sóller → Port de Sóller → Deià → Valldemossa → επιστροφή Alcúdia",plan:[
-    ["Πρωί","Sóller","Βόλτα στο κέντρο και καφές στην πλατεία.","villages","Alcúdia → Sóller"],
-    ["Μεσημέρι","Port de Sóller","Lunch δίπλα στη θάλασσα και βόλτα στο λιμάνι.","beaches","Sóller → Port de Sóller"],
-    ["Απόγευμα","Deià","Χωριό, θέα και Cala Deià αν υπάρχει χρόνος.","villages","Port de Sóller → Deià"],
-    ["Αργά","Valldemossa","Βόλτα στο χωριό και επιστροφή στην Alcúdia.","villages","Valldemossa → Alcúdia"]
+  {id:"sat",label:"Σαβ 17",title:"Σάββατο 17 · Tramuntana Road Trip",sub:"Pollença → Formentor → Sóller → Deià → Valldemossa → Alcúdia",plan:[
+    ["Πρωί","Pollença","Calvari steps + Plaça Major + καφές.","villages","Alcúdia → Pollença"],
+    ["Πρωί","Formentor","Mirador Es Colomer + Talaia d’Albercutx + scenic drive προς το cap.","sights","Pollença → Formentor"],
+    ["Μεσημέρι","Formentor Beach","Παραλία και lunch δίπλα στο νερό.","beaches","Formentor → Sóller"],
+    ["Απόγευμα","Sóller","Πλατεία, παλιά πόλη και κάτι γλυκό/παγωτό.","villages","Sóller → Port de Sóller"],
+    ["Απόγευμα","Port de Sóller","Λιμάνι, θάλασσα και drink/φαγητό με θέα.","beaches","Port de Sóller → Deià"],
+    ["Αργά","Deià","Πέτρινο χωριό + Cala Deià / seafood αν υπάρχει χρόνος.","villages","Deià → Valldemossa"],
+    ["Βράδυ","Valldemossa","Βόλτα στα σοκάκια + coca de patata.","villages","Valldemossa → Alcúdia"]
   ]},
-  {id:"sun",label:"Κυρ 18",title:"Κυριακή 18 · Formentor → Palma",sub:"Formentor → παραλία/Alcúdia → απόγευμα Palma → διαμονή Palma",plan:[
-    ["Πρωί","Formentor","Mirador + Cap de Formentor, πριν γεμίσει ο κόσμος.","sights","Alcúdia → Formentor"],
-    ["Μεσημέρι","Παραλία Alcúdia","Θάλασσα και χαλαρό lunch πριν φύγετε.","beaches","Formentor → Alcúdia"],
-    ["Απόγευμα","Palma","Check-in και πρώτη βόλτα στο old town.","villages","Alcúdia → Palma"],
-    ["Βράδυ","Palma","Dinner και βραδινή βόλτα στο κέντρο.","food","Μένουμε Palma"]
+  {id:"sun",label:"Κυρ 18",title:"Κυριακή 18 · Alcúdia → Palma",sub:"Πρωινή βόλτα και θάλασσα → Palma το απόγευμα",plan:[
+    ["Πρωί","Playa de Muro","Χαλαρό πρωινό δίπλα στα τιρκουάζ νερά.","beaches","Alcúdia → Playa de Muro"],
+    ["Πρωί","Artà","Old town + Sant Salvador sanctuary.","villages","Playa de Muro → Artà"],
+    ["Μεσημέρι","Capdepera","Castell de Capdepera και θέα προς την ανατολική ακτή.","sights","Artà → Capdepera"],
+    ["Μεσημέρι","Cala Ratjada","Λιμάνι + θάλασσα + lunch.","beaches","Capdepera → Cala Ratjada"],
+    ["Απόγευμα","Palma","Check-in και old town: La Seu → Almudaina → La Lonja → Born.","villages","Cala Ratjada → Palma"],
+    ["Βράδυ","Palma","Dinner / drinks στη Santa Catalina ή στο old town.","food","Μένουμε Palma"]
   ]},
-  {id:"mon",label:"Δευ 19",title:"Δευτέρα 19 · Palma → αεροδρόμιο",sub:"Palma πρωί → αεροδρόμιο ✈️",plan:[
-    ["Πρωί","Palma Old Town","Τελευταία βόλτα, καφές και ό,τι δεν προλάβατε.","villages","Palma"],
-    ["Late morning","Lunch / coffee","Τελευταίο brunch ή coffee stop πριν φύγετε.","food","Palma → αεροδρόμιο"],
-    ["Αναχώρηση","✈️ Αεροδρόμιο","Rental return και πτήση.","experiences","Palma → Airport"]
+  {id:"mon",label:"Δευ 19",title:"Δευτέρα 19 · Palma → Airport",sub:"Τελευταία Palma → αεροδρόμιο",plan:[
+    ["Πρωί","Palma Old Town","Τελευταία βόλτα, Cathedral/Arab Baths και καφές.","villages","Palma"],
+    ["Late morning","Mercat de l’Olivar","Breakfast/brunch και τελευταία local γεύση.","food","Palma → Airport"],
+    ["Αναχώρηση","✈️ Airport","Rental return και πτήση.","experiences","Palma → Airport"]
   ]}
 ];
 let currentDay="fri";
