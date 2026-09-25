@@ -191,277 +191,86 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--mares);outline-offs
 }
 @media (prefers-reduced-motion:reduce){.cat-drawer{transition:none}}
 
-/* Edge drawers: category slider on the left, day stops slider on the right */
-.cat-drawer,.stop-drawer{position:fixed;top:50%;z-index:1200;display:flex;align-items:center;pointer-events:none;transition:transform .28s cubic-bezier(.2,.8,.2,1);touch-action:none}
-.cat-drawer{left:0;transform:translate(-236px,-50%)}
-.cat-drawer.open{transform:translate(0,-50%)}
-.stop-drawer{right:0;transform:translate(236px,-50%)}
-.stop-drawer.open{transform:translate(0,-50%)}
-.cat-panel,.stop-panel{pointer-events:auto;width:236px;max-height:min(72vh,620px);overflow-y:auto;background:var(--paper);border:1px solid var(--line);box-shadow:0 8px 28px #0004;padding:12px}
-.cat-panel{border-left:0;border-radius:0 var(--r-lg) var(--r-lg) 0}
-.stop-panel{border-right:0;border-radius:var(--r-lg) 0 0 var(--r-lg)}
-.cat-toggle,.stop-toggle{pointer-events:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;width:48px;min-height:112px;padding:12px 8px;border:1px solid var(--line);background:var(--sea);color:#fff;box-shadow:0 4px 14px #0003;cursor:pointer;font:700 12px/1 "Figtree",sans-serif}
-.cat-toggle{border-left:0;border-radius:0 15px 15px 0}
-.stop-toggle{border-right:0;border-radius:15px 0 0 15px}
-.cat-toggle-icon,.stop-toggle-icon{font-size:19px;line-height:1}
-.cat-toggle-label,.stop-toggle-label{font-size:9px;letter-spacing:1px;writing-mode:vertical-rl;transform:rotate(180deg)}
-.cat-drawer.open .cat-toggle,.stop-drawer.open .stop-toggle{background:var(--mares);color:#1b1206}
-.cat-head,.stop-head{display:flex;align-items:center;justify-content:space-between;margin:0 2px 9px;font-size:14px}
-.cat-close,.stop-close{border:0;background:transparent;color:var(--muted);font-size:22px;line-height:1;cursor:pointer}
+
+/* Edge drawers: one Places card on the left, mirrored Stops bookmark/panel on the right */
+.cat-drawer{
+  position:fixed;left:0;top:50%;z-index:1200;display:flex;align-items:center;
+  pointer-events:none;transform:translateX(-236px) translateY(-50%);
+  transition:transform .28s cubic-bezier(.2,.8,.2,1);touch-action:none;
+}
+.cat-drawer.open{transform:translateX(0) translateY(-50%)}
+.cat-panel{
+  order:1;pointer-events:auto;width:236px;max-height:min(72vh,620px);overflow-y:auto;
+  background:var(--paper);border:1px solid var(--line);border-left:0;
+  border-radius:0 var(--r-lg) var(--r-lg) 0;box-shadow:0 8px 28px #0004;padding:12px;
+}
+.cat-toggle{
+  order:2;pointer-events:auto;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:8px;width:48px;min-height:112px;padding:12px 8px;
+  border:1px solid var(--line);border-left:0;border-radius:0 15px 15px 0;
+  background:var(--sea);color:#fff;box-shadow:0 4px 14px #0003;cursor:pointer;
+  font:700 12px/1 "Figtree",sans-serif;
+}
+.cat-drawer.open .cat-toggle{background:var(--mares);color:#1b1206}
+.cat-toggle-icon{font-size:19px;line-height:1}
+.cat-toggle-label{font-size:9px;letter-spacing:1px;writing-mode:vertical-rl;transform:rotate(180deg)}
+.cat-head{display:flex;align-items:center;justify-content:space-between;margin:0 2px 9px;font-size:14px}
+.cat-close{border:0;background:transparent;color:var(--muted);font-size:22px;line-height:1;cursor:pointer}
 .cat-drawer #filters{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;overflow:visible}
-.cat-drawer .filter{display:grid;grid-template-columns:26px 1fr auto;align-items:center;width:100%;padding:10px 11px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--paper);color:var(--ink);font-weight:600;text-align:left;cursor:pointer}
+.cat-drawer .filter{
+  display:grid;grid-template-columns:26px 1fr auto;align-items:center;width:100%;
+  padding:10px 11px;border:1px solid var(--line);border-radius:var(--r-sm);
+  background:var(--paper);color:var(--ink);font-weight:600;text-align:left;cursor:pointer;
+}
 .cat-drawer .filter.active{background:var(--mares);border-color:var(--mares);color:#1b1206}
-.cat-icon{font-size:18px;text-align:center}
-.cat-label{font-size:13px}
-.cat-count{font-size:11px;opacity:.6}
-.cat-hint,.stop-hint{font-size:10px;color:var(--muted);line-height:1.35;margin:9px 2px 2px}
-.stop-list{display:grid;gap:7px}
-.stop-list .day-card{padding:10px 11px;border-radius:12px;gap:9px}
-.stop-list .day-number{min-width:25px;width:25px;height:25px;font-size:10px}
-.stop-list .day-content h3{font-size:14px;margin:2px 0}
-.stop-list .day-content p,.stop-list .route,.stop-list .gmaps-link,.stop-list .spot-rating,.stop-list .spot-extra{display:none}
-.stop-list .day-content .time{font-size:9px}
-.stop-list .day-card{cursor:pointer}
-.stop-list .day-card:hover{transform:translateX(-2px)}
-/* Map-only action buttons */
-.map-actions{display:flex;gap:7px;padding:0 0 10px 10px}
-.map-action{width:42px;height:42px;border:2px solid #fff;border-radius:12px;background:rgba(255,255,255,.96);box-shadow:0 2px 8px #0004;font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.map-action:hover{background:var(--sea);color:#fff}
-.map-action.route-action{border-color:#146BFF}
-.map-action.nav-action{border-color:var(--pine)}
-/* Keep the main page clean: filters/stops live on edge drawers */
-aside>#filters{display:none}
-@media(max-width:1000px){
-  .cat-drawer{transform:translate(-218px,-50%)}
-  .stop-drawer{transform:translate(218px,-50%)}
-  .cat-panel,.stop-panel{width:218px;max-height:70vh}
-  .cat-toggle,.stop-toggle{width:43px;min-height:96px}
-  .cat-toggle-label,.stop-toggle b{font-size:8px}
-  .stop-list .day-card{padding:9px}
-}
-@media(max-width:600px){
-  .cat-panel,.stop-panel{width:205px;max-height:68vh}
-  .cat-drawer{transform:translate(-205px,-50%)}
-  .stop-drawer{transform:translate(205px,-50%)}
-  .cat-toggle,.stop-toggle{width:40px;min-height:88px}
-}
+.cat-icon{font-size:18px;text-align:center}.cat-label{font-size:13px}.cat-count{font-size:11px;opacity:.6}
+.cat-hint{font-size:10px;color:var(--muted);line-height:1.35;margin:9px 2px 2px}
 
-/* Route stops live exclusively in the edge widget. Never render them in the main programme panel. */
-.day-panel .day-grid{display:none!important}
-.day-panel .day-tools{display:none!important}
-
-
-@media(max-width:1000px){
-  .cat-drawer{transform:translate(-218px,-50%)}
-  .stop-drawer{transform:translate(218px,-50%)}
-  .cat-panel,.stop-panel{width:218px;max-height:70vh}
-  .cat-toggle,.stop-toggle{width:43px;min-height:96px}
-}
-@media(max-width:600px){
-  .cat-panel,.stop-panel{width:205px;max-height:68vh}
-  .cat-drawer{transform:translate(-205px,-50%)}
-  .stop-drawer{transform:translate(205px,-50%)}
-  .cat-toggle,.stop-toggle{width:40px;min-height:88px}
-}
-/* Main programme contains no route-stop cards. */
-.day-panel .day-grid,.day-panel .day-tools{display:none!important}
-
-/* Stops is the exact Places widget mirrored to the right */
-.stop-drawer{left:auto!important;right:0!important;transform:translate(205px,-50%)!important}
-.stop-drawer.open{transform:translate(0,-50%)!important}
-.stop-drawer .stop-toggle{border-left:1px solid var(--line)!important;border-right:0!important;border-radius:0 15px 15px 0!important;order:2}
-.stop-drawer .stop-panel{order:1;border-left:0!important;border-right:1px solid var(--line)!important;border-radius:15px 0 0 15px!important}
-.stop-drawer .stop-toggle-icon,.stop-drawer .stop-toggle-label{display:block}
-
-/* Stops widget removed from UI. */
-.stop-drawer{display:none!important}
-
-/* Right route stops card */
-.route-widget{position:absolute;right:16px;top:16px;z-index:700;background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 28px #0003;width:220px;max-height:48vh;overflow:hidden}.route-widget-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line);font-size:12px;letter-spacing:.08em}.route-widget-head span{font-size:11px;color:var(--muted)}.route-widget-list{overflow:auto;max-height:calc(48vh - 45px);padding:6px 0}.route-stop{display:flex;gap:10px;align-items:center;padding:8px 14px;font-size:13px}.route-stop b{font-size:10px;color:var(--muted);min-width:20px}.route-stop span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}@media(max-width:760px){.route-widget{right:10px;top:10px;width:190px;max-height:38vh}.route-widget-list{max-height:calc(38vh - 45px)}}
-
-/* Final right edge stops drawer: same treatment as ΜΕΡΗ, mirrored on the right. */
-.stop-drawer{display:flex!important;left:auto!important;right:0!important;top:50%!important;width:auto!important;transform:translate(236px,-50%)!important;position:fixed!important;z-index:1200!important}
-.stop-drawer.open{transform:translate(0,-50%)!important}
-.stop-drawer .stop-panel{order:1;width:236px!important;max-height:min(72vh,620px);overflow-y:auto;background:var(--paper);border:1px solid var(--line);border-right:0;border-radius:var(--r-lg) 0 0 var(--r-lg)!important;padding:12px;box-shadow:0 8px 28px #0004;pointer-events:auto}
-.stop-drawer .stop-toggle{order:2;width:48px;min-height:112px;padding:12px 8px;border:1px solid var(--line);border-left:0!important;border-right:0!important;border-radius:15px 0 0 15px!important;background:var(--sea);color:#fff;box-shadow:0 4px 14px #0003}
-.stop-drawer .stop-list{display:grid;gap:7px}
-.stop-drawer .stop-list .day-card{padding:10px 11px;border-radius:12px;gap:9px;cursor:pointer}
-.stop-drawer .stop-list .day-card:hover{transform:translateX(-2px)}
-.stop-drawer .stop-list .day-number{min-width:25px;width:25px;height:25px;font-size:10px}
-.stop-drawer .stop-list .day-content h3{font-size:14px;margin:2px 0}
-.stop-drawer .stop-list .day-content .time{font-size:9px}
-.stop-drawer .stop-toggle-label{writing-mode:vertical-rl;transform:rotate(180deg);font-size:9px;letter-spacing:1px}
-.stop-drawer .stop-toggle-icon{font-size:19px;line-height:1}
-.route-widget{display:none!important}
-@media(max-width:1000px){
-  .stop-drawer{transform:translate(218px,-50%)!important}
-  .stop-drawer.open{transform:translate(0,-50%)!important}
-  .stop-drawer .stop-panel{width:218px!important;max-height:70vh}
-  .stop-drawer .stop-toggle{width:43px;min-height:96px}
-}
-@media(max-width:600px){
-  .stop-drawer{transform:translate(205px,-50%)!important}
-  .stop-drawer.open{transform:translate(0,-50%)!important}
-  .stop-drawer .stop-panel{width:205px!important;max-height:68vh}
-  .stop-drawer .stop-toggle{width:40px;min-height:88px}
-}
-
-/* FINAL SYMMETRIC RIGHT HANDLE — exact mirror of ΜΕΡΗ */
-.stop-drawer{
-  display:flex!important;
-  position:fixed!important;
-  top:50%!important;
-  right:0!important;
-  left:auto!important;
-  margin:0!important;
-  padding:0!important;
-  z-index:9999!important;
-  align-items:center!important;
-  width:auto!important;
-  transform:translateX(236px) translateY(-50%)!important;
-}
-.stop-drawer.open{transform:translateX(0) translateY(-50%)!important}
-.stop-drawer .stop-panel{
-  order:1!important;
-  width:236px!important;
-  box-sizing:border-box!important;
-  max-height:min(72vh,620px)!important;
-  overflow-y:auto!important;
-  background:var(--paper)!important;
-  border:1px solid var(--line)!important;
-  border-right:0!important;
-  border-radius:var(--r-lg) 0 0 var(--r-lg)!important;
-  box-shadow:0 8px 28px #0004!important;
-  padding:12px!important;
-}
-.stop-drawer .stop-toggle{
-  order:2!important;
-  flex:0 0 48px!important;
-  width:48px!important;
-  min-height:112px!important;
-  box-sizing:border-box!important;
-  display:flex!important;
-  flex-direction:column!important;
-  align-items:center!important;
-  justify-content:center!important;
-  gap:8px!important;
-  padding:12px 8px!important;
-  border:1px solid var(--line)!important;
-  border-left:0!important;
-  border-right:0!important;
-  border-radius:15px 0 0 15px!important;
-  background:var(--sea)!important;
-  color:#fff!important;
-  box-shadow:0 4px 14px #0003!important;
-}
-.stop-drawer .stop-toggle-icon{font-size:19px!important;line-height:1!important}
-.stop-drawer .stop-toggle-label{
-  writing-mode:vertical-rl!important;
-  transform:rotate(180deg)!important;
-  font-size:9px!important;
-  letter-spacing:1px!important;
-}
-.stop-drawer .stop-list{display:grid!important;gap:7px!important}
-.stop-drawer .stop-list .day-card{padding:10px 11px!important;border-radius:12px!important;cursor:pointer!important}
-.route-widget{display:none!important}
-@media(max-width:1000px){
-  .stop-drawer{transform:translateX(218px) translateY(-50%)!important}
-  .stop-drawer.open{transform:translateX(0) translateY(-50%)!important}
-  .stop-drawer .stop-panel{width:218px!important}
-  .stop-drawer .stop-toggle{flex-basis:43px!important;width:43px!important;min-height:96px!important}
-}
-@media(max-width:600px){
-  .stop-drawer{transform:translateX(205px) translateY(-50%)!important}
-  .stop-drawer.open{transform:translateX(0) translateY(-50%)!important}
-  .stop-drawer .stop-panel{width:205px!important}
-  .stop-drawer .stop-toggle{flex-basis:40px!important;width:40px!important;min-height:88px!important}
-}
-
-/* Two identical edge cards: ΜΕΡΗ left + ΣΤΑΣΕΙΣ right */
+/* Exact mirrored Stops card */
 .stop-edge{
-  left:auto!important;
-  right:0!important;
-  top:50%!important;
+  display:flex!important;position:fixed!important;left:auto!important;right:0!important;top:50%!important;
+  z-index:1200!important;align-items:center!important;pointer-events:none!important;
   transform:translateX(236px) translateY(-50%)!important;
+  transition:transform .28s cubic-bezier(.2,.8,.2,1)!important;touch-action:none!important;
 }
 .stop-edge.open{transform:translateX(0) translateY(-50%)!important}
 .stop-edge .cat-panel{
-  order:1!important;
-  border-left:1px solid var(--line)!important;
-  border-right:0!important;
+  order:1!important;pointer-events:auto!important;width:236px!important;
+  max-height:min(72vh,620px)!important;overflow-y:auto!important;
+  background:var(--paper)!important;border:1px solid var(--line)!important;
+  border-right:0!important;border-left:1px solid var(--line)!important;
   border-radius:var(--r-lg) 0 0 var(--r-lg)!important;
+  box-shadow:0 8px 28px #0004!important;padding:12px!important;
 }
 .stop-edge .cat-toggle{
-  order:2!important;
-  border-left:1px solid var(--line)!important;
-  border-right:0!important;
+  order:2!important;pointer-events:auto!important;display:flex!important;
+  border:1px solid var(--line)!important;border-right:0!important;border-left:0!important;
   border-radius:15px 0 0 15px!important;
 }
 .stop-edge #stopFilters{
-  display:flex!important;
-  flex-direction:column!important;
-  gap:6px!important;
-  margin:0!important;
-  padding:0!important;
+  display:flex!important;flex-direction:column!important;gap:6px!important;
+  margin:0!important;padding:0!important;overflow:visible!important;
 }
 .stop-edge #stopFilters .filter{
-  display:grid!important;
-  grid-template-columns:26px 1fr!important;
-  align-items:center!important;
+  display:grid!important;grid-template-columns:26px 1fr!important;
+  align-items:center!important;width:100%!important;
 }
-.stop-drawer{display:none!important}
+.stop-edge .stop-close{border:0;background:transparent;color:var(--muted);font-size:22px;line-height:1;cursor:pointer}
 .route-widget{display:none!important}
+
 @media(max-width:1000px){
- .stop-edge{transform:translateX(218px) translateY(-50%)!important}
- .stop-edge.open{transform:translateX(0) translateY(-50%)!important}
- .stop-edge .cat-panel{width:218px!important}
+  .cat-drawer{transform:translateX(-218px) translateY(-50%)}
+  .cat-panel{width:218px}.cat-toggle{width:43px;min-height:96px}
+  .stop-edge{transform:translateX(218px) translateY(-50%)!important}
+  .stop-edge.open{transform:translateX(0) translateY(-50%)!important}
+  .stop-edge .cat-panel{width:218px!important}
+  .stop-edge .cat-toggle{width:43px!important;min-height:96px!important}
 }
 @media(max-width:600px){
- .stop-edge{transform:translateX(205px) translateY(-50%)!important}
- .stop-edge.open{transform:translateX(0) translateY(-50%)!important}
- .stop-edge .cat-panel{width:205px!important}
-}
-
-/* Standalone right bookmark: exact mirror of the ΜΕΡΗ bookmark */
-.stop-bookmark{
-  position:fixed!important;
-  right:0!important;
-  top:50%!important;
-  transform:translateY(-50%)!important;
-  z-index:1300!important;
-  width:48px!important;
-  min-height:112px!important;
-  padding:12px 8px!important;
-  margin:0!important;
-  box-sizing:border-box!important;
-  display:flex!important;
-  flex-direction:column!important;
-  align-items:center!important;
-  justify-content:center!important;
-  gap:8px!important;
-  border:1px solid var(--line)!important;
-  border-right:0!important;
-  border-radius:15px 0 0 15px!important;
-  background:var(--sea)!important;
-  color:#fff!important;
-  box-shadow:0 4px 14px #0003!important;
-  cursor:pointer!important;
-  font:700 12px/1 "Figtree",sans-serif!important;
-}
-.stop-bookmark .cat-toggle-icon{font-size:19px!important;line-height:1!important}
-.stop-bookmark .cat-toggle-label{
-  writing-mode:vertical-rl!important;
-  transform:rotate(180deg)!important;
-  font-size:9px!important;
-  letter-spacing:1px!important;
-}
-.stop-bookmark:hover{background:var(--mares)!important;color:#1b1206!important}
-
-/* the existing mirrored drawer is opened by the standalone bookmark */
-.stop-edge .cat-toggle{display:none!important}
-@media(max-width:1000px){
-  .stop-bookmark{width:43px!important;min-height:96px!important}
-}
-@media(max-width:600px){
-  .stop-bookmark{width:40px!important;min-height:88px!important}
+  .cat-drawer{transform:translateX(-205px) translateY(-50%)}
+  .cat-panel{width:205px}.cat-toggle{width:40px;min-height:88px}
+  .stop-edge{transform:translateX(205px) translateY(-50%)!important}
+  .stop-edge.open{transform:translateX(0) translateY(-50%)!important}
+  .stop-edge .cat-panel{width:205px!important}
+  .stop-edge .cat-toggle{width:40px!important;min-height:88px!important}
 }
