@@ -244,3 +244,7 @@ aside>#filters{display:none}
   .stop-drawer{transform:translate(205px,-50%)}
   .cat-toggle,.stop-toggle{width:40px;min-height:88px}
 }
+
+/* Route stops live exclusively in the edge widget. Never render them in the main programme panel. */
+.day-panel .day-grid{display:none!important}
+.day-panel .day-tools{display:none!important}
