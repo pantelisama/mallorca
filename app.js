@@ -380,22 +380,6 @@ function setCatVisible(cat,on){if(!leafletReady||!map||!markerLayers[cat])return
 function syncCategoryCards(){document.querySelectorAll("#plan .spot-card[data-cat]").forEach(card=>{const layer=markerLayers[card.dataset.cat];card.style.display=(!map||!leafletReady||!layer||map.hasLayer(layer))?"":"none";});}
 function toggleCat(cat){if(!leafletReady||!map||!markerLayers[cat])return;setCatVisible(cat,!map.hasLayer(markerLayers[cat]));syncCategoryCards();}
 
-function ensureEdgeDrawers(){
-  let cat=document.querySelector(".cat-drawer");
-  if(!cat){
-    cat=document.createElement("div");cat.className="cat-drawer";
-    cat.innerHTML="<div class='cat-panel'><div class='cat-head'><strong>Μέρη στον χάρτη</strong><button class='cat-close' type='button'>×</button></div><div id='filters'></div><p class='cat-hint'>Σύρε από την αριστερή άκρη ή πάτησε το handle.</p></div><button class='cat-toggle' type='button' aria-label='Άνοιξε κατηγορίες'><span class='cat-toggle-icon'>🧭</span><span class='cat-toggle-label'>ΜΕΡΗ</span></button>";
-    document.body.appendChild(cat);
-    const toggle=cat.querySelector(".cat-toggle"),close=cat.querySelector(".cat-close");
-    toggle.addEventListener("click",()=>cat.classList.toggle("open"));close.addEventListener("click",()=>cat.classList.remove("open"));
-    installEdgeSwipe(cat,"left");
-  }
-  // Stops widget removed from UI; route stops remain available to route logic.
-  const d=days.find(x=>x.id===currentDay)||days[0],r=routes[currentDay];
-  const list=r?r.stops.map(stopCardHtml).join(""):d.plan.map(planCardHtml).join("");
-  stops.querySelector(".stop-list").innerHTML=list;
-  syncCategoryCards();
-}
 function installEdgeSwipe(drawer,side){
   let sx=0,sy=0,tracking=false;
   drawer.addEventListener("pointerdown",e=>{tracking=true;sx=e.clientX;sy=e.clientY;drawer.setPointerCapture?.(e.pointerId);});
