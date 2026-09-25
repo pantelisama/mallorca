@@ -275,3 +275,6 @@ aside>#filters{display:none}
 
 /* Stops widget removed from UI. */
 .stop-drawer{display:none!important}
+
+/* Right route stops card */
+.route-widget{position:absolute;right:16px;top:16px;z-index:700;background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 28px #0003;width:220px;max-height:48vh;overflow:hidden}.route-widget-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line);font-size:12px;letter-spacing:.08em}.route-widget-head span{font-size:11px;color:var(--muted)}.route-widget-list{overflow:auto;max-height:calc(48vh - 45px);padding:6px 0}.route-stop{display:flex;gap:10px;align-items:center;padding:8px 14px;font-size:13px}.route-stop b{font-size:10px;color:var(--muted);min-width:20px}.route-stop span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}@media(max-width:760px){.route-widget{right:10px;top:10px;width:190px;max-height:38vh}.route-widget-list{max-height:calc(38vh - 45px)}}
