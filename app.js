@@ -345,17 +345,19 @@ function ensureEdgeDrawers(route){
     cat.querySelector(".cat-close").addEventListener("click",()=>cat.classList.remove("open"));
     if(typeof installEdgeSwipe==="function")installEdgeSwipe(cat,"left");
   }
-  let stops=document.querySelector(".stop-drawer");
-  if(!stops){
-    stops=document.createElement("div");stops.className="stop-drawer";
-    stops.innerHTML="<div class='stop-panel'><div class='stop-head'><strong>Στάσεις</strong><button class='stop-close' type='button'>×</button></div><div class='stop-list'></div><p class='stop-hint'>Πάτησε στάση για εστίαση στον χάρτη.</p></div><button class='stop-toggle' type='button' aria-label='Άνοιξε στάσεις'><span class='stop-toggle-icon'>📍</span><span class='stop-toggle-label'>ΣΤΑΣΕΙΣ</span></button>";
-    document.body.appendChild(stops);
-    stops.querySelector(".stop-toggle").addEventListener("click",()=>stops.classList.toggle("open"));
-    stops.querySelector(".stop-close").addEventListener("click",()=>stops.classList.remove("open"));
-    if(typeof installEdgeSwipe==="function")installEdgeSwipe(stops,"right");
+  const stops=document.querySelector("#stopDrawer");
+  if(stops){
+    stops.querySelector(".stop-list").innerHTML=route
+      ?route.stops.map((x,i)=>"<article class='day-card stop-item' data-stop-index='"+i+"'><div class='day-number'>"+String(i+1).padStart(2,"0")+"</div><div class='day-content'><div class='time'>ΣΤΑΣΗ</div><h3>"+escAttr(x.n)+"</h3></div></article>").join("")
+      :"<p class='empty-note'>Δεν υπάρχουν στάσεις.</p>";
+    if(!stops.dataset.bound){
+      stops.dataset.bound="1";
+      stops.querySelector(".stop-toggle").addEventListener("click",()=>stops.classList.toggle("open"));
+      stops.querySelector(".stop-close").addEventListener("click",()=>stops.classList.remove("open"));
+      if(typeof installEdgeSwipe==="function")installEdgeSwipe(stops,"right");
+    }
+    stops.classList.remove("open");
   }
-  stops.querySelector(".stop-list").innerHTML=route?route.stops.map((x,i)=>"<article class='day-card stop-item' data-stop-index='"+i+"'><div class='day-number'>"+String(i+1).padStart(2,"0")+"</div><div class='day-content'><div class='time'>ΣΤΑΣΗ</div><h3>"+escAttr(x.n)+"</h3></div></article>").join(""):"<p class='empty-note'>Δεν υπάρχουν στάσεις.</p>";
-  stops.classList.remove("open");
 }
 function render(){
 const day=days.find(d=>d.id===currentDay)||days[0];
