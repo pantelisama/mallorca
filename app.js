@@ -107,6 +107,20 @@ if(leafletReady)areas.forEach(a=>{const poly=L.polygon(a.p,{color:"#18211d",weig
 // sat:{stops:[{n:"Όνομα στάσης",c:[lat,lng],type:"food|beach|village|sight",size:"long|small"}]}
 // Το "long" = μεγάλη στάση (μεγαλύτερη πινέζα). Το όνομα ταιριάζει με μέρος από τη λίστα spots.
 const routes={
+  sat:{stops:[
+    {n:"Alcúdia Old Town",c:[39.8525,3.1192],type:"village",size:"long"},
+    {n:"Sóller",c:[39.7671,2.7158],type:"village",size:"long"},
+    {n:"Port de Sóller",c:[39.7968,2.6960],type:"beach",size:"long"},
+    {n:"Deià",c:[39.7486,2.6486],type:"village",size:"long"},
+    {n:"Valldemossa",c:[39.7115,2.6226],type:"village",size:"long"},
+    {n:"Alcúdia Old Town",c:[39.8525,3.1192],type:"village",size:"long"}
+  ]},
+  sun:{stops:[
+    {n:"Alcúdia Old Town",c:[39.8525,3.1192],type:"village",size:"long"},
+    {n:"Formentor",c:[39.9596,3.2099],type:"sight",size:"long"},
+    {n:"Alcúdia Beach",c:[39.8425,3.1215],type:"beach",size:"long"},
+    {n:"Palma",c:[39.5696,2.6502],type:"village",size:"long"}
+  ]}
 };
 let routeLayer=leafletReady?L.layerGroup():null,routeVisible=false,routeToken=0;
 function escAttr(v){return String(v).replace(/&/g,"&amp;").replace(/'/g,"&#39;").replace(/"/g,"&quot;").replace(/</g,"&lt;");}
@@ -196,7 +210,17 @@ try{enrich=JSON.parse(localStorage.getItem(ENRICH_STORE)||"{}")||{};}catch(e){en
 function saveEnrich(){try{localStorage.setItem(ENRICH_STORE,JSON.stringify(enrich));}catch(e){}}
 // Hardcoded stars always win over anything cached from earlier runtime lookups.
 // Hardcoded stars win; anything not hardcoded is filled in from Google when a key is set.
-function photoFallback(s,i){const q=s.cat==="wineries"?"winery,mallorca":s.cat==="beaches"?"beach,mallorca":s.cat==="villages"?"village,mallorca":s.cat==="hotels"?"hotel,mallorca":s.cat==="sights"?"mountain,mallorca":"restaurant,mallorca";return "https://loremflickr.com/900/650/"+q+"?lock="+(100+i);}
+function photoFallback(s,i){
+  const photos={
+    wineries:"https://wine-partners.at/img/containers/assets/clients/baur_au_lac_vins/bodega-ribas/text-images/bodega-ribas-webiste-newsdetail-text-image-c-bodega-ribas-2.png/beb49e9de395b3d168941027b47fc730.png",
+    beaches:"https://www.barcoscalobra.com/wp-content/uploads/2019/05/Cala-deia-1.jpg",
+    villages:"https://a.travel-assets.com/findyours-php/viewfinder/images/res40/36000/36604.jpg",
+    sights:"https://cdn.atrapalo.com/o/event/4931618/1702627.jpg?auto=avif&quality=75&width=1280",
+    hotels:"https://cdn.thefork.com/tf-lab/image/upload/f_auto,q_auto,g_auto:subject,w_488,h_488,c_fill/customer/0e3e3480-80df-41bc-aed0-f76d0335d2bf/bba6cef5-5af3-43be-92ef-a5b28e5a6ca1.jpg",
+    food:"https://lumaguide.sfo3.digitaloceanspaces.com/media/place_images/2025/07/30/google_place_ChIJry7HVOyTlxIReL37j5Z29n0_photo_1.jpg"
+  };
+  return photos[s.cat]||photos.food;
+}
 function spotData(s){const e=enrich[s.n]||{};const i=spots.indexOf(s);return {photo:s.photo||e.photo||photoFallback(s,i),rating:s.rating||e.rating||null,reviews:s.reviews||e.reviews||null,gmap:s.id?"":(e.gmap||"")};}
 function ratingHtml(r,n){return "<span class='stars'>★ "+r.toFixed(1)+"</span> · "+(n||0).toLocaleString()+" κριτικές";}
 function extraHtml(s){const x=[s.price,s.hours].filter(Boolean);return (x.length?"<p class='spot-extra'>"+x.join(" · ")+"</p>":"")+(s.tag?"<p class='spot-extra spot-flag'>"+s.tag+"</p>":"");}
@@ -266,7 +290,7 @@ const stopCount=planItems.length;
 // Empty day: show a hint instead of a blank panel.
 if(!planItems.length)planItems.push("<article class='day-card empty-card'><div class='day-content'><h3>Καμία στάση ακόμα</h3><p>Στείλε μου τα μέρη που θέλεις για αυτή τη μέρα και θα μπουν εδώ, με αστέρια Google, περιγραφή και πλοήγηση.</p></div></article>");
 const cards=daySpots.map(spotCardHtml).join("");
-const villagesHtml=dayVillages.map(v=>{const media=v.data.photos&&v.data.photos[0]?"<img loading='lazy' src='"+escAttr(v.data.photos[0])+"' alt='"+escAttr(v.name)+"'>":"<div class='spot-photo-empty spot-photo-villages'><span>🏘️</span></div>";return "<article class='spot-card village-card' data-cat='villages' data-village='"+v.id+"' tabindex='0' role='button'><div class='spot-photo'>"+media+"</div><div class='spot-info'><div class='spot-cat'>🏘️ Χωριά</div><h3>"+v.name+"</h3>"+(v.data.rating?"<div class='spot-rating'>"+ratingHtml(v.data.rating,v.data.reviews)+"</div>":"")+"<p>"+(v.data.description||"Άνοιξέ το για να δεις τα αποθηκευμένα δεδομένα.")+"</p></div></article>";}).join("");
+const villagesHtml=dayVillages.map(v=>{const villagePhoto=v.data.photos&&v.data.photos[0]?v.data.photos[0]:photoFallback({cat:"villages"},0);const media="<img loading='lazy' src='"+escAttr(villagePhoto)+"' alt='"+escAttr(v.name)+"' onerror='this.onerror=null;this.src=photoFallback({cat:"villages"},0)'>";return "<article class='spot-card village-card' data-cat='villages' data-village='"+v.id+"' tabindex='0' role='button'><div class='spot-photo'>"+media+"</div><div class='spot-info'><div class='spot-cat'>🏘️ Χωριά</div><h3>"+v.name+"</h3>"+(v.data.rating?"<div class='spot-rating'>"+ratingHtml(v.data.rating,v.data.reviews)+"</div>":"")+"<p>"+(v.data.description||"Άνοιξέ το για να δεις τα αποθηκευμένα δεδομένα.")+"</p></div></article>";}).join("");
 document.querySelector("#plan").innerHTML="<section class='day-panel'><div class='findings-head'><div><h2>"+day.label+" · Πρόγραμμα</h2><p class='day-description'>"+day.sub+"</p>"+(day.note?"<p class='day-note'>"+day.note+"</p>":"")+"</div><div class='day-tools'>"+(route?"<button type='button' id='route-toggle' class='route-toggle' onclick='toggleRoute()'>Δείξε τη διαδρομή</button>":"")+navLinksHtml(day)+"<span>"+stopCount+" στάσεις</span></div></div><div class='day-grid'>"+planItems.join("")+"</div></section><section class='findings'><div class='findings-head'><h2>"+"Αποθηκευμένα μέρη"+"</h2><span>"+(daySpots.length+dayVillages.length)+" μέρη</span></div><div class='photo-grid'>"+(cards+villagesHtml||"<p class='empty-note'>Δεν υπάρχουν αποθηκευμένα μέρη για αυτή τη μέρα.</p>")+"</div><p class='stars-note'>★ Αστέρια και κριτικές από το Google Maps ("+RATINGS_AS_OF+"). Χάρτης, βενζινάδικα, μάρκετ και τουαλέτες: © OpenStreetMap contributors.</p></section>";
 if(route&&map){drawRoute(currentDay);routeLayer.addTo(map);routeVisible=true;const b=document.querySelector("#route-toggle");if(b){b.textContent="Κρύψε τη διαδρομή";b.classList.add("active");}}
 const pts=daySpots.map(s=>s.c).concat(dayVillages.map(v=>v.c)).concat(route?route.stops.map(x=>x.c):[]);if(map&&pts.length)map.fitBounds(L.latLngBounds(pts),{padding:[40,40]});
