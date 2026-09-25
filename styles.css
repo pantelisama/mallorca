@@ -421,3 +421,44 @@ aside>#filters{display:none}
  .stop-edge.open{transform:translateX(0) translateY(-50%)!important}
  .stop-edge .cat-panel{width:205px!important}
 }
+
+
+/* Right edge stops bookmark — same tab as ΜΕΡΗ, mirrored */
+.stop-edge{
+  left:auto!important;
+  right:0!important;
+  top:50%!important;
+  transform:translateX(236px) translateY(-50%)!important;
+}
+.stop-edge.open{transform:translateX(0) translateY(-50%)!important}
+.stop-edge .cat-panel{
+  order:1!important;
+  border-left:1px solid var(--line)!important;
+  border-right:0!important;
+  border-radius:var(--r-lg) 0 0 var(--r-lg)!important;
+}
+.stop-edge .cat-toggle{
+  order:2!important;
+  display:flex!important;
+  border-left:1px solid var(--line)!important;
+  border-right:0!important;
+  border-radius:15px 0 0 15px!important;
+}
+.stop-edge #stopFilters{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:6px!important;
+  margin:0!important;
+  padding:0!important;
+}
+.stop-edge #stopFilters .filter{
+  display:grid!important;
+  grid-template-columns:26px 1fr!important;
+  align-items:center!important;
+}
+@media(max-width:720px){
+  .stop-edge{transform:translateX(205px) translateY(-50%)!important}
+  .stop-edge.open{transform:translateX(0) translateY(-50%)!important}
+  .stop-edge .cat-panel{width:205px!important}
+  .stop-edge .cat-toggle{width:40px!important;min-height:88px!important}
+}
