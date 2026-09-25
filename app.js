@@ -382,7 +382,7 @@ function ensureEdgeDrawers(){
   let stops=document.querySelector(".stop-drawer");
   if(!stops){
     stops=document.createElement("div");stops.className="stop-drawer";
-    stops.innerHTML="<div class='stop-panel'><div class='stop-head'><strong>Στάσεις ημέρας</strong><button class='stop-close' type='button'>×</button></div><div class='stop-list'></div><p class='stop-hint'>Σύρε από τη δεξιά άκρη για να ανοίξει.</p></div><button class='stop-toggle' type='button' aria-label='Άνοιξε στάσεις'><span>📍</span><b>ΣΤΑΣΕΙΣ</b></button>";
+    stops.innerHTML="<div class='stop-panel'><div class='stop-head'><strong>Στάσεις ημέρας</strong><button class='stop-close' type='button'>×</button></div><div class='stop-list'></div><p class='stop-hint'>Σύρε από τη δεξιά άκρη για να ανοίξει.</p></div><button class='stop-toggle' type='button' aria-label='Άνοιξε στάσεις'><span class='stop-toggle-icon'>📍</span><span class='stop-toggle-label'>ΣΤΑΣΕΙΣ</span></button>";
     document.body.appendChild(stops);
     const toggle=stops.querySelector(".stop-toggle"),close=stops.querySelector(".stop-close");
     toggle.addEventListener("click",()=>stops.classList.toggle("open"));close.addEventListener("click",()=>stops.classList.remove("open"));
