@@ -335,6 +335,13 @@ function enrichSpots(list){
     enrichRunning=false;
   })();
 }
+document.addEventListener("click",e=>{
+  const b=e.target.closest("#stopBookmark");
+  if(b){
+    const d=document.querySelector("#stopDrawer");
+    if(d)d.classList.toggle("open");
+  }
+});
 function ensureEdgeDrawers(route){
   let cat=document.querySelector(".cat-drawer:not(.stop-edge)");
   if(!cat){
