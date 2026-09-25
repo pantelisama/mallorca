@@ -204,7 +204,7 @@ function spotCardHtml(s){
   const i=spots.indexOf(s);const cat=categories[s.cat];const x=spotData(s);
     const media="<img loading='lazy' src='"+escAttr(x.photo)+"' alt='"+escAttr(s.n)+"' onerror='this.onerror=null;this.src=\""+photoFallback(s,i)+"\"'>";
   const rating=x.rating?ratingHtml(x.rating,x.reviews):"Δες το στο Google Maps";
-  return "<article class='spot-card' data-cat='"+s.cat+"' data-spot-index='"+i+"' tabindex='0' role='button'><div class='spot-photo'>"+media+"</div><div class='spot-info'><div class='spot-meta'><div class='spot-cat'>"+cat.icon+" "+cat.label+"</div>"+(s.by?"<span class='finder-tag'>"+s.by+"</span>":"")+"</div><h3>"+s.n+"</h3>"+(s.type?"<p class='spot-type'>"+s.type+"</p>":"")+extraHtml(s)+"<p>"+s.d+"</p><div class='spot-rating'>"+rating+" →</div></div></article>";
+  return "<article class='spot-card' data-cat='"+s.cat+"' data-spot-index='"+i+"' tabindex='0' role='button'><div class='spot-photo'>"+media+"</div><div class='spot-info'><div class='spot-meta'><div class='spot-cat'>"+cat.icon+" "+cat.label+"</div>"+(s.by?"<span class='finder-tag'>Added by "+s.by+"</span>":"")+"</div><h3>"+s.n+"</h3>"+(s.type?"<p class='spot-type'>"+s.type+"</p>":"")+extraHtml(s)+"<p>"+s.d+"</p><div class='spot-rating'>"+rating+" →</div></div></article>";
 }
 function planCardHtml(x,i){return "<article class='day-card'><div class='day-number'>"+String(i+1).padStart(2,"0")+"</div><div class='day-content'><div class='time'>"+x[0]+"</div><h3>"+x[1]+"</h3><p>"+x[2]+"</p><span class='tag'>"+categories[x[3]].icon+" "+categories[x[3]].label+"</span><div class='route'>"+x[4]+"</div></div></article>";}
 function stopCardHtml(x,i){
