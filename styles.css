@@ -423,113 +423,12 @@ aside>#filters{display:none}
 }
 
 
-/* Right edge stops bookmark — same tab as ΜΕΡΗ, mirrored */
-.stop-edge{
-  left:auto!important;
-  right:0!important;
-  top:50%!important;
-  transform:translateX(236px) translateY(-50%)!important;
-}
-.stop-edge.open{transform:translateX(0) translateY(-50%)!important}
-.stop-edge .cat-panel{
-  order:1!important;
-  border-left:1px solid var(--line)!important;
-  border-right:0!important;
-  border-radius:var(--r-lg) 0 0 var(--r-lg)!important;
-}
-.stop-edge .cat-toggle{
-  order:2!important;
-  display:flex!important;
-  border-left:1px solid var(--line)!important;
-  border-right:0!important;
-  border-radius:15px 0 0 15px!important;
-}
-.stop-edge #stopFilters{
-  display:flex!important;
-  flex-direction:column!important;
-  gap:6px!important;
-  margin:0!important;
-  padding:0!important;
-}
-.stop-edge #stopFilters .filter{
-  display:grid!important;
-  grid-template-columns:26px 1fr!important;
-  align-items:center!important;
-}
-@media(max-width:720px){
-  .stop-edge{transform:translateX(205px) translateY(-50%)!important}
-  .stop-edge.open{transform:translateX(0) translateY(-50%)!important}
-  .stop-edge .cat-panel{width:205px!important}
-  .stop-edge .cat-toggle{width:40px!important;min-height:88px!important}
-}
-
-
-/* CLEAN EDGE DRAWERS: ΜΕΡΗ left + ΣΤΑΣΕΙΣ right */
-.cat-drawer.stop-edge{
-  position:fixed!important;
-  left:auto!important;
-  right:0!important;
-  top:50%!important;
-  z-index:12000!important;
-  display:flex!important;
-  align-items:center!important;
-  width:auto!important;
-  margin:0!important;
-  padding:0!important;
-  pointer-events:none!important;
-  transform:translateX(236px) translateY(-50%)!important;
-  transition:transform .28s cubic-bezier(.2,.8,.2,1)!important;
-}
+/* CLEAN RIGHT STOPS DRAWER */
+.cat-drawer.stop-edge{position:fixed!important;left:auto!important;right:0!important;top:50%!important;z-index:99999!important;display:flex!important;align-items:center!important;width:auto!important;margin:0!important;padding:0!important;pointer-events:none!important;transform:translateX(236px) translateY(-50%)!important;transition:transform .28s ease!important}
 .cat-drawer.stop-edge.open{transform:translateX(0) translateY(-50%)!important}
-.cat-drawer.stop-edge .cat-panel{
-  order:1!important;
-  width:236px!important;
-  max-height:min(72vh,620px)!important;
-  overflow-y:auto!important;
-  box-sizing:border-box!important;
-  pointer-events:auto!important;
-  border:1px solid var(--line)!important;
-  border-right:0!important;
-  border-left:1px solid var(--line)!important;
-  border-radius:var(--r-lg) 0 0 var(--r-lg)!important;
-  background:var(--paper)!important;
-  padding:12px!important;
-}
-.cat-drawer.stop-edge .cat-toggle{
-  order:2!important;
-  flex:0 0 48px!important;
-  width:48px!important;
-  min-height:112px!important;
-  box-sizing:border-box!important;
-  pointer-events:auto!important;
-  display:flex!important;
-  flex-direction:column!important;
-  align-items:center!important;
-  justify-content:center!important;
-  gap:8px!important;
-  margin:0!important;
-  padding:12px 8px!important;
-  border:1px solid var(--line)!important;
-  border-left:1px solid var(--line)!important;
-  border-right:0!important;
-  border-radius:15px 0 0 15px!important;
-  background:var(--sea)!important;
-  color:#fff!important;
-}
-.cat-drawer.stop-edge .cat-toggle-icon{font-size:19px!important;line-height:1!important}
+.cat-drawer.stop-edge .cat-panel{order:1!important;width:236px!important;max-height:72vh!important;overflow:auto!important;box-sizing:border-box!important;pointer-events:auto!important;border:1px solid var(--line)!important;border-right:0!important;border-radius:var(--r-lg) 0 0 var(--r-lg)!important;background:var(--paper)!important;padding:12px!important}
+.cat-drawer.stop-edge .cat-toggle{order:2!important;flex:0 0 48px!important;width:48px!important;min-height:112px!important;box-sizing:border-box!important;pointer-events:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:8px!important;border:1px solid var(--line)!important;border-right:0!important;border-radius:15px 0 0 15px!important;background:var(--sea)!important;color:#fff!important;cursor:pointer!important}
 .cat-drawer.stop-edge .cat-toggle-label{writing-mode:vertical-rl!important;transform:rotate(180deg)!important;font-size:9px!important;letter-spacing:1px!important}
-.cat-drawer.stop-edge.open .cat-toggle{background:var(--mares)!important;color:#1b1206!important}
-.cat-drawer.stop-edge #stopFilters{display:flex!important;flex-direction:column!important;gap:6px!important;margin:0!important;padding:0!important}
-.cat-drawer.stop-edge #stopFilters .stop-item{display:grid!important;grid-template-columns:26px 1fr!important;align-items:center!important;width:100%!important;box-sizing:border-box!important}
-@media(max-width:1000px){
-  .cat-drawer.stop-edge{transform:translateX(218px) translateY(-50%)!important}
-  .cat-drawer.stop-edge.open{transform:translateX(0) translateY(-50%)!important}
-  .cat-drawer.stop-edge .cat-panel{width:218px!important}
-  .cat-drawer.stop-edge .cat-toggle{flex-basis:43px!important;width:43px!important;min-height:96px!important}
-}
-@media(max-width:600px){
-  .cat-drawer.stop-edge{transform:translateX(205px) translateY(-50%)!important}
-  .cat-drawer.stop-edge.open{transform:translateX(0) translateY(-50%)!important}
-  .cat-drawer.stop-edge .cat-panel{width:205px!important}
-  .cat-drawer.stop-edge .cat-toggle{flex-basis:40px!important;width:40px!important;min-height:88px!important}
-}
+.cat-drawer.stop-edge #stopFilters{display:flex!important;flex-direction:column!important;gap:6px!important}
+.cat-drawer.stop-edge #stopFilters .stop-item{display:grid!important;grid-template-columns:26px 1fr!important;align-items:center!important;width:100%!important}
+@media(max-width:600px){.cat-drawer.stop-edge{transform:translateX(205px) translateY(-50%)!important}.cat-drawer.stop-edge.open{transform:translateX(0) translateY(-50%)!important}.cat-drawer.stop-edge .cat-panel{width:205px!important}.cat-drawer.stop-edge .cat-toggle{width:40px!important;flex-basis:40px!important;min-height:88px!important}}
