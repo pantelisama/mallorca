@@ -52,6 +52,38 @@ const spots=[
   {by:"Anna",n:"Restaurante Paparazzi",q:"Restaurante Paparazzi, Cala d'Or, Mallorca, Spain",c:[39.378,3.234],cat:"food",day:"all",type:"Cala d'Or · Mediterranean",rating:4.2,reviews:1438,price:"€20–30",hours:"Έως 23:00",d:"Casual Mediterranean restaurant στην Cala d’Or, με καλό value."},
   {by:"Anna",n:"Roosevelvet Bakery",q:"Rosevelvet Bakery, Palma, Mallorca, Spain",c:[39.5707,2.6553],cat:"food",day:"all",type:"Arxiduc · bakery",d:"Bakery που φαίνεται να βρίσκεται κοντά στο Bar Rey Sancho. Έλεγξε το ωράριο πριν πας."},
   {by:"Anna",n:"Serra de Tramuntana",q:"Serra de Tramuntana, Mallorca, Spain",c:[39.76,2.7],cat:"sights",day:"all",type:"Mountain range · UNESCO",d:"Η Serra de Tramuntana είναι η ορεινή ραχοκοκαλιά της δυτικής Mallorca και το σκηνικό για Deià, Valldemossa, Sóller και Fornalutx."},
+  {by:"Web research",n:"La Seu Cathedral",q:"Catedral de Mallorca, Palma, Spain",c:[39.5676,2.6489],cat:"sights",day:"mon",type:"Palma · Gothic cathedral",rating:4.6,reviews:16417,d:"Το πιο χαρακτηριστικό landmark της Palma, πάνω ακριβώς στο waterfront."},
+  {by:"Web research",n:"Palau de l’Almudaina",q:"Palau de l'Almudaina, Palma, Spain",c:[39.5678,2.6487],cat:"sights",day:"mon",type:"Palma · royal palace",d:"Βασιλικό παλάτι δίπλα στη La Seu, με αυλή και ιστορικά δωμάτια."},
+  {by:"Web research",n:"Castell de Bellver",q:"Castell de Bellver, Palma, Spain",c:[39.5631,2.6198],cat:"sights",day:"mon",type:"Palma · castle & viewpoint",rating:4.5,reviews:26852,d:"Κυκλικό κάστρο πάνω από την Palma με πανοραμική θέα στον κόλπο."},
+  {by:"Web research",n:"Arab Baths",q:"Banys Àrabs, Palma, Spain",c:[39.5707,2.6503],cat:"sights",day:"mon",type:"Palma · historic baths",d:"Μικρό αλλά ιδιαίτερο κατάλοιπο της αραβικής Palma μέσα στην παλιά πόλη."},
+  {by:"Web research",n:"Mirador des Colomer",q:"Mirador des Colomer, Mallorca, Spain",c:[39.9275,3.1983],cat:"sights",day:"sat",type:"Formentor · cliff viewpoint",rating:4.8,reviews:11528,d:"Από τα πιο διάσημα viewpoints του νησιού, πάνω από τους απόκρημνους βράχους του Formentor."},
+  {by:"Web research",n:"Talaia d’Albercutx",q:"Talaia d'Albercutx, Mallorca, Spain",c:[39.9308,3.2074],cat:"sights",day:"sat",type:"Formentor · historic tower",d:"Παλιός πύργος-παρατηρητήριο με εντυπωσιακή θέα στην ακτογραμμή."},
+  {by:"Web research",n:"Sa Calobra",q:"Sa Calobra, Mallorca, Spain",c:[39.8504,2.7984],cat:"sights",day:"sat",type:"Tramuntana · scenic road",d:"Διάσημη ορεινή διαδρομή και δραματικό coastal scenery προς το Torrent de Pareis."},
+  {by:"Web research",n:"Torrent de Pareis",q:"Torrent de Pareis, Mallorca, Spain",c:[39.8534,2.8018],cat:"sights",day:"sat",type:"Tramuntana · gorge",d:"Εμβληματικό φαράγγι της Tramuntana, ένα από τα πιο εντυπωσιακά φυσικά τοπία της Mallorca."},
+  {by:"Web research",n:"Son Marroig",q:"Son Marroig, Deià, Mallorca, Spain",c:[39.7505,2.6208],cat:"sights",day:"sat",type:"Deià · historic estate & viewpoint",d:"Ιστορικό κτήμα πάνω από τη θάλασσα με θέα στη Sa Foradada."},
+  {by:"Web research",n:"Sa Foradada",q:"Sa Foradada, Deià, Mallorca, Spain",c:[39.7525,2.6200],cat:"sights",day:"sat",type:"Deià · rock viewpoint",d:"Εμβληματικός βράχος με τρύπα στη θάλασσα και κλασικό sunset viewpoint."},
+  {by:"Web research",n:"Capdepera Castle",q:"Castell de Capdepera, Mallorca, Spain",c:[39.7021,3.4337],cat:"sights",day:"all",type:"Castle · medieval fortress",rating:4.5,reviews:9760,d:"Μεσαιωνικό κάστρο πάνω από την Capdepera με θέα προς την ανατολική ακτή."},
+  {by:"Web research",n:"Castell d’Alaró",q:"Castell d'Alaró, Mallorca, Spain",c:[39.7356,2.7872],cat:"sights",day:"all",type:"Castle · mountain hike",rating:4.8,reviews:807,d:"Εντυπωσιακό mountain castle σε κορυφή· θέλει πεζοπορία."},
+  {by:"Web research",n:"Cuevas del Drach",q:"Cuevas del Drach, Porto Cristo, Mallorca, Spain",c:[39.5337,3.3295],cat:"experiences",day:"all",type:"Caves · underground lake",rating:4.0,reviews:13614,d:"Μεγάλο σύστημα σπηλαίων με τη λίμνη Martel και μουσική παράσταση μέσα στο σπήλαιο."},
+  {by:"Web research",n:"Cuevas de Artà",q:"Cuevas de Artà, Mallorca, Spain",c:[39.6567,3.4498],cat:"experiences",day:"all",type:"Caves · guided visit",d:"Εντυπωσιακές σπηλιές με τεράστιους σταλακτίτες και θέα προς την ανατολική ακτή."},
+  {by:"Web research",n:"Tren de Sóller",q:"Tren de Sóller, Mallorca, Spain",c:[39.7668,2.7148],cat:"experiences",day:"sat",type:"Vintage railway · Palma–Sóller",d:"Ιστορικό ξύλινο τρένο ανάμεσα σε Palma και Sóller."},
+  {by:"Web research",n:"Palma Aquarium",q:"Palma Aquarium, Mallorca, Spain",c:[39.5375,2.7190],cat:"experiences",day:"all",type:"Aquarium · marine life",rating:4.4,reviews:33516,d:"Μεγάλο aquarium στη Palma, καλή εναλλακτική αν ο καιρός χαλάσει."},
+  {by:"Web research",n:"Safari Mallorca",q:"Safari Mallorca, Cala Millor, Mallorca, Spain",c:[39.6045,3.3730],cat:"experiences",day:"all",type:"Safari park · wildlife",rating:3.8,reviews:6276,d:"Safari-style park στην ανατολική Mallorca με ζώα και διαδρομή μέσα στο πάρκο."},
+  {by:"Web research",n:"s’Albufereta",q:"Reserva Natural de s'Albufereta, Mallorca, Spain",c:[39.8904,3.0870],cat:"experiences",day:"fri",type:"Nature reserve · birds",rating:4.5,reviews:269,d:"Υγροτοπικός βιότοπος κοντά στην Alcúdia, καλός για birdwatching."},
+  {by:"Web research",n:"Península de Llevant",q:"Parc Natural de la Península de Llevant, Artà, Mallorca, Spain",c:[39.7170,3.3420],cat:"experiences",day:"all",type:"Nature park · hiking",rating:4.8,reviews:775,d:"Μεγάλη προστατευόμενη περιοχή με μονοπάτια, ακτές και άγριο τοπίο."},
+  {by:"Web research",n:"Es Trenc",q:"Es Trenc, Mallorca, Spain",c:[39.3178,2.9946],cat:"beaches",day:"all",type:"South · long natural beach",d:"Μεγάλη φυσική αμμουδιά με διάφανα νερά και αίσθηση πιο άγριας παραλίας."},
+  {by:"Web research",n:"Cala Agulla",q:"Cala Agulla, Mallorca, Spain",c:[39.7207,3.4611],cat:"beaches",day:"all",type:"East · pine-backed beach",d:"Μεγάλη αμμώδης παραλία ανάμεσα σε πεύκα και λόφους."},
+  {by:"Web research",n:"Cala Mesquida",q:"Cala Mesquida, Mallorca, Spain",c:[39.7388,3.4325],cat:"beaches",day:"all",type:"East · dune beach",d:"Ανοιχτή παραλία με αμμόλοφους και καθαρά νερά."},
+  {by:"Web research",n:"Cala Llombards",q:"Cala Llombards, Mallorca, Spain",c:[39.3164,3.1398],cat:"beaches",day:"all",type:"Southeast · cove",d:"Μικρή τιρκουάζ cala ανάμεσα σε βράχια, κοντά στο Santanyí."},
+  {by:"Web research",n:"Caló des Moro",q:"Caló des Moro, Mallorca, Spain",c:[39.3125,3.1197],cat:"beaches",day:"all",type:"Southeast · iconic cove",d:"Μία από τις πιο φωτογραφημένες μικρές calas της Mallorca, με κρυστάλλινα νερά."},
+  {by:"Web research",n:"Cala Santanyí",q:"Cala Santanyí, Mallorca, Spain",c:[39.3263,3.1451],cat:"beaches",day:"all",type:"Southeast · sandy cove",d:"Εύκολη και οργανωμένη cala κοντά στο Santanyí, με καθαρά νερά."},
+  {by:"Web research",n:"Cala Pi",q:"Cala Pi, Mallorca, Spain",c:[39.3611,2.8288],cat:"beaches",day:"all",type:"South · narrow cove",rating:4.3,reviews:4101,d:"Στενή, ψηλή cala με πεύκα και καθαρά νερά."},
+  {by:"Web research",n:"Cala Tuent",q:"Cala Tuent, Mallorca, Spain",c:[39.8214,2.7825],cat:"beaches",day:"sat",type:"Tramuntana · wild cove",d:"Άγρια παραλία κάτω από τα βουνά της Tramuntana."},
+  {by:"Web research",n:"Portals Vells",q:"Portals Vells, Mallorca, Spain",c:[39.4872,2.5204],cat:"beaches",day:"all",type:"Southwest · three-finger bay",d:"Μικρός κόλπος με τρεις στενές εισόδους στη θάλασσα, πεύκα και μικρές αμμουδιές."},
+  {by:"Web research",n:"Cala Major",q:"Cala Major, Palma, Spain",c:[39.5530,2.6070],cat:"beaches",day:"mon",type:"Palma · city beach",rating:4.4,reviews:12907,d:"Μεγάλη εύκολη παραλία πολύ κοντά στην Palma."},
+  {by:"Web research",n:"S’Amarador",q:"S'Amarador, Mallorca, Spain",c:[39.3459,3.1888],cat:"beaches",day:"sun",type:"Mondragó · natural beach",rating:4.5,reviews:1713,d:"Φυσική παραλία μέσα στο Mondragó, με τιρκουάζ νερά και πεύκα."},
+  {by:"Web research",n:"Mirador del Pontàs",q:"Mirador del Pontàs, Cala Santanyí, Mallorca, Spain",c:[39.3267,3.1550],cat:"sights",day:"sun",type:"Cala Santanyí · sea arch viewpoint",rating:4.8,reviews:1715,d:"Θέα στον χαρακτηριστικό βραχώδη θαλάσσιο σχηματισμό Pontàs."},
+  {by:"Web research",n:"Punta de n’Amer",q:"Castell de la Punta de n'Amer, Mallorca, Spain",c:[39.5620,3.3820],cat:"sights",day:"all",type:"Coastal fortress · nature",rating:4.5,reviews:6328,d:"Μικρό κάστρο πάνω σε προστατευμένη χερσόνησο, με μονοπάτι και θάλασσα."}
 ];
 
 // Villages on the day trips. gid = Google place id (used to open the right place in Google Maps).
@@ -59,12 +91,12 @@ function village(id,name,gid,c,day,description,rating=null,reviews=null,photo=""
 // village("id","Όνομα","Google place id",[lat,lng],"sat|all","Περιγραφή")
 // day:"all" = φαίνεται σε όλες τις μέρες, χωρίς να είναι στάση.
 const villages=[
-  village("fornalutx","Fornalutx","",[39.7822,2.7410],"all","Ίσως το πιο παραμυθένιο μικρό χωριό του νησιού. Σκαλιστά πέτρινα σοκάκια, 10 λεπτά από το Sóller."),
-  village("valldemossa","Valldemossa","",[39.7115,2.6226],"all","Πέτρινα σοκάκια, λουλούδια και βουνό γύρω γύρω."),
+  village("fornalutx","Fornalutx","",[39.7822,2.7410],"sat","Ίσως το πιο παραμυθένιο μικρό χωριό του νησιού. Σκαλιστά πέτρινα σοκάκια, 10 λεπτά από το Sóller."),
+  village("valldemossa","Valldemossa","",[39.7115,2.6226],"sat","Πέτρινα σοκάκια, λουλούδια και βουνό γύρω γύρω."),
   village("deia","Deià","",[39.7486,2.6486],"all","Πέτρινο χωριό σκαρφαλωμένο στην πλαγιά, με θέα στη θάλασσα.",4.6,1052,"https://www.hola.com/horizon/square/6f8e6754512a-2xk6xtn.jpg?im=Resize%3D%28960%29%2Ctype%3Ddownsize"),
-  village("soller","Sóller","",[39.7671,2.7158],"all","Μεγαλύτερο και με περισσότερη ζωή. Συνδυάζει βουνό, χωριό και το Port de Sóller."),
-  village("alcudia","Alcúdia Old Town","",[39.8525,3.1192],"all","Πολύ όμορφο αλλά σε άλλο στιλ: μεσαιωνικό, μέσα στα παλιά τείχη."),
-  village("santanyi","Santanyí","",[39.3545,3.1290],"all","Χωριό από χρυσαφί πέτρα στα νοτιοανατολικά, κοντά στις calas. Έχει αγορά Τετάρτη και Σάββατο, μέχρι τις 14:00.")
+  village("soller","Sóller","",[39.7671,2.7158],"sat","Μεγαλύτερο και με περισσότερη ζωή. Συνδυάζει βουνό, χωριό και το Port de Sóller."),
+  village("alcudia","Alcúdia Old Town","",[39.8525,3.1192],"fri","Πολύ όμορφο αλλά σε άλλο στιλ: μεσαιωνικό, μέσα στα παλιά τείχη."),
+  village("santanyi","Santanyí","",[39.3545,3.1290],"sun","Χωριό από χρυσαφί πέτρα στα νοτιοανατολικά, κοντά στις calas. Έχει αγορά Τετάρτη και Σάββατο, μέχρι τις 14:00.")
 ];
 
 const areas=[
