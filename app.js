@@ -185,7 +185,7 @@ const routes={
 };
 let routeLayer=leafletReady?L.layerGroup():null,routeVisible=false,routeToken=0;
 function escAttr(v){return String(v).replace(/&/g,"&amp;").replace(/'/g,"&#39;").replace(/"/g,"&quot;").replace(/</g,"&lt;");}
-async async function drawRoute(id){
+async function drawRoute(id){
   if(!leafletReady||!routeLayer)return;
   const token=++routeToken;
   routeLayer.clearLayers();
@@ -335,13 +335,6 @@ function enrichSpots(list){
     enrichRunning=false;
   })();
 }
-document.addEventListener("click",e=>{
-  const b=e.target.closest("#stopBookmark");
-  if(b){
-    const d=document.querySelector("#stopDrawer");
-    if(d)d.classList.toggle("open");
-  }
-});
 function ensureEdgeDrawers(route){
   let cat=document.querySelector(".cat-drawer:not(.stop-edge)");
   if(!cat){
