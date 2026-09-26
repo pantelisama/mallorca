@@ -345,7 +345,22 @@ function ensureEdgeDrawers(route){
     cat.querySelector(".cat-close").addEventListener("click",()=>cat.classList.remove("open"));
     if(typeof installEdgeSwipe==="function")installEdgeSwipe(cat,"left");
   }
-  const stops=document.querySelector("#stopDrawer");
+  let stops=document.querySelector("#stopDrawer");
+  if(!stops){
+    stops=cat.cloneNode(true);
+    stops.id="stopDrawer";
+    stops.classList.add("stop-edge");
+    stops.querySelector(".cat-head strong").textContent="Στάσεις στον χάρτη";
+    const close=stops.querySelector(".cat-close");
+    close.className="cat-close stop-close";
+    const filters=stops.querySelector("#filters");
+    filters.id="stopFilters";
+    const toggle=stops.querySelector(".cat-toggle");
+    toggle.className="cat-toggle stop-toggle";
+    toggle.setAttribute("aria-label","Άνοιξε στάσεις");
+    toggle.querySelector(".cat-toggle-label").textContent="ΣΤΑΣΕΙΣ";
+    document.body.appendChild(stops);
+  }
   if(stops){
     stops.querySelector("#stopFilters").innerHTML=route
       ?route.stops.map((x,i)=>"<button type='button' class='filter stop-item' data-stop-index='"+i+"'><span class='cat-icon'>"+String(i+1).padStart(2,"0")+"</span><span class='cat-label'>"+escAttr(x.n)+"</span></button>").join("")
